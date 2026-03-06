@@ -89,20 +89,37 @@
                     </li>
                 @endcan
 
-                <!-- CLIENTS SECTION -->
-                @can('clients.general.view')
-                    <li class="menu-title"><span>CLIENTS</span></li>
-                    <li>
-                        <ul>
-                            <li class="{{ request()->routeIs('backoffice.clients.*') ? 'active' : '' }}">
-                                <a href="{{ route('backoffice.clients.index') }}">
-                                    <i class="ti ti-user-circle"></i>
-                                    <span>Clients</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                @endcan
+<!-- CLIENTS SECTION -->
+@can('clients.general.view')
+    <li class="menu-title"><span>CLIENTS</span></li>
+    <li>
+        <ul>
+            <li class="{{ request()->routeIs('backoffice.clients.index') ? 'active' : '' }}">
+                <a href="{{ route('backoffice.clients.index') }}">
+                    <i class="ti ti-user-circle"></i>
+                    <span>Clients</span>
+                </a>
+            </li>
+            
+            {{-- BLACKLIST LINK --}}
+            <li class="{{ request()->routeIs('backoffice.clients.blacklist.index') ? 'active' : '' }}">
+                <a href="{{ route('backoffice.clients.blacklist.index') }}">
+                    <i class="ti ti-alert-triangle text-danger"></i>
+                    <span>Blacklist</span>
+                    @php
+                        $blacklistCount = 0;
+                        if (class_exists('App\Models\BlacklistedClient')) {
+                            $blacklistCount = App\Models\BlacklistedClient::count();
+                        }
+                    @endphp
+                    @if($blacklistCount > 0)
+                        <span class="badge bg-danger ms-auto">{{ $blacklistCount }}</span>
+                    @endif
+                </a>
+            </li>
+        </ul>
+    </li>
+@endcan
 
                 <!-- MANAGEMENT SECTION -->
                 @can('users.general.view')
@@ -369,7 +386,7 @@
                                     @endcan
                                     
                                     {{-- Catégories - visible si permission view --}}
-                                    @can('transaction-categories.general.view')
+                                    <!-- @can('transaction-categories.general.view')
                                         <li>
                                             <a href="{{ route('backoffice.finance.categories.index') }}"
                                                 class="{{ request()->routeIs('backoffice.finance.categories.*') ? 'active' : '' }}">
@@ -377,7 +394,7 @@
                                                 Catégories
                                             </a>
                                         </li>
-                                    @endcan
+                                    @endcan -->
                                     
                                     {{-- Transactions - visible si permission view --}}
                                     @can('financial-transactions.general.view')

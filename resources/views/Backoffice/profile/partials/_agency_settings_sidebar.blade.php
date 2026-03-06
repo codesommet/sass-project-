@@ -27,10 +27,26 @@
                         </a>
                     </li>
 
+                    <!-- NEW: WEBSITE SETTINGS TAB -->
+                    <li @class(['active' => $active === 'website'])>
+                        <a href="{{ route('backoffice.agencies.settings.website', $agency) }}">
+                            <i class="ti ti-world me-2"></i>
+                            <span>Site Web</span>
+                        </a>
+                    </li>
+
                     <li @class(['active' => $active === 'invoice-template'])>
                         <a href="{{ route('backoffice.agencies.settings.invoice-template', $agency) }}">
                             <i class="ti ti-template me-2"></i>
                             <span>Modèle de facture</span>
+                        </a>
+                    </li>
+
+                    <!-- NEW: INVOICES SETTINGS TAB -->
+                    <li @class(['active' => $active === 'invoice-settings'])>
+                        <a href="{{ route('backoffice.agencies.settings.invoice-settings', $agency) }}">
+                            <i class="ti ti-file-invoice me-2"></i>
+                            <span>Paramètres de facturation</span>
                         </a>
                     </li>
 
@@ -41,7 +57,7 @@
                         </a>
                     </li>
 
-                    <!-- ✅ ADD THIS - SUBSCRIPTION TAB -->
+                    <!-- SUBSCRIPTION TAB -->
                     <li @class(['active' => $active === 'subscription'])>
                         <a href="{{ route('backoffice.my-subscription') }}">
                             <i class="ti ti-crown me-2"></i>

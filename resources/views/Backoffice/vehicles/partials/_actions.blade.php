@@ -16,6 +16,36 @@
         </li>
         @endcan
 
+        {{-- Vehicle Follow-up (Suivi Véhicule) - Links to the most recent credit --}}
+        @can('vehicle-credits.general.view')
+            @php
+                // Get the most recent credit for this vehicle
+                $latestCredit = $vehicle->credits()->latest()->first();
+            @endphp
+            
+            @if($latestCredit)
+                <li>
+                    <a class="dropdown-item rounded-1"
+                       href="{{ route('backoffice.vehicle-credits.show', ['vehicleCredit' => $latestCredit->id]) }}">
+                        <i class="ti ti-credit-card me-1 text-info"></i> Suivi Véhicule
+                        @if($latestCredit->status === 'active')
+                            <span class="badge bg-success ms-2">Actif</span>
+                        @elseif($latestCredit->status === 'completed')
+                            <span class="badge bg-info ms-2">Terminé</span>
+                        @elseif($latestCredit->status === 'defaulted')
+                            <span class="badge bg-danger ms-2">Défaut</span>
+                        @endif
+                    </a>
+                </li>
+            @else
+                <li>
+                    <span class="dropdown-item text-muted rounded-1" style="cursor: not-allowed;">
+                        <i class="ti ti-credit-card me-1"></i> Aucun crédit
+                    </span>
+                </li>
+            @endif
+        @endcan
+
         {{-- Modifier - contrôlé par permission EDIT --}}
         @can('vehicles.general.edit')
         <li>

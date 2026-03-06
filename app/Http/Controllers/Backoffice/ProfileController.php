@@ -76,6 +76,43 @@ public function update(UpdateProfileRequest $request)
         ]);
 }
 
+public function updateWebsite(Request $request, Agency $agency): RedirectResponse
+{
+    $this->checkAgencyPermission($agency);
+    
+    $validated = $request->validate([
+        // Localization fields
+        'timezone' => 'nullable|string|max:50',
+        'week_start' => 'nullable|string|in:monday,tuesday,wednesday,thursday,friday,saturday,sunday',
+        'date_format' => 'nullable|string|max:20',
+        'time_format' => 'nullable|string|max:20',
+        
+        // Currency fields
+        'currency' => 'nullable|string|max:10',
+        'currency_symbol' => 'nullable|string|max:10',
+        'currency_position' => 'nullable|string|in:left,right,left_space,right_space',
+        'decimal_separator' => 'nullable|string|max:1|in:.,,',
+        'thousand_separator' => 'nullable|string|max:1|in:,. ,',
+    ]);
+
+    $settings = $agency->settings ?? [];
+    $settings['website'] = array_merge($settings['website'] ?? [], $validated);
+    $agency->settings = $settings;
+    $agency->save();
+
+    $this->createNotification('update', 'website_settings', $agency);
+
+    return redirect()
+        ->route('backoffice.agencies.settings.website', $agency)
+        ->with('toast', [
+            'title'   => 'Mis à jour',
+            'message' => "Les paramètres du site web ont été mis à jour avec succès.",
+            'dot'     => '#0d6efd',
+            'delay'   => 3500,
+            'time'    => 'now',
+        ]);
+}
+
     /**
      * Delete profile photo
      */

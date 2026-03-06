@@ -353,7 +353,13 @@
                                             </span>
                                             <div>
                                                 <p class="mb-1 fw-medium">Paiement #{{ $payment->payment_number }} reçu</p>
-                                                <small class="text-muted">{{ $payment->paid_date->format('d M Y, H:i') }}</small>
+                                                <small class="text-muted">
+                                                    @if($payment->paid_date)
+                                                        {{ $payment->paid_date->format('d M Y, H:i') }}
+                                                    @else
+                                                        Date non enregistrée
+                                                    @endif
+                                                </small>
                                             </div>
                                         </div>
                                     @endforeach

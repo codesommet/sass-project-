@@ -55,6 +55,24 @@
             color: #6c757d;
             min-width: 80px;
         }
+        
+        /* Pagination styling */
+        .pagination {
+            margin: 0;
+        }
+        .pagination .page-item.active .page-link {
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+        }
+        .pagination .page-link {
+            color: #0d6efd;
+            border-radius: 8px;
+            margin: 0 3px;
+        }
+        .pagination-info {
+            color: #6c757d;
+            font-size: 14px;
+        }
     </style>
 </head>
 
@@ -76,31 +94,33 @@
                         <a href="#" class="dropdown-toggle btn btn-white d-inline-flex align-items-center"
                            data-bs-toggle="dropdown">
                             <i class="ti ti-filter me-1"></i>
-                            Sort By : 
+                            Trier par : 
                             @if(request('sort') == 'az')
                                 A → Z
                             @elseif(request('sort') == 'za')
                                 Z → A
                             @elseif(request('sort') == 'price_asc')
-                                Price (Low)
+                                Prix (croissant)
                             @elseif(request('sort') == 'price_desc')
-                                Price (High)
+                                Prix (décroissant)
                             @elseif(request('sort') == 'mileage_asc')
-                                Mileage (Low)
+                                Kilométrage (croissant)
                             @elseif(request('sort') == 'mileage_desc')
-                                Mileage (High)
+                                Kilométrage (décroissant)
                             @else
-                                Latest
+                                Plus récents
                             @endif
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end p-2">
-                            <li><a class="dropdown-item" href="{{ route('backoffice.vehicles.index', array_merge(request()->except('sort', 'page'), ['sort' => 'latest'])) }}">Latest</a></li>
+                            <li><a class="dropdown-item" href="{{ route('backoffice.vehicles.index', array_merge(request()->except('sort', 'page'), ['sort' => 'latest'])) }}">Plus récents</a></li>
                             <li><a class="dropdown-item" href="{{ route('backoffice.vehicles.index', array_merge(request()->except('sort', 'page'), ['sort' => 'az'])) }}">A → Z</a></li>
                             <li><a class="dropdown-item" href="{{ route('backoffice.vehicles.index', array_merge(request()->except('sort', 'page'), ['sort' => 'za'])) }}">Z → A</a></li>
-                            <li><a class="dropdown-item" href="{{ route('backoffice.vehicles.index', array_merge(request()->except('sort', 'page'), ['sort' => 'price_asc'])) }}">Price (Low)</a></li>
-                            <li><a class="dropdown-item" href="{{ route('backoffice.vehicles.index', array_merge(request()->except('sort', 'page'), ['sort' => 'price_desc'])) }}">Price (High)</a></li>
-                            <li><a class="dropdown-item" href="{{ route('backoffice.vehicles.index', array_merge(request()->except('sort', 'page'), ['sort' => 'mileage_asc'])) }}">Mileage (Low)</a></li>
-                            <li><a class="dropdown-item" href="{{ route('backoffice.vehicles.index', array_merge(request()->except('sort', 'page'), ['sort' => 'mileage_desc'])) }}">Mileage (High)</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{{ route('backoffice.vehicles.index', array_merge(request()->except('sort', 'page'), ['sort' => 'price_asc'])) }}">Prix (croissant)</a></li>
+                            <li><a class="dropdown-item" href="{{ route('backoffice.vehicles.index', array_merge(request()->except('sort', 'page'), ['sort' => 'price_desc'])) }}">Prix (décroissant)</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{{ route('backoffice.vehicles.index', array_merge(request()->except('sort', 'page'), ['sort' => 'mileage_asc'])) }}">Kilométrage (croissant)</a></li>
+                            <li><a class="dropdown-item" href="{{ route('backoffice.vehicles.index', array_merge(request()->except('sort', 'page'), ['sort' => 'mileage_desc'])) }}">Kilométrage (décroissant)</a></li>
                         </ul>
                     </div>
 
@@ -109,20 +129,20 @@
                         <a href="#" class="dropdown-toggle btn btn-white d-inline-flex align-items-center"
                            data-bs-toggle="dropdown">
                             <i class="ti ti-calendar me-1"></i>
-                            {{ request('date_from') ? \Carbon\Carbon::parse(request('date_from'))->format('m/d/Y') : '02/06/2026' }} - 
-                            {{ request('date_to') ? \Carbon\Carbon::parse(request('date_to'))->format('m/d/Y') : '02/12/2026' }}
+                            {{ request('date_from') ? \Carbon\Carbon::parse(request('date_from'))->format('d/m/Y') : now()->subDays(7)->format('d/m/Y') }} - 
+                            {{ request('date_to') ? \Carbon\Carbon::parse(request('date_to'))->format('d/m/Y') : now()->format('d/m/Y') }}
                         </a>
                         <div class="dropdown-menu dropdown-menu-end p-3" style="min-width: 300px;">
                             <div class="mb-3">
-                                <label class="form-label">From</label>
-                                <input type="date" name="date_from" class="form-control" value="{{ request('date_from') }}" form="filterForm">
+                                <label class="form-label">Date début</label>
+                                <input type="date" name="date_from" class="form-control" value="{{ request('date_from', now()->subDays(7)->format('Y-m-d')) }}" form="filterForm">
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">To</label>
-                                <input type="date" name="date_to" class="form-control" value="{{ request('date_to') }}" form="filterForm">
+                                <label class="form-label">Date fin</label>
+                                <input type="date" name="date_to" class="form-control" value="{{ request('date_to', now()->format('Y-m-d')) }}" form="filterForm">
                             </div>
                             <div class="d-flex justify-content-end">
-                                <button type="submit" class="btn btn-primary btn-sm" form="filterForm">Apply</button>
+                                <button type="submit" class="btn btn-primary btn-sm" form="filterForm">Appliquer</button>
                             </div>
                         </div>
                     </div>
@@ -131,13 +151,14 @@
                     <div>
                         <a href="#filtercollapse"
                            class="filtercollapse coloumn d-inline-flex align-items-center"
-                           data-bs-toggle="collapse">
-                            <i class="ti ti-filter me-1"></i> Filter
+                           data-bs-toggle="collapse"
+                           role="button">
+                            <i class="ti ti-filter me-1"></i> Filtres
                         </a>
                     </div>
                 </div>
 
-                <!-- SEARCH & ACTIONS -->
+                <!-- SEARCH & ACTIONS - FIXED ADD BUTTON -->
                 <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
                     <div class="top-search me-2">
                         <div class="top-search-group position-relative">
@@ -149,7 +170,7 @@
                                 name="search"
                                 id="searchInput"
                                 class="form-control" 
-                                placeholder="Search..." 
+                                placeholder="Rechercher..." 
                                 value="{{ request('search') }}" 
                                 autocomplete="off"
                             >
@@ -161,13 +182,10 @@
                         </div>
                     </div>
 
-                    <!-- Add Button - contrôlé par permission CREATE -->
+                    <!-- Add Button - FIXED: Now links to create page instead of modal -->
                     @can('vehicles.general.create')
                     <div class="mb-0">
-                        <a href="javascript:void(0);"
-                           class="btn btn-primary d-flex align-items-center"
-                           data-bs-toggle="modal"
-                           data-bs-target="#add_vehicle">
+                        <a href="{{ route('backoffice.vehicles.create') }}" class="btn btn-primary d-flex align-items-center">
                             <i class="ti ti-plus me-2"></i>Ajouter un véhicule
                         </a>
                     </div>
@@ -176,38 +194,38 @@
             </div>
 
             <!-- FILTERS ROW - HIDDEN BY DEFAULT -->
-            <div class="filter-row collapse" id="filtercollapse">
+            <div class="filter-row collapse {{ request()->has('select_cars') || request()->has('type') || request()->has('location') || request()->has('status') || request()->has('model_id') ? 'show' : '' }}" id="filtercollapse">
                 
-                <!-- Select Cars -->
+                <!-- Select Model -->
                 <div class="filter-item">
-                    <span class="filter-label">Select Cars:</span>
-                    <select name="select_cars" class="form-select" style="width: 200px;" onchange="this.form.submit()">
-                        <option value="">All Cars</option>
+                    <span class="filter-label">Modèle:</span>
+                    <select name="model_id" class="form-select" style="width: 200px;" onchange="this.form.submit()">
+                        <option value="">Tous les modèles</option>
                         @foreach($models as $model)
-                            <option value="{{ $model->id }}" {{ request('select_cars') == $model->id ? 'selected' : '' }}>
+                            <option value="{{ $model->id }}" {{ request('model_id') == $model->id ? 'selected' : '' }}>
                                 {{ $model->brand->name ?? '' }} {{ $model->name }}
                             </option>
                         @endforeach
                     </select>
                 </div>
 
-                <!-- Type -->
+                <!-- Type (Brand/Model search) -->
                 <div class="filter-item">
-                    <span class="filter-label">Type:</span>
-                    <input type="text" name="type" class="form-control" style="width: 150px;" placeholder="Brand/Model" value="{{ request('type') }}" onchange="this.form.submit()">
+                    <span class="filter-label">Marque/Modèle:</span>
+                    <input type="text" name="type" class="form-control" style="width: 150px;" placeholder="Rechercher" value="{{ request('type') }}" onchange="this.form.submit()">
                 </div>
 
                 <!-- Location -->
                 <div class="filter-item">
-                    <span class="filter-label">Location:</span>
-                    <input type="text" name="location" class="form-control" style="width: 150px;" placeholder="City" value="{{ request('location') }}" onchange="this.form.submit()">
+                    <span class="filter-label">Localisation:</span>
+                    <input type="text" name="location" class="form-control" style="width: 150px;" placeholder="Ville" value="{{ request('location') }}" onchange="this.form.submit()">
                 </div>
 
                 <!-- Status -->
                 <div class="filter-item">
-                    <span class="filter-label">Status:</span>
+                    <span class="filter-label">Statut:</span>
                     <select name="status" class="form-select" style="width: 150px;" onchange="this.form.submit()">
-                        <option value="">All</option>
+                        <option value="">Tous</option>
                         <option value="available" {{ request('status') == 'available' ? 'selected' : '' }}>Disponible</option>
                         <option value="unavailable" {{ request('status') == 'unavailable' ? 'selected' : '' }}>Indisponible</option>
                         <option value="maintenance" {{ request('status') == 'maintenance' ? 'selected' : '' }}>Maintenance</option>
@@ -217,12 +235,12 @@
 
                 <!-- Apply Button -->
                 <div class="filter-item">
-                    <button type="submit" class="btn btn-primary">Apply</button>
+                    <button type="submit" class="btn btn-primary">Appliquer</button>
                 </div>
 
                 <!-- Clear All -->
                 <div class="filter-item">
-                    <a href="{{ route('backoffice.vehicles.index') }}" class="btn btn-light">Clear All</a>
+                    <a href="{{ route('backoffice.vehicles.index') }}" class="btn btn-light">Effacer tout</a>
                 </div>
             </div>
         </form>
@@ -233,12 +251,64 @@
 
         <!-- Pagination with counter -->
         @if(isset($vehicles) && $vehicles->total() > 0)
-        <div class="d-flex justify-content-between align-items-center mt-3">
-            <div class="text-muted">
-                Affichage de {{ $vehicles->firstItem() }} à {{ $vehicles->lastItem() }} sur {{ $vehicles->total() }} véhicules
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4">
+            <div class="pagination-info mb-3 mb-md-0">
+                Affichage de <span class="fw-semibold">{{ $vehicles->firstItem() }}</span> à <span class="fw-semibold">{{ $vehicles->lastItem() }}</span> 
+                sur <span class="fw-semibold">{{ $vehicles->total() }}</span> véhicules
             </div>
-            <div>
-                {{ $vehicles->withQueryString()->links() }}
+            <div class="pagination-container">
+                @if ($vehicles->hasPages())
+                    <nav aria-label="Navigation des pages">
+                        <ul class="pagination justify-content-center mb-0">
+                            {{-- Previous Page Link --}}
+                            @if ($vehicles->onFirstPage())
+                                <li class="page-item disabled">
+                                    <span class="page-link" aria-hidden="true">&laquo;</span>
+                                </li>
+                            @else
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ $vehicles->previousPageUrl() }}" rel="prev" aria-label="Précédent">&laquo;</a>
+                                </li>
+                            @endif
+
+                            {{-- Pagination Elements --}}
+                            @php
+                                $start = max(1, $vehicles->currentPage() - 2);
+                                $end = min($vehicles->lastPage(), $vehicles->currentPage() + 2);
+                                
+                                if ($start > 1) {
+                                    echo '<li class="page-item"><a class="page-link" href="' . $vehicles->url(1) . '">1</a></li>';
+                                    if ($start > 2) {
+                                        echo '<li class="page-item disabled"><span class="page-link">...</span></li>';
+                                    }
+                                }
+                                
+                                for ($i = $start; $i <= $end; $i++) {
+                                    $active = $i == $vehicles->currentPage() ? 'active' : '';
+                                    echo '<li class="page-item ' . $active . '"><a class="page-link" href="' . $vehicles->url($i) . '">' . $i . '</a></li>';
+                                }
+                                
+                                if ($end < $vehicles->lastPage()) {
+                                    if ($end < $vehicles->lastPage() - 1) {
+                                        echo '<li class="page-item disabled"><span class="page-link">...</span></li>';
+                                    }
+                                    echo '<li class="page-item"><a class="page-link" href="' . $vehicles->url($vehicles->lastPage()) . '">' . $vehicles->lastPage() . '</a></li>';
+                                }
+                            @endphp
+
+                            {{-- Next Page Link --}}
+                            @if ($vehicles->hasMorePages())
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ $vehicles->nextPageUrl() }}" rel="next" aria-label="Suivant">&raquo;</a>
+                                </li>
+                            @else
+                                <li class="page-item disabled">
+                                    <span class="page-link" aria-hidden="true">&raquo;</span>
+                                </li>
+                            @endif
+                        </ul>
+                    </nav>
+                @endif
             </div>
         </div>
         @endif

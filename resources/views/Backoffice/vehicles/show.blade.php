@@ -128,27 +128,13 @@
                                     <div class="col-md-6 mb-3">
                                         <div class="info-label">Modèle</div>
                                         <div class="info-value">
-                                            {{-- Lien vers modèle - contrôlé par permission VIEW --}}
-                                            @can('vehicle-models.general.view')
-                                                <a href="{{ route('backoffice.vehicle-models.show', $vehicle->model_id) }}">
-                                                    {{ $vehicle->model->name ?? 'N/A' }}
-                                                </a>
-                                            @else
-                                                {{ $vehicle->model->name ?? 'N/A' }}
-                                            @endcan
+                                            {{ $vehicle->model->name ?? 'N/A' }}
                                         </div>
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <div class="info-label">Marque</div>
                                         <div class="info-value">
-                                            {{-- Lien vers marque - contrôlé par permission VIEW --}}
-                                            @can('vehicle-brands.general.view')
-                                                <a href="{{ route('backoffice.vehicle-brands.show', $vehicle->model?->brand_id) }}">
-                                                    {{ optional($vehicle->model?->brand)->name ?? 'N/A' }}
-                                                </a>
-                                            @else
-                                                {{ optional($vehicle->model?->brand)->name ?? 'N/A' }}
-                                            @endcan
+                                            {{ optional($vehicle->model?->brand)->name ?? 'N/A' }}
                                         </div>
                                     </div>
                                     <div class="col-md-6 mb-3">

@@ -114,6 +114,78 @@
         background: #bb2d3b;
         color: white;
     }
+
+    /* ============ PAGINATION STYLING ============ */
+    .pagination {
+        margin: 0;
+        display: flex;
+        padding-left: 0;
+        list-style: none;
+        border-radius: 0.25rem;
+    }
+    
+    .pagination .page-item.active .page-link {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+        color: white;
+        z-index: 3;
+    }
+    
+    .pagination .page-link {
+        position: relative;
+        display: block;
+        padding: 0.5rem 0.75rem;
+        margin-left: -1px;
+        line-height: 1.25;
+        color: #0d6efd;
+        background-color: #fff;
+        border: 1px solid #dee2e6;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+    
+    .pagination .page-link:hover {
+        background-color: #e9ecef;
+        border-color: #dee2e6;
+        color: #0a58ca;
+        z-index: 2;
+    }
+    
+    .pagination .page-item:first-child .page-link {
+        margin-left: 0;
+        border-top-left-radius: 0.25rem;
+        border-bottom-left-radius: 0.25rem;
+    }
+    
+    .pagination .page-item:last-child .page-link {
+        border-top-right-radius: 0.25rem;
+        border-bottom-right-radius: 0.25rem;
+    }
+    
+    .pagination .page-item.disabled .page-link {
+        color: #6c757d;
+        pointer-events: none;
+        cursor: auto;
+        background-color: #fff;
+        border-color: #dee2e6;
+    }
+    
+    .pagination-info {
+        color: #6c757d;
+        font-size: 14px;
+    }
+    
+    .pagination-container {
+        display: flex;
+        justify-content: flex-end;
+    }
+    
+    @media (max-width: 768px) {
+        .pagination-container {
+            justify-content: center;
+            margin-top: 15px;
+        }
+    }
 </style>
 
 <div class="page-wrapper">
@@ -250,14 +322,77 @@
             @include('backoffice.rental-contracts.partials._table', ['contracts' => $contracts, 'permissions' => $permissions])
         </div>
 
-        <!-- Pagination -->
+        <!-- PAGINATION - FIXED VERSION -->
         @if(isset($contracts) && $contracts->total() > 0)
-        <div class="d-flex justify-content-between align-items-center mt-4">
-            <div class="text-muted">
-                Affichage de {{ $contracts->firstItem() }} à {{ $contracts->lastItem() }} sur {{ $contracts->total() }} contrats
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4">
+            <div class="pagination-info mb-3 mb-md-0">
+                Affichage de <span class="fw-semibold">{{ $contracts->firstItem() }}</span> à <span class="fw-semibold">{{ $contracts->lastItem() }}</span> 
+                sur <span class="fw-semibold">{{ $contracts->total() }}</span> contrats
             </div>
-            <div>
-                {{ $contracts->withQueryString()->links() }}
+            <div class="pagination-container">
+                @if ($contracts->hasPages())
+                    <nav aria-label="Navigation des pages">
+                        <ul class="pagination justify-content-center mb-0">
+                            {{-- Previous Page Link --}}
+                            @if ($contracts->onFirstPage())
+                                <li class="page-item disabled">
+                                    <span class="page-link" aria-hidden="true">
+                                        <i class="ti ti-chevron-left"></i>
+                                    </span>
+                                </li>
+                            @else
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ $contracts->previousPageUrl() }}" rel="prev" aria-label="Précédent">
+                                        <i class="ti ti-chevron-left"></i>
+                                    </a>
+                                </li>
+                            @endif
+
+                            {{-- Pagination Elements - Show 5 pages at a time --}}
+                            @php
+                                $start = max(1, $contracts->currentPage() - 2);
+                                $end = min($contracts->lastPage(), $contracts->currentPage() + 2);
+                                
+                                // Show first page with ellipsis if needed
+                                if ($start > 1) {
+                                    echo '<li class="page-item"><a class="page-link" href="' . $contracts->url(1) . '">1</a></li>';
+                                    if ($start > 2) {
+                                        echo '<li class="page-item disabled"><span class="page-link">...</span></li>';
+                                    }
+                                }
+                                
+                                // Show pages around current page
+                                for ($i = $start; $i <= $end; $i++) {
+                                    $active = $i == $contracts->currentPage() ? 'active' : '';
+                                    echo '<li class="page-item ' . $active . '"><a class="page-link" href="' . $contracts->url($i) . '">' . $i . '</a></li>';
+                                }
+                                
+                                // Show last page with ellipsis if needed
+                                if ($end < $contracts->lastPage()) {
+                                    if ($end < $contracts->lastPage() - 1) {
+                                        echo '<li class="page-item disabled"><span class="page-link">...</span></li>';
+                                    }
+                                    echo '<li class="page-item"><a class="page-link" href="' . $contracts->url($contracts->lastPage()) . '">' . $contracts->lastPage() . '</a></li>';
+                                }
+                            @endphp
+
+                            {{-- Next Page Link --}}
+                            @if ($contracts->hasMorePages())
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ $contracts->nextPageUrl() }}" rel="next" aria-label="Suivant">
+                                        <i class="ti ti-chevron-right"></i>
+                                    </a>
+                                </li>
+                            @else
+                                <li class="page-item disabled">
+                                    <span class="page-link" aria-hidden="true">
+                                        <i class="ti ti-chevron-right"></i>
+                                    </span>
+                                </li>
+                            @endif
+                        </ul>
+                    </nav>
+                @endif
             </div>
         </div>
         @endif

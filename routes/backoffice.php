@@ -92,23 +92,40 @@ Route::prefix('backoffice')
                     ->middleware('can:users.general.delete,backoffice');
             });
 
-            // ==================== CLIENTS ====================
-            Route::prefix('clients')->name('clients.')->group(function () {
-                Route::get('/', [ClientController::class, 'index'])->name('index')
-                    ->middleware('can:clients.general.view,backoffice');
-                Route::get('/create', [ClientController::class, 'create'])->name('create')
-                    ->middleware('can:clients.general.create,backoffice');
-                Route::post('/', [ClientController::class, 'store'])->name('store')
-                    ->middleware('can:clients.general.create,backoffice');
-                Route::get('/{client}', [ClientController::class, 'show'])->name('show')
-                    ->middleware('can:clients.general.view,backoffice');
-                Route::get('/{client}/edit', [ClientController::class, 'edit'])->name('edit')
-                    ->middleware('can:clients.general.edit,backoffice');
-                Route::put('/{client}', [ClientController::class, 'update'])->name('update')
-                    ->middleware('can:clients.general.edit,backoffice');
-                Route::delete('/{client}', [ClientController::class, 'destroy'])->name('destroy')
-                    ->middleware('can:clients.general.delete,backoffice');
-            });
+// ==================== CLIENTS ====================
+Route::prefix('clients')->name('clients.')->group(function () {
+    // Blacklist Routes - MUST come BEFORE the {client} routes
+    Route::get('/blacklist', [ClientController::class, 'blacklistIndex'])
+        ->name('blacklist.index')
+        ->middleware('can:clients.general.view,backoffice');
+    Route::post('/check-blacklist', [ClientController::class, 'checkBlacklist'])
+        ->name('check-blacklist')
+        ->middleware('can:clients.general.view,backoffice');
+
+    // CRUD Routes - with {client} parameter (these come AFTER)
+    Route::get('/', [ClientController::class, 'index'])->name('index')
+        ->middleware('can:clients.general.view,backoffice');
+    Route::get('/create', [ClientController::class, 'create'])->name('create')
+        ->middleware('can:clients.general.create,backoffice');
+    Route::post('/', [ClientController::class, 'store'])->name('store')
+        ->middleware('can:clients.general.create,backoffice');
+    Route::get('/{client}', [ClientController::class, 'show'])->name('show')
+        ->middleware('can:clients.general.view,backoffice');
+    Route::get('/{client}/edit', [ClientController::class, 'edit'])->name('edit')
+        ->middleware('can:clients.general.edit,backoffice');
+    Route::put('/{client}', [ClientController::class, 'update'])->name('update')
+        ->middleware('can:clients.general.edit,backoffice');
+    Route::delete('/{client}', [ClientController::class, 'destroy'])->name('destroy')
+        ->middleware('can:clients.general.delete,backoffice');
+    
+    // These can stay here (they also have {client} but come after)
+    Route::post('/{client}/blacklist', [ClientController::class, 'addToBlacklist'])
+        ->name('add-to-blacklist')
+        ->middleware('can:clients.general.edit,backoffice');
+    Route::delete('/{client}/unblacklist', [ClientController::class, 'removeFromBlacklist'])
+        ->name('remove-from-blacklist')
+        ->middleware('can:clients.general.edit,backoffice');
+});
 
             // ==================== AGENCIES ====================
             Route::prefix('agencies')->name('agencies.')->group(function () {
@@ -127,8 +144,9 @@ Route::prefix('backoffice')
                 Route::delete('/{agency}', [AgencyController::class, 'destroy'])->name('destroy')
                     ->middleware('can:agencies.general.delete,backoffice');
 
-                // Agency Settings
+                // ==================== AGENCY SETTINGS (ALL IN ONE PLACE) ====================
                 Route::prefix('{agency}/settings')->name('settings.')->group(function () {
+                    // GET routes
                     Route::get('/', [AgencySettingsController::class, 'edit'])->name('edit')
                         ->middleware('can:agencies.general.edit,backoffice');
                     Route::get('/profile', [AgencyController::class, 'profile'])->name('profile')
@@ -141,12 +159,28 @@ Route::prefix('backoffice')
                         ->middleware('can:agencies.general.edit,backoffice');
                     Route::get('/signatures', [AgencySettingsController::class, 'signatures'])->name('signatures')
                         ->middleware('can:agencies.general.edit,backoffice');
+                    
+                    // NEW WEBSITE SETTINGS
+                    Route::get('/website', [AgencySettingsController::class, 'website'])->name('website')
+                        ->middleware('can:agencies.general.edit,backoffice');
+                    Route::post('/website', [AgencySettingsController::class, 'updateWebsite'])->name('website.update')
+                        ->middleware('can:agencies.general.edit,backoffice');
+                    
+                    // NEW INVOICE SETTINGS
+                    Route::get('/invoice-settings', [AgencySettingsController::class, 'invoiceSettings'])->name('invoice-settings')
+                        ->middleware('can:agencies.general.edit,backoffice');
+                    Route::post('/invoice-settings', [AgencySettingsController::class, 'updateInvoiceSettings'])->name('invoice-settings.update')
+                        ->middleware('can:agencies.general.edit,backoffice');
+                    
+                    // UPDATE routes
                     Route::patch('/', [AgencySettingsController::class, 'update'])->name('update')
                         ->middleware('can:agencies.general.edit,backoffice');
                     Route::post('/company', [AgencySettingsController::class, 'updateCompany'])->name('update.company')
                         ->middleware('can:agencies.general.edit,backoffice');
                     Route::post('/profile', [AgencyController::class, 'updateProfile'])->name('update.profile')
                         ->middleware('can:agencies.general.edit,backoffice');
+                    
+                    // DELETE routes
                     Route::delete('/delete-logo', [AgencySettingsController::class, 'deleteLogo'])->name('delete-logo')
                         ->middleware('can:agencies.general.edit,backoffice');
                     Route::delete('/delete-signature', [AgencySettingsController::class, 'deleteSignature'])->name('delete-signature')
@@ -363,6 +397,7 @@ Route::prefix('backoffice')
                         ->middleware('can:vehicle-controls.general.edit,backoffice');
                     Route::delete('/{control}', [ControlController::class, 'destroy'])->name('destroy')
                         ->middleware('can:vehicle-controls.general.delete,backoffice');
+                        
                 });
             });
 

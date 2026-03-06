@@ -27,6 +27,41 @@
 @extends('layout.mainlayout_admin')
 
 @section('content')
+<style>
+    /* Pagination styling */
+    .pagination {
+        margin: 0;
+    }
+    .pagination .page-item.active .page-link {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+        color: white;
+    }
+    .pagination .page-link {
+        color: #0d6efd;
+        border-radius: 8px;
+        margin: 0 3px;
+        padding: 8px 12px;
+    }
+    .pagination .page-link:hover {
+        background-color: #e9ecef;
+    }
+    .pagination-info {
+        color: #6c757d;
+        font-size: 14px;
+    }
+    .pagination-container {
+        display: flex;
+        justify-content: flex-end;
+    }
+    @media (max-width: 768px) {
+        .pagination-container {
+            justify-content: center;
+            margin-top: 15px;
+        }
+    }
+</style>
+
 <div class="page-wrapper">
     <div class="content me-4">
 
@@ -208,12 +243,72 @@
 
         <!-- PAGINATION -->
         @if($vignettes->total() > 0)
-        <div class="d-flex justify-content-between align-items-center mt-4">
-            <div class="text-muted">
-                Affichage de {{ $vignettes->firstItem() }} à {{ $vignettes->lastItem() }} sur {{ $vignettes->total() }} vignettes
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4">
+            <div class="pagination-info mb-3 mb-md-0">
+                Affichage de <span class="fw-semibold">{{ $vignettes->firstItem() }}</span> à <span class="fw-semibold">{{ $vignettes->lastItem() }}</span> 
+                sur <span class="fw-semibold">{{ $vignettes->total() }}</span> vignettes
             </div>
-            <div>
-                {{ $vignettes->withQueryString()->links() }}
+            <div class="pagination-container">
+                @if ($vignettes->hasPages())
+                    <nav aria-label="Navigation des pages">
+                        <ul class="pagination justify-content-center mb-0">
+                            {{-- Previous Page Link --}}
+                            @if ($vignettes->onFirstPage())
+                                <li class="page-item disabled">
+                                    <span class="page-link" aria-hidden="true">
+                                        <i class="ti ti-chevron-left"></i>
+                                    </span>
+                                </li>
+                            @else
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ $vignettes->previousPageUrl() }}" rel="prev" aria-label="Précédent">
+                                        <i class="ti ti-chevron-left"></i>
+                                    </a>
+                                </li>
+                            @endif
+
+                            {{-- Pagination Elements --}}
+                            @php
+                                $start = max(1, $vignettes->currentPage() - 2);
+                                $end = min($vignettes->lastPage(), $vignettes->currentPage() + 2);
+                                
+                                if ($start > 1) {
+                                    echo '<li class="page-item"><a class="page-link" href="' . $vignettes->url(1) . '">1</a></li>';
+                                    if ($start > 2) {
+                                        echo '<li class="page-item disabled"><span class="page-link">...</span></li>';
+                                    }
+                                }
+                                
+                                for ($i = $start; $i <= $end; $i++) {
+                                    $active = $i == $vignettes->currentPage() ? 'active' : '';
+                                    echo '<li class="page-item ' . $active . '"><a class="page-link" href="' . $vignettes->url($i) . '">' . $i . '</a></li>';
+                                }
+                                
+                                if ($end < $vignettes->lastPage()) {
+                                    if ($end < $vignettes->lastPage() - 1) {
+                                        echo '<li class="page-item disabled"><span class="page-link">...</span></li>';
+                                    }
+                                    echo '<li class="page-item"><a class="page-link" href="' . $vignettes->url($vignettes->lastPage()) . '">' . $vignettes->lastPage() . '</a></li>';
+                                }
+                            @endphp
+
+                            {{-- Next Page Link --}}
+                            @if ($vignettes->hasMorePages())
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ $vignettes->nextPageUrl() }}" rel="next" aria-label="Suivant">
+                                        <i class="ti ti-chevron-right"></i>
+                                    </a>
+                                </li>
+                            @else
+                                <li class="page-item disabled">
+                                    <span class="page-link" aria-hidden="true">
+                                        <i class="ti ti-chevron-right"></i>
+                                    </span>
+                                </li>
+                            @endif
+                        </ul>
+                    </nav>
+                @endif
             </div>
         </div>
         @endif

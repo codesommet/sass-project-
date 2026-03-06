@@ -7,6 +7,7 @@ use App\Http\Requests\Backoffice\Client\ClientStoreRequest;
 use App\Http\Requests\Backoffice\Client\ClientUpdateRequest;
 use App\Models\Client;
 use App\Models\Agency;
+use App\Models\BlacklistedClient; // Add this
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -91,6 +92,8 @@ class ClientController extends Controller
 
         return view('backoffice.clients.partials._modal_create', compact('agencies'));
     }
+
+    
 
     /**
      * Store a newly created client in storage.
@@ -297,6 +300,197 @@ class ClientController extends Controller
                     'dot'     => '#dc3545',
                     'delay'   => 3500,
                     'time'    => 'now',
+                ]);
+        }
+    }
+
+    // ==================== BLACKLIST METHODS ====================
+
+    /**
+     * Display blacklisted clients.
+     */
+    public function blacklistIndex(Request $request): View
+    {
+        // // ✅ Vérifier la permission VIEW
+        // if (!auth()->user()->can('clients.general.view')) {
+        //     abort(403, 'Vous n\'avez pas la permission de voir les clients blacklistés.');
+        // }
+
+        $query = BlacklistedClient::with(['client', 'agency', 'blacklistedBy']);
+
+        // 🔎 SEARCH
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->whereHas('client', function ($q) use ($search) {
+                $q->where('first_name', 'like', "%{$search}%")
+                  ->orWhere('last_name', 'like', "%{$search}%")
+                  ->orWhere('phone', 'like', "%{$search}%")
+                  ->orWhere('cin_number', 'like', "%{$search}%");
+            });
+        }
+
+        // 🏢 FILTER BY AGENCY
+        if ($request->filled('agency_id')) {
+            $query->where('agency_id', $request->agency_id);
+        }
+
+        // 📅 FILTER BY DATE
+        if ($request->filled('date_from')) {
+            $query->whereDate('created_at', '>=', $request->date_from);
+        }
+        if ($request->filled('date_to')) {
+            $query->whereDate('created_at', '<=', $request->date_to);
+        }
+
+        $blacklisted = $query->latest()->paginate(15)->withQueryString();
+        $agencies = Agency::all();
+
+        return view('backoffice.clients.blacklist', compact('blacklisted', 'agencies'));
+    }
+
+    /**
+     * Check if a client with given CIN is blacklisted in any agency
+     */
+    public function checkBlacklist(Request $request)
+    {
+        $request->validate([
+            'cin' => 'required|string|max:50'
+        ]);
+
+        $client = Client::where('cin_number', $request->cin)
+            ->where('status', 'blacklisted')
+            ->with('agency')
+            ->first();
+
+        if ($client) {
+            $blacklistEntry = BlacklistedClient::where('client_id', $client->id)->latest()->first();
+            
+            return response()->json([
+                'blacklisted' => true,
+                'client' => [
+                    'id' => $client->id,
+                    'first_name' => $client->first_name,
+                    'last_name' => $client->last_name,
+                    'cin_number' => $client->cin_number,
+                    'phone' => $client->phone,
+                    'notes' => $blacklistEntry?->reason ?? $client->notes,
+                    'updated_at' => $client->updated_at
+                ],
+                'agency' => $client->agency ? [
+                    'id' => $client->agency->id,
+                    'name' => $client->agency->name,
+                    'city' => $client->agency->city,
+                    'phone' => $client->agency->phone
+                ] : null
+            ]);
+        }
+
+        return response()->json(['blacklisted' => false]);
+    }
+
+    /**
+     * Add client to blacklist
+     */
+    public function addToBlacklist(Request $request, Client $client)
+    {
+        $request->validate([
+            'reason' => 'required|string|max:500',
+            'internal_notes' => 'nullable|string|max:500'
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            // Create blacklist entry
+            BlacklistedClient::create([
+                'client_id' => $client->id,
+                'agency_id' => auth()->user()->agency_id,
+                'blacklisted_by' => auth()->id(),
+                'reason' => $request->reason,
+                'internal_notes' => $request->internal_notes
+            ]);
+
+            // Update client status
+            $client->status = 'blacklisted';
+            $client->notes = ($client->notes ? $client->notes . "\n\n" : '') . 
+                "[BLACKLISTÉ] " . $request->reason;
+            $client->save();
+
+            $this->createNotification('blacklist', 'client', $client, [
+                'reason' => $request->reason
+            ]);
+
+            DB::commit();
+
+            return redirect()
+                ->back()
+                ->with('toast', [
+                    'title' => 'Client blacklisté',
+                    'message' => 'Le client a été ajouté à la blacklist',
+                    'dot' => '#dc3545',
+                    'delay' => 3500,
+                ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()
+                ->back()
+                ->with('toast', [
+                    'title' => 'Erreur',
+                    'message' => 'Erreur: ' . $e->getMessage(),
+                    'dot' => '#dc3545',
+                    'delay' => 3500,
+                ]);
+        }
+    }
+
+    /**
+     * Remove client from blacklist
+     */
+    public function removeFromBlacklist(Request $request, Client $client)
+    {
+        $request->validate([
+            'unblacklist_reason' => 'nullable|string|max:500'
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            // Delete blacklist entries
+            BlacklistedClient::where('client_id', $client->id)->delete();
+
+            // Update client status
+            $client->status = 'active';
+            if ($request->filled('unblacklist_reason')) {
+                $client->notes = ($client->notes ? $client->notes . "\n\n" : '') . 
+                    "[RETIRÉ DE LA BLACKLIST] " . $request->unblacklist_reason;
+            }
+            $client->save();
+
+            $this->createNotification('unblacklist', 'client', $client, [
+                'reason' => $request->unblacklist_reason
+            ]);
+
+            DB::commit();
+
+            return redirect()
+                ->back()
+                ->with('toast', [
+                    'title' => 'Client retiré',
+                    'message' => 'Le client a été retiré de la blacklist',
+                    'dot' => '#198754',
+                    'delay' => 3500,
+                ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()
+                ->back()
+                ->with('toast', [
+                    'title' => 'Erreur',
+                    'message' => 'Erreur: ' . $e->getMessage(),
+                    'dot' => '#dc3545',
+                    'delay' => 3500,
                 ]);
         }
     }

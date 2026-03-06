@@ -32,7 +32,7 @@
         <li>
             <a class="dropdown-item rounded-1 text-danger" 
                href="#"
-               onclick="event.preventDefault(); event.stopPropagation(); document.getElementById('deleteAccountForm').action = '{{ route('backoffice.finance.accounts.destroy', $account) }}'; document.getElementById('deleteAccountName').innerText = '{{ $account->name }}'; new bootstrap.Modal(document.getElementById('delete_account')).show(); return false;">
+               onclick="event.preventDefault(); event.stopPropagation(); document.getElementById('deleteAccountForm').action = '{{ route('backoffice.finance.accounts.destroy', $account) }}'; document.getElementById('deleteAccountText').innerHTML = 'Êtes-vous sûr de vouloir supprimer le compte <strong>{{ $account->name }}</strong> ?'; new bootstrap.Modal(document.getElementById('delete_account')).show(); return false;">
                 <i class="ti ti-trash me-2"></i>Supprimer
             </a>
         </li>

@@ -6,7 +6,7 @@
                     <i class="ti ti-trash-x fs-26"></i>
                 </span>
                 <h4 class="mb-1">Supprimer la transaction</h4>
-                <p class="mb-3" id="deleteTransactionText">Êtes-vous sûr de vouloir supprimer cette transaction ?</p>
+                <p class="mb-3">Êtes-vous sûr de vouloir supprimer la transaction <strong id="deleteTransactionRef"></strong> ?</p>
                 
                 <form method="POST" action="" id="deleteTransactionForm">
                     @csrf
@@ -34,14 +34,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 const details = button.getAttribute('data-delete-details') || 'cette transaction';
                 
                 const form = document.getElementById('deleteTransactionForm');
-                const text = document.getElementById('deleteTransactionText');
+                const refElement = document.getElementById('deleteTransactionRef');
                 
                 if (action && form) {
                     form.action = action;
                 }
                 
-                if (text && details) {
-                    text.innerHTML = 'Êtes-vous sûr de vouloir supprimer ' + details + ' ?';
+                if (refElement && details) {
+                    refElement.innerText = details;
                 }
             }
         });

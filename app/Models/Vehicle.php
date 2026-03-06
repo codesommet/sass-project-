@@ -59,10 +59,20 @@ class Vehicle extends Model implements HasMedia
         return $this->getMainPhotoUrlAttribute();
     }
 
-    // Ajoutez cette méthode
+/**
+ * Get the credits for the vehicle.
+ */
 public function credits()
 {
     return $this->hasMany(VehicleCredit::class);
+}
+
+/**
+ * Get the most recent credit for the vehicle.
+ */
+public function latestCredit()
+{
+    return $this->hasOne(VehicleCredit::class)->latestOfMany();
 }
 
 public function activeCredit()

@@ -298,9 +298,10 @@ class VehicleCreditController extends Controller
             'can_record_payment' => auth()->user()->can('vehicle-credits.general.edit'),
         ];
         
-        return view('Backoffice.vehicle-credits.show', [
-            'credit' => $vehicleCredit,
-            'permissions' => $permissions
+    return view('Backoffice.vehicle-credits.show', [
+        'credit' => $vehicleCredit,
+        'permissions' => $permissions,
+        'from' => request('from')
         ]);
     }
 

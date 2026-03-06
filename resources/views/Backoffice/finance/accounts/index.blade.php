@@ -75,6 +75,78 @@
     .collapse.show {
         display: block;
     }
+
+    /* ============ PAGINATION STYLING ============ */
+    .pagination {
+        margin: 0;
+        display: flex;
+        padding-left: 0;
+        list-style: none;
+        border-radius: 0.25rem;
+    }
+    
+    .pagination .page-item.active .page-link {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+        color: white;
+        z-index: 3;
+    }
+    
+    .pagination .page-link {
+        position: relative;
+        display: block;
+        padding: 0.5rem 0.75rem;
+        margin-left: -1px;
+        line-height: 1.25;
+        color: #0d6efd;
+        background-color: #fff;
+        border: 1px solid #dee2e6;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+    
+    .pagination .page-link:hover {
+        background-color: #e9ecef;
+        border-color: #dee2e6;
+        color: #0a58ca;
+        z-index: 2;
+    }
+    
+    .pagination .page-item:first-child .page-link {
+        margin-left: 0;
+        border-top-left-radius: 0.25rem;
+        border-bottom-left-radius: 0.25rem;
+    }
+    
+    .pagination .page-item:last-child .page-link {
+        border-top-right-radius: 0.25rem;
+        border-bottom-right-radius: 0.25rem;
+    }
+    
+    .pagination .page-item.disabled .page-link {
+        color: #6c757d;
+        pointer-events: none;
+        cursor: auto;
+        background-color: #fff;
+        border-color: #dee2e6;
+    }
+    
+    .pagination-info {
+        color: #6c757d;
+        font-size: 14px;
+    }
+    
+    .pagination-container {
+        display: flex;
+        justify-content: flex-end;
+    }
+    
+    @media (max-width: 768px) {
+        .pagination-container {
+            justify-content: center;
+            margin-top: 15px;
+        }
+    }
 </style>
 
 <div class="page-wrapper">
@@ -177,14 +249,77 @@
             @include('backoffice.finance.accounts.partials._table', ['accounts' => $accounts])
         </div>
 
-        <!-- Pagination -->
+        <!-- PAGINATION - FIXED VERSION -->
         @if(isset($accounts) && $accounts->total() > 0)
-        <div class="d-flex justify-content-between align-items-center mt-4">
-            <div class="text-muted">
-                Affichage de {{ $accounts->firstItem() }} à {{ $accounts->lastItem() }} sur {{ $accounts->total() }} comptes
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4">
+            <div class="pagination-info mb-3 mb-md-0">
+                Affichage de <span class="fw-semibold">{{ $accounts->firstItem() }}</span> à <span class="fw-semibold">{{ $accounts->lastItem() }}</span> 
+                sur <span class="fw-semibold">{{ $accounts->total() }}</span> comptes
             </div>
-            <div>
-                {{ $accounts->withQueryString()->links() }}
+            <div class="pagination-container">
+                @if ($accounts->hasPages())
+                    <nav aria-label="Navigation des pages">
+                        <ul class="pagination justify-content-center mb-0">
+                            {{-- Previous Page Link --}}
+                            @if ($accounts->onFirstPage())
+                                <li class="page-item disabled">
+                                    <span class="page-link" aria-hidden="true">
+                                        <i class="ti ti-chevron-left"></i>
+                                    </span>
+                                </li>
+                            @else
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ $accounts->previousPageUrl() }}" rel="prev" aria-label="Précédent">
+                                        <i class="ti ti-chevron-left"></i>
+                                    </a>
+                                </li>
+                            @endif
+
+                            {{-- Pagination Elements - Show 5 pages at a time --}}
+                            @php
+                                $start = max(1, $accounts->currentPage() - 2);
+                                $end = min($accounts->lastPage(), $accounts->currentPage() + 2);
+                                
+                                // Show first page with ellipsis if needed
+                                if ($start > 1) {
+                                    echo '<li class="page-item"><a class="page-link" href="' . $accounts->url(1) . '">1</a></li>';
+                                    if ($start > 2) {
+                                        echo '<li class="page-item disabled"><span class="page-link">...</span></li>';
+                                    }
+                                }
+                                
+                                // Show pages around current page
+                                for ($i = $start; $i <= $end; $i++) {
+                                    $active = $i == $accounts->currentPage() ? 'active' : '';
+                                    echo '<li class="page-item ' . $active . '"><a class="page-link" href="' . $accounts->url($i) . '">' . $i . '</a></li>';
+                                }
+                                
+                                // Show last page with ellipsis if needed
+                                if ($end < $accounts->lastPage()) {
+                                    if ($end < $accounts->lastPage() - 1) {
+                                        echo '<li class="page-item disabled"><span class="page-link">...</span></li>';
+                                    }
+                                    echo '<li class="page-item"><a class="page-link" href="' . $accounts->url($accounts->lastPage()) . '">' . $accounts->lastPage() . '</a></li>';
+                                }
+                            @endphp
+
+                            {{-- Next Page Link --}}
+                            @if ($accounts->hasMorePages())
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ $accounts->nextPageUrl() }}" rel="next" aria-label="Suivant">
+                                        <i class="ti ti-chevron-right"></i>
+                                    </a>
+                                </li>
+                            @else
+                                <li class="page-item disabled">
+                                    <span class="page-link" aria-hidden="true">
+                                        <i class="ti ti-chevron-right"></i>
+                                    </span>
+                                </li>
+                            @endif
+                        </ul>
+                    </nav>
+                @endif
             </div>
         </div>
         @endif

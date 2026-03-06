@@ -12,7 +12,8 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 class Client extends Model implements HasMedia
 {
     use HasFactory, SoftDeletes, InteractsWithMedia;
-      protected $dates = ['deleted_at'];
+    
+    protected $dates = ['deleted_at'];
 
     protected $fillable = [
         'agency_id',
@@ -114,5 +115,20 @@ class Client extends Model implements HasMedia
     public function agency()
     {
         return $this->belongsTo(Agency::class);
+    }
+
+    public function blacklistEntries()
+    {
+        return $this->hasMany(BlacklistedClient::class);
+    }
+
+    public function isBlacklisted(): bool
+    {
+        return $this->status === 'blacklisted';
+    }
+
+    public function currentBlacklistEntry()
+    {
+        return $this->hasOne(BlacklistedClient::class)->latestOfMany();
     }
 }

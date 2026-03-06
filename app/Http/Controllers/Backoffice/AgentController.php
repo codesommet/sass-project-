@@ -24,7 +24,16 @@ class AgentController extends Controller
             abort(403, 'Vous n\'avez pas la permission de voir les agents.');
         }
 
+        $user = auth()->user();
+        $userAgencyId = $user->agency_id; // Get the current user's agency ID
+
         $query = Agent::with(['agency', 'user']);
+
+        // 👥 FILTER BY CURRENT USER'S AGENCY
+        // If user is not super admin, only show agents from their agency
+        if (!$user->hasRole('super-admin')) {
+            $query->where('agency_id', $userAgencyId);
+        }
 
         // 🔎 SEARCH
         if ($request->filled('search')) {
@@ -40,8 +49,8 @@ class AgentController extends Controller
             });
         }
 
-        // 🏢 FILTER BY AGENCY
-        if ($request->filled('agency_id')) {
+        // 🏢 FILTER BY AGENCY (only if user is super-admin)
+        if ($user->hasRole('super-admin') && $request->filled('agency_id')) {
             $query->where('agency_id', $request->agency_id);
         }
 
@@ -56,8 +65,21 @@ class AgentController extends Controller
 
         $agents = $query->paginate(15)->withQueryString();
 
-        $agencies = Agency::all();
-        $users = User::all();
+        // Get agencies for filter dropdown - only show relevant agencies
+        if ($user->hasRole('super-admin')) {
+            // Super-admin can see all agencies
+            $agencies = Agency::all();
+        } else {
+            // Regular users only see their own agency
+            $agencies = Agency::where('id', $userAgencyId)->get();
+        }
+
+        // Get users for filter dropdown - only show users from the same agency
+        $usersQuery = User::query();
+        if (!$user->hasRole('super-admin')) {
+            $usersQuery->where('agency_id', $userAgencyId);
+        }
+        $users = $usersQuery->get();
 
         // ✅ Passer les permissions à la vue
         $permissions = [
@@ -80,8 +102,22 @@ class AgentController extends Controller
             abort(403, 'Vous n\'avez pas la permission de créer des agents.');
         }
 
-        $agencies = Agency::all();
-        $users = User::all();
+        $user = auth()->user();
+        $userAgencyId = $user->agency_id;
+
+        // Only show agencies the user has access to
+        if ($user->hasRole('super-admin')) {
+            $agencies = Agency::all();
+        } else {
+            $agencies = Agency::where('id', $userAgencyId)->get();
+        }
+
+        // Only show users from the same agency
+        $usersQuery = User::query();
+        if (!$user->hasRole('super-admin')) {
+            $usersQuery->where('agency_id', $userAgencyId);
+        }
+        $users = $usersQuery->get();
 
         return view('backoffice.agents.partials._modal_create', compact('agencies', 'users'));
     }
@@ -97,6 +133,12 @@ class AgentController extends Controller
         }
 
         $validated = $request->validated();
+
+        // Ensure the agent is created for the user's agency if not super-admin
+        $user = auth()->user();
+        if (!$user->hasRole('super-admin')) {
+            $validated['agency_id'] = $user->agency_id;
+        }
 
         try {
             DB::beginTransaction();
@@ -153,6 +195,12 @@ class AgentController extends Controller
             abort(403, 'Vous n\'avez pas la permission de voir les agents.');
         }
 
+        // Check if user has access to this agent
+        $user = auth()->user();
+        if (!$user->hasRole('super-admin') && $agent->agency_id !== $user->agency_id) {
+            abort(403, 'Vous n\'avez pas accès à cet agent.');
+        }
+
         $agent->load(['agency', 'user']);
 
         // ✅ Passer les permissions à la vue
@@ -174,9 +222,27 @@ class AgentController extends Controller
             abort(403, 'Vous n\'avez pas la permission de modifier les agents.');
         }
 
+        // Check if user has access to this agent
+        $user = auth()->user();
+        if (!$user->hasRole('super-admin') && $agent->agency_id !== $user->agency_id) {
+            abort(403, 'Vous n\'avez pas accès à cet agent.');
+        }
+
         $agent->load(['agency', 'user']);
-        $agencies = Agency::all();
-        $users = User::all();
+        
+        // Only show agencies the user has access to
+        if ($user->hasRole('super-admin')) {
+            $agencies = Agency::all();
+        } else {
+            $agencies = Agency::where('id', $user->agency_id)->get();
+        }
+
+        // Only show users from the same agency
+        $usersQuery = User::query();
+        if (!$user->hasRole('super-admin')) {
+            $usersQuery->where('agency_id', $user->agency_id);
+        }
+        $users = $usersQuery->get();
 
         return view('backoffice.agents.partials._modal_edit', compact('agent', 'agencies', 'users'));
     }
@@ -191,7 +257,18 @@ class AgentController extends Controller
             abort(403, 'Vous n\'avez pas la permission de modifier les agents.');
         }
 
+        // Check if user has access to this agent
+        $user = auth()->user();
+        if (!$user->hasRole('super-admin') && $agent->agency_id !== $user->agency_id) {
+            abort(403, 'Vous n\'avez pas accès à cet agent.');
+        }
+
         $validated = $request->validated();
+
+        // Ensure the agent stays in the user's agency if not super-admin
+        if (!$user->hasRole('super-admin')) {
+            $validated['agency_id'] = $user->agency_id;
+        }
 
         try {
             DB::beginTransaction();
@@ -253,6 +330,12 @@ class AgentController extends Controller
         // ✅ Vérifier la permission DELETE
         if (!auth()->user()->can('agents.general.delete')) {
             abort(403, 'Vous n\'avez pas la permission de supprimer les agents.');
+        }
+
+        // Check if user has access to this agent
+        $user = auth()->user();
+        if (!$user->hasRole('super-admin') && $agent->agency_id !== $user->agency_id) {
+            abort(403, 'Vous n\'avez pas accès à cet agent.');
         }
 
         try {

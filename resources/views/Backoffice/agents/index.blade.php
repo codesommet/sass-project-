@@ -26,6 +26,41 @@
 @extends('layout.mainlayout_admin')
 
 @section('content')
+<style>
+    /* Pagination styling */
+    .pagination {
+        margin: 0;
+    }
+    .pagination .page-item.active .page-link {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+        color: white;
+    }
+    .pagination .page-link {
+        color: #0d6efd;
+        border-radius: 8px;
+        margin: 0 3px;
+        padding: 8px 12px;
+    }
+    .pagination .page-link:hover {
+        background-color: #e9ecef;
+    }
+    .pagination-info {
+        color: #6c757d;
+        font-size: 14px;
+    }
+    .pagination-container {
+        display: flex;
+        justify-content: flex-end;
+    }
+    @media (max-width: 768px) {
+        .pagination-container {
+            justify-content: center;
+            margin-top: 15px;
+        }
+    }
+</style>
+
 <div class="page-wrapper">
     <div class="content me-4">
 
@@ -65,6 +100,9 @@
                                    href="{{ route('backoffice.agents.index', array_merge(request()->all(), ['sort'=>'za'])) }}">
                                     Z → A
                                 </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
                             </li>
                             <li>
                                 <a class="dropdown-item"
@@ -158,12 +196,72 @@
 
         <!-- PAGINATION -->
         @if($agents->total() > 0)
-        <div class="d-flex justify-content-between align-items-center mt-4">
-            <div class="text-muted">
-                Affichage de {{ $agents->firstItem() }} à {{ $agents->lastItem() }} sur {{ $agents->total() }} agents
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4">
+            <div class="pagination-info mb-3 mb-md-0">
+                Affichage de <span class="fw-semibold">{{ $agents->firstItem() }}</span> à <span class="fw-semibold">{{ $agents->lastItem() }}</span> 
+                sur <span class="fw-semibold">{{ $agents->total() }}</span> agents
             </div>
-            <div>
-                {{ $agents->withQueryString()->links() }}
+            <div class="pagination-container">
+                @if ($agents->hasPages())
+                    <nav aria-label="Navigation des pages">
+                        <ul class="pagination justify-content-center mb-0">
+                            {{-- Previous Page Link --}}
+                            @if ($agents->onFirstPage())
+                                <li class="page-item disabled">
+                                    <span class="page-link" aria-hidden="true">
+                                        <i class="ti ti-chevron-left"></i>
+                                    </span>
+                                </li>
+                            @else
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ $agents->previousPageUrl() }}" rel="prev" aria-label="Précédent">
+                                        <i class="ti ti-chevron-left"></i>
+                                    </a>
+                                </li>
+                            @endif
+
+                            {{-- Pagination Elements --}}
+                            @php
+                                $start = max(1, $agents->currentPage() - 2);
+                                $end = min($agents->lastPage(), $agents->currentPage() + 2);
+                                
+                                if ($start > 1) {
+                                    echo '<li class="page-item"><a class="page-link" href="' . $agents->url(1) . '">1</a></li>';
+                                    if ($start > 2) {
+                                        echo '<li class="page-item disabled"><span class="page-link">...</span></li>';
+                                    }
+                                }
+                                
+                                for ($i = $start; $i <= $end; $i++) {
+                                    $active = $i == $agents->currentPage() ? 'active' : '';
+                                    echo '<li class="page-item ' . $active . '"><a class="page-link" href="' . $agents->url($i) . '">' . $i . '</a></li>';
+                                }
+                                
+                                if ($end < $agents->lastPage()) {
+                                    if ($end < $agents->lastPage() - 1) {
+                                        echo '<li class="page-item disabled"><span class="page-link">...</span></li>';
+                                    }
+                                    echo '<li class="page-item"><a class="page-link" href="' . $agents->url($agents->lastPage()) . '">' . $agents->lastPage() . '</a></li>';
+                                }
+                            @endphp
+
+                            {{-- Next Page Link --}}
+                            @if ($agents->hasMorePages())
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ $agents->nextPageUrl() }}" rel="next" aria-label="Suivant">
+                                        <i class="ti ti-chevron-right"></i>
+                                    </a>
+                                </li>
+                            @else
+                                <li class="page-item disabled">
+                                    <span class="page-link" aria-hidden="true">
+                                        <i class="ti ti-chevron-right"></i>
+                                    </span>
+                                </li>
+                            @endif
+                        </ul>
+                    </nav>
+                @endif
             </div>
         </div>
         @endif
