@@ -7,6 +7,7 @@ use App\Models\Vehicle;
 use App\Models\VehicleOilChange;
 use App\Http\Requests\Backoffice\VehicleOilChange\VehicleOilChangeStoreRequest;
 use App\Http\Requests\Backoffice\VehicleOilChange\VehicleOilChangeUpdateRequest;
+use App\Services\Finance\AutoTransactionService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -246,6 +247,12 @@ class OilChangeController extends Controller
                 'observations' => $data['observations'] ?? null,
             ]);
             
+            // CRÉER AUTOMATIQUEMENT LA TRANSACTION DE DÉPENSE
+            if ($oilChange->amount > 0) {
+                app(AutoTransactionService::class)
+                    ->createExpenseFromOilChange($oilChange);
+            }
+            
             $this->createNotification('store', 'oil-change', $oilChange);
             
             DB::commit();
@@ -366,10 +373,12 @@ class OilChangeController extends Controller
             abort(404);
         }
         
-        //$this->authorize('delete', $oilChange->vehicle);
-        
         try {
             DB::beginTransaction();
+            
+            // Supprimer la transaction associée
+            app(AutoTransactionService::class)
+                ->deleteTransactionForSource('oil_change', $oilChange->id);
             
             $oilChangeData = clone $oilChange;
             $vehicleId = $oilChange->vehicle_id;

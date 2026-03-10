@@ -7,6 +7,7 @@ use App\Models\Vehicle;
 use App\Models\VehicleInsurance;
 use App\Http\Requests\Backoffice\VehicleInsurance\VehicleInsuranceStoreRequest;
 use App\Http\Requests\Backoffice\VehicleInsurance\VehicleInsuranceUpdateRequest;
+use App\Services\Finance\AutoTransactionService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -244,6 +245,12 @@ class InsuranceController extends Controller
                 'notes' => $data['notes'] ?? null,
             ]);
             
+            // CRÉER AUTOMATIQUEMENT LA TRANSACTION DE DÉPENSE
+            if ($insurance->amount > 0) {
+                app(AutoTransactionService::class)
+                    ->createExpenseFromInsurance($insurance);
+            }
+            
             $this->createNotification('store', 'insurance', $insurance);
             
             DB::commit();
@@ -359,10 +366,12 @@ class InsuranceController extends Controller
             abort(404);
         }
         
-        //$this->authorize('delete', $insurance->vehicle);
-        
         try {
             DB::beginTransaction();
+            
+            // Supprimer la transaction associée
+            app(AutoTransactionService::class)
+                ->deleteTransactionForSource('insurance', $insurance->id);
             
             $insuranceData = clone $insurance;
             $insurance->delete();
@@ -395,7 +404,7 @@ class InsuranceController extends Controller
             DB::rollBack();
             return redirect()->back()->with('toast', [
                 'title' => 'Erreur', 
-                'message' => 'Erreur lors de la suppression', 
+                'message' => 'Erreur lors de la suppression: ' . $e->getMessage(), 
                 'dot' => '#dc3545'
             ]);
         }

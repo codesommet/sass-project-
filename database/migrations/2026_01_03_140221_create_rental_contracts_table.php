@@ -16,9 +16,10 @@ return new class extends Migration
             $table->foreignId('agency_id')->constrained('agencies')->cascadeOnDelete();
             $table->string('contract_number', 50)->nullable()->unique();
             $table->foreignId('vehicle_id')->constrained('vehicles')->cascadeOnDelete();
-            $table->foreignId('primary_client_id')->constrained('clients')->cascadeOnDelete();
-            $table->foreignId('secondary_client_id')->nullable()
-                ->constrained('clients')->nullOnDelete();
+            
+            // Remove primary_client_id and secondary_client_id as they'll be in pivot table
+            // $table->foreignId('primary_client_id')->constrained('clients')->cascadeOnDelete();
+            // $table->foreignId('secondary_client_id')->nullable()->constrained('clients')->nullOnDelete();
 
             $table->date('start_date');
             $table->time('start_time');

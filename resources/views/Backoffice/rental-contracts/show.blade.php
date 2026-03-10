@@ -67,6 +67,40 @@
         display: block;
     }
     
+    /* Client badges */
+    .client-badge {
+        display: inline-block;
+        padding: 0.35rem 0.75rem;
+        border-radius: 50px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        margin-left: 8px;
+    }
+    .client-badge.primary {
+        background: #cce5ff;
+        color: #004085;
+    }
+    .client-badge.secondary {
+        background: #d4edda;
+        color: #155724;
+    }
+    
+    .client-card {
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 15px;
+        transition: all 0.3s;
+    }
+    .client-card:hover {
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    .client-card .client-role {
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
     /* PDF Preview Styles */
     .pdf-preview-container {
         border: 1px solid #dee2e6;
@@ -138,11 +172,24 @@
         object-fit: contain;
     }
     
-    .photo-badge {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        z-index: 10;
+    /* Transaction styles */
+    .transaction-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 10px;
+        padding: 20px;
+        margin-top: 20px;
+    }
+    .transaction-card .amount-large {
+        font-size: 2rem;
+        font-weight: 700;
+    }
+    .transaction-link {
+        color: white;
+        text-decoration: underline;
+    }
+    .transaction-link:hover {
+        color: #f8f9fa;
     }
 </style>
 
@@ -163,10 +210,13 @@
                         </a>
                         @endcan
                         
-                        {{-- Bouton WhatsApp - contrôlé par permission VIEW --}}
+                        {{-- WhatsApp Button for Primary Client --}}
                         @can('rental-contracts.general.view')
-                            @if($rentalContract->primaryClient && $rentalContract->primaryClient->phone)
-                            <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $rentalContract->primaryClient->phone) }}?text={{ urlencode('Bonjour, voici votre contrat #' . $rentalContract->contract_number . ' : ' . route('backoffice.contracts.pdf.single', $rentalContract->id, true)) }}" 
+                            @php
+                                $primaryClient = $rentalContract->clients()->wherePivot('role', 'primary')->first();
+                            @endphp
+                            @if($primaryClient && $primaryClient->phone)
+                            <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $primaryClient->phone) }}?text={{ urlencode('Bonjour, voici votre contrat #' . $rentalContract->contract_number . ' : ' . route('backoffice.contracts.pdf.single', $rentalContract->id, true)) }}" 
                                class="btn btn-success" target="_blank">
                                 <i class="ti ti-brand-whatsapp me-1"></i>WhatsApp
                             </a>
@@ -174,11 +224,11 @@
                         @endcan
                         
                         {{-- Bouton Modifier - contrôlé par permission EDIT --}}
-                        @if(isset($permissions['can_edit']) && $permissions['can_edit'])
+                        @can('rental-contracts.general.edit')
                         <a href="{{ route('backoffice.rental-contracts.edit', $rentalContract) }}" class="btn btn-primary">
                             <i class="ti ti-edit me-1"></i>Modifier
                         </a>
-                        @endif
+                        @endcan
                     </div>
                 </div>
 
@@ -212,190 +262,180 @@
                     </div>
                 </div>
 
+                <!-- Transaction Card -->
+                @if(isset($transaction) && $transaction)
+                <div class="transaction-card mb-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="text-white mb-2">Transaction financière</h5>
+                            <div class="amount-large">
+                                {{ $transaction->formatted_amount }}
+                            </div>
+                            <p class="mb-0 mt-2">
+                                <i class="ti ti-calendar me-1"></i> {{ $transaction->formatted_date }}
+                            </p>
+                        </div>
+                        <div class="text-end">
+                            <span class="badge bg-white text-dark mb-2">{{ $transaction->type_text }}</span>
+                            <br>
+                            <a href="{{ route('backoffice.finance.transactions.show', $transaction) }}" class="transaction-link">
+                                <i class="ti ti-eye me-1"></i>Voir la transaction
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                @endif
+
                 <!-- Info Tabs -->
                 <div class="wizard-nav">
                     <div class="nav-item">
                         <a class="nav-link active" data-panel="1">
                             <i class="ti ti-user"></i>
-                            Client & Véhicule
+                            Clients
                         </a>
                     </div>
                     <div class="nav-item">
                         <a class="nav-link" data-panel="2">
+                            <i class="ti ti-car"></i>
+                            Véhicule
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a class="nav-link" data-panel="3">
                             <i class="ti ti-calendar"></i>
                             Dates & Lieux
                         </a>
                     </div>
                     <div class="nav-item">
-                        <a class="nav-link" data-panel="3">
-                            <i class="ti ti-currency-dollar"></i>
-                            Tarifs & Observations
-                        </a>
-                    </div>
-                    <div class="nav-item">
                         <a class="nav-link" data-panel="4">
-                            <i class="ti ti-photo"></i>
-                            Photos du véhicule
+                            <i class="ti ti-currency-dollar"></i>
+                            Tarifs
                         </a>
                     </div>
                     <div class="nav-item">
                         <a class="nav-link" data-panel="5">
+                            <i class="ti ti-photo"></i>
+                            Photos
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a class="nav-link" data-panel="6">
                             <i class="ti ti-file-text"></i>
                             Aperçu PDF
                         </a>
                     </div>
                 </div>
 
-                <!-- Panel 1: Client & Véhicule -->
+                <!-- Panel 1: Clients -->
                 <div class="info-panel active" id="panel1">
                     <div class="row">
-                        <!-- Client Information -->
-                        <div class="col-md-6">
-                            <div class="card mb-4">
-                                <div class="card-header d-flex justify-content-between align-items-center">
-                                    <h5 class="card-title mb-0">
-                                        <i class="ti ti-user me-2"></i>
-                                        Client principal
-                                    </h5>
-                                    @can('rental-contracts.general.view')
-                                        @if($rentalContract->primaryClient && $rentalContract->primaryClient->phone)
-                                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $rentalContract->primaryClient->phone) }}" 
-                                           class="btn btn-sm btn-success" target="_blank">
-                                            <i class="ti ti-brand-whatsapp me-1"></i>WhatsApp
+                        @php
+                            $clients = $rentalContract->clients()->orderBy('pivot_order')->get();
+                        @endphp
+
+                        @foreach($clients as $client)
+                            <div class="col-md-6">
+                                <div class="client-card">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <span class="client-role text-muted">
+                                            @if($client->pivot->role == 'primary')
+                                                <span class="client-badge primary">Client principal</span>
+                                            @else
+                                                <span class="client-badge secondary">Client secondaire</span>
+                                            @endif
+                                        </span>
+                                        @can('clients.general.view')
+                                        <a href="{{ route('backoffice.clients.show', $client->id) }}" class="btn btn-sm btn-outline-primary">
+                                            <i class="ti ti-eye"></i>
                                         </a>
-                                        @endif
-                                    @endcan
+                                        @endcan
+                                    </div>
+                                    
+                                    <h5 class="mb-2">{{ $client->first_name }} {{ $client->last_name }}</h5>
+                                    
+                                    @if($client->phone)
+                                    <div class="mb-1">
+                                        <i class="ti ti-phone me-2 text-muted"></i>
+                                        <a href="tel:{{ $client->phone }}">{{ $client->phone }}</a>
+                                        @can('rental-contracts.general.view')
+                                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $client->phone) }}" class="ms-2 text-success" target="_blank">
+                                            <i class="ti ti-brand-whatsapp"></i>
+                                        </a>
+                                        @endcan
+                                    </div>
+                                    @endif
+                                    
+                                    @if($client->email)
+                                    <div class="mb-1">
+                                        <i class="ti ti-mail me-2 text-muted"></i>
+                                        <a href="mailto:{{ $client->email }}">{{ $client->email }}</a>
+                                    </div>
+                                    @endif
+                                    
+                                    @if($client->cin_number)
+                                    <div class="mb-1">
+                                        <i class="ti ti-id me-2 text-muted"></i>
+                                        CIN: {{ $client->cin_number }}
+                                    </div>
+                                    @endif
+                                    
+                                    @if($client->driving_license_number)
+                                    <div class="mb-1">
+                                        <i class="ti ti-license me-2 text-muted"></i>
+                                        Permis: {{ $client->driving_license_number }}
+                                    </div>
+                                    @endif
                                 </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="info-label">Nom</div>
-                                            <div class="info-value">
-                                                {{-- Lien vers client - contrôlé par permission VIEW sur clients --}}
-                                                @can('clients.general.view')
-                                                    <a href="{{ route('backoffice.clients.show', $rentalContract->primary_client_id) }}">
-                                                        {{ $rentalContract->primaryClient->first_name ?? '' }} {{ $rentalContract->primaryClient->last_name ?? '' }}
-                                                    </a>
-                                                @else
-                                                    <span>{{ $rentalContract->primaryClient->first_name ?? '' }} {{ $rentalContract->primaryClient->last_name ?? '' }}</span>
-                                                @endcan
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="info-label">Téléphone</div>
-                                            <div class="info-value">
-                                                {{ $rentalContract->primaryClient->phone ?? 'N/A' }}
-                                                @can('rental-contracts.general.view')
-                                                    @if($rentalContract->primaryClient && $rentalContract->primaryClient->phone)
-                                                    <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $rentalContract->primaryClient->phone) }}" 
-                                                       class="ms-2 text-success" target="_blank">
-                                                        <i class="ti ti-brand-whatsapp"></i>
-                                                    </a>
-                                                    @endif
-                                                @endcan
-                                            </div>
-                                        </div>
-                                        @if($rentalContract->primaryClient && $rentalContract->primaryClient->email)
-                                        <div class="col-md-12">
-                                            <div class="info-label">Email</div>
-                                            <div class="info-value">{{ $rentalContract->primaryClient->email }}</div>
-                                        </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+
+                <!-- Panel 2: Véhicule -->
+                <div class="info-panel" id="panel2">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="info-label">Véhicule</div>
+                                    <div class="info-value">
+                                        @can('vehicles.general.view')
+                                            <a href="{{ route('backoffice.vehicles.show', $rentalContract->vehicle_id) }}" class="fw-medium">
+                                                {{ $rentalContract->vehicle->registration_number ?? 'N/A' }}
+                                            </a>
+                                        @else
+                                            <span>{{ $rentalContract->vehicle->registration_number ?? 'N/A' }}</span>
+                                        @endcan
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="info-label">Modèle</div>
+                                    <div class="info-value">
+                                        @if($rentalContract->vehicle && $rentalContract->vehicle->model)
+                                            {{ $rentalContract->vehicle->model->brand->name ?? '' }} {{ $rentalContract->vehicle->model->name ?? '' }}
+                                        @else
+                                            N/A
                                         @endif
                                     </div>
                                 </div>
-                            </div>
-
-                            @if($rentalContract->secondaryClient)
-                            <div class="card mb-4">
-                                <div class="card-header d-flex justify-content-between align-items-center">
-                                    <h5 class="card-title mb-0">
-                                        <i class="ti ti-users me-2"></i>
-                                        Client secondaire
-                                    </h5>
-                                    @can('rental-contracts.general.view')
-                                        @if($rentalContract->secondaryClient->phone)
-                                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $rentalContract->secondaryClient->phone) }}" 
-                                           class="btn btn-sm btn-success" target="_blank">
-                                            <i class="ti ti-brand-whatsapp me-1"></i>WhatsApp
-                                        </a>
-                                        @endif
-                                    @endcan
+                                <div class="col-md-4">
+                                    <div class="info-label">Année</div>
+                                    <div class="info-value">{{ $rentalContract->vehicle->year ?? 'N/A' }}</div>
                                 </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="info-label">Nom</div>
-                                            <div class="info-value">
-                                                {{-- Lien vers client - contrôlé par permission VIEW sur clients --}}
-                                                @can('clients.general.view')
-                                                    <a href="{{ route('backoffice.clients.show', $rentalContract->secondary_client_id) }}">
-                                                        {{ $rentalContract->secondaryClient->first_name ?? '' }} {{ $rentalContract->secondaryClient->last_name ?? '' }}
-                                                    </a>
-                                                @else
-                                                    <span>{{ $rentalContract->secondaryClient->first_name ?? '' }} {{ $rentalContract->secondaryClient->last_name ?? '' }}</span>
-                                                @endcan
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="info-label">Téléphone</div>
-                                            <div class="info-value">
-                                                {{ $rentalContract->secondaryClient->phone ?? 'N/A' }}
-                                                @can('rental-contracts.general.view')
-                                                    @if($rentalContract->secondaryClient && $rentalContract->secondaryClient->phone)
-                                                    <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $rentalContract->secondaryClient->phone) }}" 
-                                                       class="ms-2 text-success" target="_blank">
-                                                        <i class="ti ti-brand-whatsapp"></i>
-                                                    </a>
-                                                    @endif
-                                                @endcan
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div class="col-md-4">
+                                    <div class="info-label">Couleur</div>
+                                    <div class="info-value">{{ ucfirst($rentalContract->vehicle->color ?? 'N/A') }}</div>
                                 </div>
-                            </div>
-                            @endif
-                        </div>
-
-                        <!-- Vehicle Information -->
-                        <div class="col-md-6">
-                            <div class="card mb-4">
-                                <div class="card-header">
-                                    <h5 class="card-title mb-0">
-                                        <i class="ti ti-car me-2"></i>
-                                        Véhicule
-                                    </h5>
+                                <div class="col-md-4">
+                                    <div class="info-label">Kilométrage</div>
+                                    <div class="info-value">{{ number_format($rentalContract->vehicle->current_mileage ?? 0) }} km</div>
                                 </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="info-label">Véhicule</div>
-                                            <div class="info-value">
-                                                {{-- Lien vers véhicule - contrôlé par permission VIEW sur véhicules --}}
-                                                @can('vehicles.general.view')
-                                                    <a href="{{ route('backoffice.vehicles.show', $rentalContract->vehicle_id) }}">
-                                                        {{ $rentalContract->vehicle->registration_number ?? 'N/A' }}
-                                                    </a>
-                                                @else
-                                                    <span>{{ $rentalContract->vehicle->registration_number ?? 'N/A' }}</span>
-                                                @endcan
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="info-label">Modèle</div>
-                                            <div class="info-value">{{ $rentalContract->vehicle->model->name ?? 'N/C' }}</div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="info-label">Kilométrage</div>
-                                            <div class="info-value">{{ number_format($rentalContract->vehicle->current_mileage ?? 0) }} km</div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="info-label">Statut</div>
-                                            <div class="info-value">
-                                                <span class="badge {{ $rentalContract->vehicle->status_badge_class ?? 'badge-secondary' }}">
-                                                    {{ $rentalContract->vehicle->status_text ?? 'N/A' }}
-                                                </span>
-                                            </div>
-                                        </div>
+                                <div class="col-md-4">
+                                    <div class="info-label">Statut</div>
+                                    <div class="info-value">
+                                        <span class="badge {{ $rentalContract->vehicle->status_badge_class ?? 'badge-secondary' }}">
+                                            {{ $rentalContract->vehicle->status_text ?? 'N/A' }}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -403,8 +443,8 @@
                     </div>
                 </div>
 
-                <!-- Panel 2: Dates & Lieux -->
-                <div class="info-panel" id="panel2">
+                <!-- Panel 3: Dates & Lieux -->
+                <div class="info-panel" id="panel3">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="card mb-4">
@@ -417,13 +457,13 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <div class="info-label">Début</div>
+                                            <div class="info-label">Début prévu</div>
                                             <div class="info-value">
                                                 {{ $rentalContract->formatted_start_date }} à {{ $rentalContract->formatted_start_time }}
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <div class="info-label">Fin</div>
+                                            <div class="info-label">Fin prévue</div>
                                             <div class="info-value">
                                                 {{ $rentalContract->formatted_end_date }} à {{ $rentalContract->formatted_end_time }}
                                             </div>
@@ -474,8 +514,8 @@
                     </div>
                 </div>
 
-                <!-- Panel 3: Tarifs & Observations -->
-                <div class="info-panel" id="panel3">
+                <!-- Panel 4: Tarifs -->
+                <div class="info-panel" id="panel4">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="card mb-4">
@@ -549,8 +589,8 @@
                     </div>
                 </div>
 
-                <!-- Panel 4: Photos du véhicule -->
-                <div class="info-panel" id="panel4">
+                <!-- Panel 5: Photos -->
+                <div class="info-panel" id="panel5">
                     <div class="card">
                         <div class="card-header">
                             <h5 class="card-title mb-0">
@@ -560,7 +600,7 @@
                         </div>
                         <div class="card-body">
                             @php
-                                $vehiclePhotos = [
+                                $imageFields = [
                                     'front' => 'Face avant',
                                     'rear' => 'Face arrière',
                                     'left' => 'Côté gauche',
@@ -574,9 +614,9 @@
                             @endphp
 
                             <div class="photo-gallery">
-                                @foreach($vehiclePhotos as $key => $label)
+                                @foreach($imageFields as $field => $label)
                                     @php
-                                        $photoPath = $rentalContract->{$key . '_image'} ?? null;
+                                        $photoPath = $rentalContract->{$field . '_image'} ?? null;
                                     @endphp
                                     @if($photoPath)
                                         @php $hasPhotos = true; @endphp
@@ -593,19 +633,19 @@
                                     <i class="ti ti-photo-off fs-48 text-muted mb-3"></i>
                                     <h5 class="text-muted">Aucune photo disponible</h5>
                                     <p class="text-muted">Ce contrat n'a pas de photos du véhicule.</p>
-                                    @if(isset($permissions['can_edit']) && $permissions['can_edit'])
+                                    @can('rental-contracts.general.edit')
                                     <a href="{{ route('backoffice.rental-contracts.edit', $rentalContract) }}" class="btn btn-primary mt-2">
                                         <i class="ti ti-upload me-1"></i>Ajouter des photos
                                     </a>
-                                    @endif
+                                    @endcan
                                 </div>
                             @endif
                         </div>
                     </div>
                 </div>
 
-                <!-- Panel 5: Aperçu PDF -->
-                <div class="info-panel" id="panel5">
+                <!-- Panel 6: Aperçu PDF -->
+                <div class="info-panel" id="panel6">
                     <div class="card">
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h5 class="card-title mb-0">
@@ -617,8 +657,11 @@
                                 <a href="{{ route('backoffice.contracts.pdf.single', $rentalContract->id) }}" class="btn btn-sm btn-danger" target="_blank">
                                     <i class="ti ti-download me-1"></i>Télécharger
                                 </a>
-                                @if($rentalContract->primaryClient && $rentalContract->primaryClient->phone)
-                                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $rentalContract->primaryClient->phone) }}?text={{ urlencode('Bonjour, voici votre contrat #' . $rentalContract->contract_number . ' : ' . route('backoffice.contracts.pdf.single', $rentalContract->id, true)) }}" 
+                                @php
+                                    $primaryClient = $rentalContract->clients()->wherePivot('role', 'primary')->first();
+                                @endphp
+                                @if($primaryClient && $primaryClient->phone)
+                                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $primaryClient->phone) }}?text={{ urlencode('Bonjour, voici votre contrat #' . $rentalContract->contract_number . ' : ' . route('backoffice.contracts.pdf.single', $rentalContract->id, true)) }}" 
                                    class="btn btn-sm btn-success" target="_blank">
                                     <i class="ti ti-brand-whatsapp me-1"></i>Partager
                                 </a>

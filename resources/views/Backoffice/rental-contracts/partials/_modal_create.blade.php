@@ -69,6 +69,28 @@
         margin-bottom: 0.5rem;
         display: block;
     }
+    .client-badge {
+        display: inline-block;
+        padding: 0.35rem 0.75rem;
+        border-radius: 50px;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+    .client-badge.primary {
+        background: #cce5ff;
+        color: #004085;
+    }
+    .client-badge.secondary {
+        background: #d4edda;
+        color: #155724;
+    }
+    .secondary-client-row {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        border: 1px solid #dee2e6;
+    }
 </style>
 
 <div class="page-wrapper">
@@ -144,13 +166,26 @@
                                                 <option value="">Sélectionner un véhicule</option>
                                                 @foreach($vehicles as $vehicle)
                                                     <option value="{{ $vehicle->id }}" {{ old('vehicle_id') == $vehicle->id ? 'selected' : '' }}>
-                                                        {{ $vehicle->registration_number }} - {{ $vehicle->model->name ?? 'N/C' }}
+                                                        {{ $vehicle->registration_number }} - 
+                                                        {{ optional($vehicle->model)->name ?? 'N/C' }}
+                                                        ({{ $vehicle->daily_rate }} MAD/jour)
                                                     </option>
                                                 @endforeach
                                             </select>
                                             @error('vehicle_id')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Clients Section -->
+                                <div class="row mt-3">
+                                    <div class="col-12">
+                                        <h5 class="mb-3">Clients</h5>
+                                        <div class="alert alert-info">
+                                            <i class="ti ti-info-circle me-2"></i>
+                                            Sélectionnez un client principal et ajoutez des clients secondaires si nécessaire.
                                         </div>
                                     </div>
 
@@ -160,35 +195,58 @@
                                             <label class="form-label">
                                                 Client principal <span class="text-danger">*</span>
                                             </label>
-                                            <select name="primary_client_id" class="form-select @error('primary_client_id') is-invalid @enderror" required>
-                                                <option value="">Sélectionner un client</option>
+                                            <select name="clients[primary][client_id]" class="form-select @error('clients.primary.client_id') is-invalid @enderror" required>
+                                                <option value="">Sélectionner un client principal</option>
                                                 @foreach($clients as $client)
-                                                    <option value="{{ $client->id }}" {{ old('primary_client_id') == $client->id ? 'selected' : '' }}>
+                                                    <option value="{{ $client->id }}" {{ old('clients.primary.client_id') == $client->id ? 'selected' : '' }}>
                                                         {{ $client->first_name }} {{ $client->last_name }}
+                                                        @if($client->phone) - {{ $client->phone }} @endif
                                                     </option>
                                                 @endforeach
                                             </select>
-                                            @error('primary_client_id')
+                                            <input type="hidden" name="clients[primary][role]" value="primary">
+                                            <input type="hidden" name="clients[primary][order]" value="1">
+                                            @error('clients.primary.client_id')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
                                     </div>
 
-                                    <!-- Secondary Client -->
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Client secondaire</label>
-                                            <select name="secondary_client_id" class="form-select @error('secondary_client_id') is-invalid @enderror">
-                                                <option value="">Aucun</option>
-                                                @foreach($clients as $client)
-                                                    <option value="{{ $client->id }}" {{ old('secondary_client_id') == $client->id ? 'selected' : '' }}>
-                                                        {{ $client->first_name }} {{ $client->last_name }}
-                                                    </option>
+                                    <!-- Secondary Clients Container -->
+                                    <div class="col-12">
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <h6>Clients secondaires</h6>
+                                            <button type="button" class="btn btn-sm btn-outline-primary" onclick="addSecondaryClient()">
+                                                <i class="ti ti-plus me-1"></i>Ajouter un client secondaire
+                                            </button>
+                                        </div>
+                                        <div id="secondary-clients-container">
+                                            @if(old('clients.secondary'))
+                                                @foreach(old('clients.secondary') as $index => $secondary)
+                                                    <div class="secondary-client-row">
+                                                        <div class="row">
+                                                            <div class="col-md-10">
+                                                                <select name="clients[secondary][{{ $index }}][client_id]" class="form-select">
+                                                                    <option value="">Sélectionner un client</option>
+                                                                    @foreach($clients as $client)
+                                                                        <option value="{{ $client->id }}" {{ $secondary['client_id'] == $client->id ? 'selected' : '' }}>
+                                                                            {{ $client->first_name }} {{ $client->last_name }}
+                                                                            @if($client->phone) - {{ $client->phone }} @endif
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                                <input type="hidden" name="clients[secondary][{{ $index }}][role]" value="secondary">
+                                                                <input type="hidden" name="clients[secondary][{{ $index }}][order]" value="{{ $index + 2 }}">
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <button type="button" class="btn btn-sm btn-danger w-100" onclick="this.closest('.secondary-client-row').remove()">
+                                                                    <i class="ti ti-trash me-1"></i>Supprimer
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 @endforeach
-                                            </select>
-                                            @error('secondary_client_id')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -209,7 +267,7 @@
                                             <label class="form-label">
                                                 Date de début <span class="text-danger">*</span>
                                             </label>
-                                            <input type="date" name="start_date" value="{{ old('start_date') }}" 
+                                            <input type="date" name="start_date" value="{{ old('start_date', date('Y-m-d')) }}" 
                                                    class="form-control @error('start_date') is-invalid @enderror" 
                                                    min="{{ date('Y-m-d') }}" required>
                                             @error('start_date')
@@ -238,8 +296,9 @@
                                             <label class="form-label">
                                                 Date de fin <span class="text-danger">*</span>
                                             </label>
-                                            <input type="date" name="end_date" value="{{ old('end_date') }}" 
-                                                   class="form-control @error('end_date') is-invalid @enderror" required>
+                                            <input type="date" name="end_date" value="{{ old('end_date', date('Y-m-d', strtotime('+1 day'))) }}" 
+                                                   class="form-control @error('end_date') is-invalid @enderror" 
+                                                   min="{{ date('Y-m-d', strtotime('+1 day')) }}" required>
                                             @error('end_date')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -255,7 +314,7 @@
                                             @error('end_time')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
-                                            <small class="text-muted">Optionnel</small>
+                                            <small class="text-muted">Optionnel (défaut: 10:00)</small>
                                         </div>
                                     </div>
 
@@ -303,14 +362,14 @@
                             <!-- Tab 3: Tarifs & Observations -->
                             <fieldset class="fieldset" id="tab3">
                                 <div class="row">
-                                    <!-- Daily Rate -->
+                                    <!-- Daily Rate (auto-filled from vehicle) -->
                                     <div class="col-md-4">
                                         <div class="mb-3">
                                             <label class="form-label">
                                                 Tarif journalier (MAD) <span class="text-danger">*</span>
                                             </label>
                                             <div class="input-group">
-                                                <input type="number" name="daily_rate" value="{{ old('daily_rate') }}" 
+                                                <input type="number" name="daily_rate" id="daily_rate" value="{{ old('daily_rate') }}" 
                                                        class="form-control @error('daily_rate') is-invalid @enderror" 
                                                        step="0.01" min="0" required>
                                                 <span class="input-group-text">MAD</span>
@@ -326,7 +385,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Remise (MAD)</label>
                                             <div class="input-group">
-                                                <input type="number" name="discount_amount" value="{{ old('discount_amount', 0) }}" 
+                                                <input type="number" name="discount_amount" id="discount_amount" value="{{ old('discount_amount', 0) }}" 
                                                        class="form-control @error('discount_amount') is-invalid @enderror" 
                                                        step="0.01" min="0">
                                                 <span class="input-group-text">MAD</span>
@@ -353,8 +412,20 @@
                                         </div>
                                     </div>
 
+                                    <!-- Total Amount (calculated) -->
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label class="form-label">Montant total</label>
+                                            <div class="input-group">
+                                                <input type="text" id="total_amount_display" class="form-control" readonly value="0.00 MAD">
+                                                <input type="hidden" name="total_amount" id="total_amount" value="0">
+                                            </div>
+                                            <small class="text-muted">Calculé automatiquement</small>
+                                        </div>
+                                    </div>
+
                                     <!-- Status -->
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="mb-3">
                                             <label class="form-label">Statut initial</label>
                                             <select name="status" class="form-select @error('status') is-invalid @enderror">
@@ -368,7 +439,7 @@
                                     </div>
 
                                     <!-- Source -->
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="mb-3">
                                             <label class="form-label">Source</label>
                                             <select name="source" class="form-select @error('source') is-invalid @enderror">
@@ -410,7 +481,7 @@
                             <fieldset class="fieldset" id="tab4">
                                 <div class="row">
                                     <div class="col-12 mb-4">
-                                        <h5 class="mb-2">Photos du véhicule (4 angles)</h5>
+                                        <h5 class="mb-2">Photos du véhicule (8 angles)</h5>
                                         <p class="text-muted small">Téléchargez des photos du véhicule sous différents angles pour documenter son état</p>
                                     </div>
                                     
@@ -478,7 +549,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Dashboard/Interior View (Optional) -->
+                                    <!-- Dashboard/Interior View -->
                                     <div class="col-md-3">
                                         <div class="mb-4">
                                             <span class="photo-label">Tableau de bord</span>
@@ -510,7 +581,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Damage Photos (Optional) -->
+                                    <!-- Damage Photos -->
                                     <div class="col-md-3">
                                         <div class="mb-4">
                                             <span class="photo-label">Dégâts existants</span>
@@ -526,6 +597,7 @@
                                         </div>
                                     </div>
 
+                                    <!-- Extra View -->
                                     <div class="col-md-3">
                                         <div class="mb-4">
                                             <span class="photo-label">Autre angle</span>
@@ -544,15 +616,15 @@
 
                                 <div class="alert alert-info mt-2">
                                     <i class="ti ti-info-circle me-2"></i>
-                                    Les photos aident à documenter l'état du véhicule avant la location. Maximum 5 photos, 2MB chacune.
+                                    Les photos aident à documenter l'état du véhicule avant la location. Maximum 5MB par photo.
                                 </div>
 
                                 <div class="d-flex justify-content-between mt-4">
                                     <button type="button" class="btn btn-light prev-tab" data-prev="3">
                                         <i class="ti ti-chevron-left me-1"></i> Précédent
                                     </button>
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="ti ti-device-floppy me-1"></i> Créer le contrat avec photos
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="ti ti-device-floppy me-1"></i> Créer le contrat
                                     </button>
                                 </div>
                             </fieldset>
@@ -565,6 +637,8 @@
 </div>
 
 <script>
+let secondaryClientCount = {{ old('clients.secondary') ? count(old('clients.secondary')) : 0 }};
+
 document.addEventListener('DOMContentLoaded', function() {
     // Tab Navigation
     const tabs = document.querySelectorAll('.nav-link[data-tab]');
@@ -610,7 +684,78 @@ document.addEventListener('DOMContentLoaded', function() {
             form.classList.add('was-validated');
         }, false);
     });
+
+    // Auto-fill daily rate from vehicle selection
+    const vehicleSelect = document.querySelector('[name="vehicle_id"]');
+    const dailyRateInput = document.getElementById('daily_rate');
+    
+    if (vehicleSelect && dailyRateInput) {
+        vehicleSelect.addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            if (selectedOption && selectedOption.text) {
+                const match = selectedOption.text.match(/(\d+(?:\.\d+)?)\s*MAD/);
+                if (match) {
+                    dailyRateInput.value = match[1];
+                    calculateTotal();
+                }
+            }
+        });
+    }
+
+    // Calculate total amount
+    const startDate = document.querySelector('[name="start_date"]');
+    const endDate = document.querySelector('[name="end_date"]');
+    const discountInput = document.getElementById('discount_amount');
+    
+    function calculateTotal() {
+        if (startDate && startDate.value && endDate && endDate.value && dailyRateInput && dailyRateInput.value) {
+            const start = new Date(startDate.value);
+            const end = new Date(endDate.value);
+            const diffTime = Math.abs(end - start);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+            
+            const dailyRate = parseFloat(dailyRateInput.value) || 0;
+            const discount = parseFloat(discountInput?.value) || 0;
+            const total = (diffDays * dailyRate) - discount;
+            
+            document.getElementById('total_amount_display').value = total.toFixed(2) + ' MAD';
+            document.getElementById('total_amount').value = total.toFixed(2);
+        }
+    }
+
+    if (startDate) startDate.addEventListener('change', calculateTotal);
+    if (endDate) endDate.addEventListener('change', calculateTotal);
+    if (dailyRateInput) dailyRateInput.addEventListener('input', calculateTotal);
+    if (discountInput) discountInput.addEventListener('input', calculateTotal);
 });
+
+// Add secondary client
+function addSecondaryClient() {
+    secondaryClientCount++;
+    const container = document.getElementById('secondary-clients-container');
+    const row = document.createElement('div');
+    row.className = 'secondary-client-row';
+    row.innerHTML = `
+        <div class="row">
+            <div class="col-md-10">
+                <select name="clients[secondary][${secondaryClientCount}][client_id]" class="form-select">
+                    <option value="">Sélectionner un client</option>
+                    @foreach($clients as $client)
+                        <option value="{{ $client->id }}">{{ $client->first_name }} {{ $client->last_name }} @if($client->phone) - {{ $client->phone }} @endif</option>
+                    @endforeach
+                </select>
+                <input type="hidden" name="clients[secondary][${secondaryClientCount}][role]" value="secondary">
+                <input type="hidden" name="clients[secondary][${secondaryClientCount}][order]" value="${secondaryClientCount + 1}">
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-sm btn-danger w-100" onclick="this.closest('.secondary-client-row').remove()">
+                    <i class="ti ti-trash me-1"></i>Supprimer
+                </button>
+            </div>
+        </div>
+    `;
+    container.appendChild(row);
+}
 
 // Image preview function
 function previewImage(input, previewId, placeholderId) {
@@ -636,7 +781,7 @@ function previewImage(input, previewId, placeholderId) {
     }
 }
 
-// Add file size validation
+// File size validation
 document.querySelectorAll('input[type="file"]').forEach(input => {
     input.addEventListener('change', function() {
         if (this.files && this.files[0]) {

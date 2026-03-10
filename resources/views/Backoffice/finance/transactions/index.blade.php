@@ -137,6 +137,20 @@
             margin-top: 15px;
         }
     }
+    
+    .source-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.25rem 0.75rem;
+        border-radius: 50px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        white-space: nowrap;
+    }
+    .source-badge i {
+        margin-right: 0.25rem;
+        font-size: 1rem;
+    }
 </style>
 
 <div class="page-wrapper">
@@ -204,10 +218,10 @@
             </div>
 
             <!-- Filters Panel -->
-            <div class="collapse @if(request()->has('type') || request()->has('account_id') || request()->has('category_id') || request()->has('date_from') || request()->has('date_to') || request()->has('amount_min') || request()->has('amount_max')) show @endif" id="filtercollapse">
+            <div class="collapse @if(request()->has('type') || request()->has('account_id') || request()->has('category_id') || request()->has('source_type') || request()->has('date_from') || request()->has('date_to') || request()->has('amount_min') || request()->has('amount_max')) show @endif" id="filtercollapse">
                 <div class="filterbox p-3 mb-3 bg-light-100 rounded">
                     <div class="row align-items-end">
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <label class="form-label fw-medium">Type</label>
                             <select name="type" form="filterForm" class="form-select" onchange="this.form.submit()">
                                 <option value="">Tous</option>
@@ -215,7 +229,7 @@
                                 <option value="expense" {{ request('type') == 'expense' ? 'selected' : '' }}>Dépense</option>
                             </select>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <label class="form-label fw-medium">Compte</label>
                             <select name="account_id" form="filterForm" class="form-select" onchange="this.form.submit()">
                                 <option value="">Tous</option>
@@ -226,7 +240,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <label class="form-label fw-medium">Catégorie</label>
                             <select name="category_id" form="filterForm" class="form-select" onchange="this.form.submit()">
                                 <option value="">Toutes</option>
@@ -237,23 +251,35 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
+                            <label class="form-label fw-medium">Source</label>
+                            <select name="source_type" form="filterForm" class="form-select" onchange="this.form.submit()">
+                                <option value="">Toutes les sources</option>
+                                <option value="rental_contract" {{ request('source_type') == 'rental_contract' ? 'selected' : '' }}>Contrats de location</option>
+                                <option value="vignette" {{ request('source_type') == 'vignette' ? 'selected' : '' }}>Vignettes</option>
+                                <option value="insurance" {{ request('source_type') == 'insurance' ? 'selected' : '' }}>Assurances</option>
+                                <option value="technical_check" {{ request('source_type') == 'technical_check' ? 'selected' : '' }}>Contrôles techniques</option>
+                                <option value="oil_change" {{ request('source_type') == 'oil_change' ? 'selected' : '' }}>Vidanges</option>
+                                <option value="credit_payment" {{ request('source_type') == 'credit_payment' ? 'selected' : '' }}>Paiements de crédits</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
                             <label class="form-label fw-medium">Date début</label>
                             <input type="date" form="filterForm" name="date_from" value="{{ request('date_from') }}" class="form-control" onchange="this.form.submit()">
                         </div>
-                        <div class="col-md-3 mt-2">
+                        <div class="col-md-2 mt-2">
                             <label class="form-label fw-medium">Date fin</label>
                             <input type="date" form="filterForm" name="date_to" value="{{ request('date_to') }}" class="form-control" onchange="this.form.submit()">
                         </div>
-                        <div class="col-md-3 mt-2">
+                        <div class="col-md-2 mt-2">
                             <label class="form-label fw-medium">Montant min</label>
                             <input type="number" form="filterForm" name="amount_min" value="{{ request('amount_min') }}" class="form-control" step="0.01" onchange="this.form.submit()">
                         </div>
-                        <div class="col-md-3 mt-2">
+                        <div class="col-md-2 mt-2">
                             <label class="form-label fw-medium">Montant max</label>
                             <input type="number" form="filterForm" name="amount_max" value="{{ request('amount_max') }}" class="form-control" step="0.01" onchange="this.form.submit()">
                         </div>
-                        <div class="col-md-3 mt-2 d-flex align-items-end">
+                        <div class="col-md-2 mt-2 d-flex align-items-end">
                             <a href="{{ route('backoffice.finance.transactions.index') }}" class="btn btn-sm btn-outline-danger w-100">
                                 <i class="ti ti-x me-1"></i>Tout effacer
                             </a>

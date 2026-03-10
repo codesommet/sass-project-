@@ -55,6 +55,20 @@
         color: #dc3545; 
         font-weight: 600; 
     }
+    
+    .source-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.25rem 0.75rem;
+        border-radius: 50px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        white-space: nowrap;
+    }
+    .source-badge i {
+        margin-right: 0.25rem;
+        font-size: 1rem;
+    }
 </style>
 
 <div class="table-responsive">
@@ -75,6 +89,7 @@
                 <th>Compte</th>
                 <th>Catégorie</th>
                 <th>Référence</th>
+                <th>Source</th>
                 <th>Montant</th>
                 
                 {{-- Colonne Actions - visible seulement si au moins une permission d'action --}}
@@ -98,9 +113,15 @@
                 <td>{{ $transaction->formatted_date }}</td>
                 <td>
                     @can('financial-transactions.general.view')
-                        <a href="{{ route('backoffice.finance.transactions.show', $transaction) }}" class="fw-medium">
-                            {{ $transaction->description ?? '—' }}
-                        </a>
+                        @if($transaction->source_link)
+                            <a href="{{ $transaction->source_link }}" class="fw-medium">
+                                {{ $transaction->description ?? '—' }}
+                            </a>
+                        @else
+                            <a href="{{ route('backoffice.finance.transactions.show', $transaction) }}" class="fw-medium">
+                                {{ $transaction->description ?? '—' }}
+                            </a>
+                        @endif
                     @else
                         <span class="fw-medium">{{ $transaction->description ?? '—' }}</span>
                     @endcan
@@ -127,7 +148,20 @@
                 </td>
                 <td>{{ $transaction->reference ?? '—' }}</td>
                 <td>
-                    <span class="{{ $transaction->type === 'income' ? 'amount-income' : 'amount-expense' }}">
+                    @if($transaction->source_type)
+                        @php
+                            $sourceInfo = $transaction->source_info;
+                        @endphp
+                        <span class="source-badge" style="background-color: {{ $sourceInfo['color'] }}20; color: {{ $sourceInfo['color'] }}; border: 1px solid {{ $sourceInfo['color'] }}40;">
+                            <i class="{{ $sourceInfo['icon'] }}"></i>
+                            {{ $sourceInfo['label'] }}
+                        </span>
+                    @else
+                        <span class="text-muted">—</span>
+                    @endif
+                </td>
+                <td>
+                    <span class="{{ $transaction->amount_color_class }}">
                         {{ $transaction->formatted_amount }}
                     </span>
                 </td>
@@ -145,7 +179,7 @@
                 <td></td>
                 @endcan
                 
-                <td colspan="{{ auth()->user()->can('financial-transactions.general.delete') ? 7 : 6 }}" class="text-center py-5">
+                <td colspan="{{ auth()->user()->can('financial-transactions.general.delete') ? 8 : 7 }}" class="text-center py-5">
                     <div class="text-center">
                         <i class="ti ti-transfer fs-48 text-gray-4 mb-3"></i>
                         <h5 class="mb-2">Aucune transaction trouvée</h5>

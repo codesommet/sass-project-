@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\FinancialTransaction;
 use App\Models\FinancialAccount;
 use App\Models\TransactionCategory;
+use App\Models\RentalContract;
 use App\Http\Requests\Backoffice\Finance\FinancialTransaction\FinancialTransactionStoreRequest;
 use App\Http\Requests\Backoffice\Finance\FinancialTransaction\FinancialTransactionUpdateRequest;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -115,7 +116,7 @@ class FinancialTransactionController extends Controller
     /**
      * Show the form for creating a new financial transaction.
      */
-    public function create()
+    public function create(Request $request)
     {
         // ✅ Vérifier la permission CREATE
         if (!auth()->user()->can('financial-transactions.general.create')) {
@@ -126,8 +127,28 @@ class FinancialTransactionController extends Controller
 
         $accounts = FinancialAccount::where('agency_id', $agencyId)->orderBy('name')->get();
         $categories = TransactionCategory::where('agency_id', $agencyId)->orderBy('name')->get();
+        
+        // Pré-remplir si source spécifiée
+        $sourceType = $request->get('source_type');
+        $sourceId = $request->get('source_id');
+        $prefillData = [];
+        
+        if ($sourceType === 'rental_contract' && $sourceId) {
+            $contract = RentalContract::with(['primaryClient'])->find($sourceId);
+            if ($contract) {
+                $prefillData = [
+                    'description' => "Revenu location - Contrat #{$contract->contract_number}",
+                    'reference' => $contract->contract_number,
+                    'amount' => $contract->total_amount,
+                    'date' => $contract->start_date->format('Y-m-d'),
+                    'type' => 'income',
+                    'source_type' => $sourceType,
+                    'source_id' => $sourceId
+                ];
+            }
+        }
 
-        return view('backoffice.finance.transactions.partials._modal_create', compact('accounts', 'categories'));
+        return view('backoffice.finance.transactions.partials._modal_create', compact('accounts', 'categories', 'prefillData'));
     }
 
     /**
@@ -190,7 +211,7 @@ class FinancialTransactionController extends Controller
             abort(403, 'Cette transaction n\'appartient pas à votre agence.');
         }
 
-        $financialTransaction->load(['account', 'category', 'createdBy', 'related']);
+        $financialTransaction->load(['account', 'category', 'createdBy', 'source']);
 
         // ✅ Passer les permissions à la vue
         $permissions = [

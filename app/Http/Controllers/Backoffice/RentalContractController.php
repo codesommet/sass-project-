@@ -7,8 +7,10 @@ use App\Models\RentalContract;
 use App\Models\Vehicle;
 use App\Models\Client;
 use App\Models\Agency;
+use App\Models\FinancialTransaction;
 use App\Http\Requests\Backoffice\RentalContract\RentalContractStoreRequest;
 use App\Http\Requests\Backoffice\RentalContract\RentalContractUpdateRequest;
+use App\Services\Finance\AutoTransactionService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -32,7 +34,7 @@ class RentalContractController extends Controller
         $agencyId = Auth::guard('backoffice')->user()->agency_id;
 
         $query = RentalContract::where('agency_id', $agencyId)
-            ->with(['vehicle', 'primaryClient', 'secondaryClient', 'createdBy']);
+            ->with(['vehicle', 'clients', 'createdBy']);
 
         // Search
         if ($request->filled('search')) {
@@ -44,9 +46,10 @@ class RentalContractController extends Controller
                   ->orWhereHas('vehicle', function ($sub) use ($search) {
                       $sub->where('registration_number', 'like', "%{$search}%");
                   })
-                  ->orWhereHas('primaryClient', function ($sub) use ($search) {
+                  ->orWhereHas('clients', function ($sub) use ($search) {
                       $sub->where('first_name', 'like', "%{$search}%")
-                           ->orWhere('last_name', 'like', "%{$search}%");
+                           ->orWhere('last_name', 'like', "%{$search}%")
+                           ->orWhere('phone', 'like', "%{$search}%");
                   });
             });
         }
@@ -71,7 +74,9 @@ class RentalContractController extends Controller
 
         // Filter by client
         if ($request->filled('client_id')) {
-            $query->where('primary_client_id', $request->client_id);
+            $query->whereHas('clients', function($q) use ($request) {
+                $q->where('client_id', $request->client_id);
+            });
         }
 
         // Sort
@@ -167,7 +172,7 @@ class RentalContractController extends Controller
         // Generate unique contract number
         $contractNumber = $this->generateContractNumber();
 
-        return view('backoffice.rental-contracts.partials._modal_create', compact('vehicles', 'clients', 'contractNumber'));
+        return view('backoffice.rental-contracts.create', compact('vehicles', 'clients', 'contractNumber'));
     }
 
     /**
@@ -197,7 +202,7 @@ class RentalContractController extends Controller
             $endDate = Carbon::parse($data['end_date']);
             
             // Calculate days
-            $days = $startDate->diffInDays($endDate);
+            $days = $startDate->diffInDays($endDate) + 1; // +1 to include both start and end days
             $data['planned_days'] = $days > 0 ? $days : 1;
             
             // Calculate total amount
@@ -205,18 +210,56 @@ class RentalContractController extends Controller
             $data['total_amount'] = max($total, 0);
 
             // Set datetime fields
-            $data['start_at'] = Carbon::parse($data['start_date'] . ' ' . ($data['start_time'] ?? '00:00'));
-            $data['end_at'] = Carbon::parse($data['end_date'] . ' ' . ($data['end_time'] ?? '23:59'));
+            $data['start_at'] = Carbon::parse($data['start_date'] . ' ' . ($data['start_time'] ?? '10:00'));
+            $data['end_at'] = Carbon::parse($data['end_date'] . ' ' . ($data['end_time'] ?? '10:00'));
 
             // Handle empty values
             $data['deposit_amount'] = !empty($data['deposit_amount']) ? $data['deposit_amount'] : null;
             $data['observations'] = !empty($data['observations']) ? $data['observations'] : null;
-            $data['secondary_client_id'] = !empty($data['secondary_client_id']) ? $data['secondary_client_id'] : null;
 
-            // Remove any fields that shouldn't be in the create
-            unset($data['_token']);
+            // Remove clients data from main data array (they will be handled separately)
+            $clientsData = $data['clients'] ?? [];
+            unset($data['clients']);
 
+            // Create the contract
             $contract = RentalContract::create($data);
+
+            // Attach clients
+            if (!empty($clientsData)) {
+                $clientPivotData = [];
+                
+                // Primary client
+                if (!empty($clientsData['primary']['client_id'])) {
+                    $clientPivotData[$clientsData['primary']['client_id']] = [
+                        'role' => 'primary',
+                        'order' => 1
+                    ];
+                }
+
+                // Secondary clients
+                if (!empty($clientsData['secondary'])) {
+                    $order = 2;
+                    foreach ($clientsData['secondary'] as $secondary) {
+                        if (!empty($secondary['client_id'])) {
+                            $clientPivotData[$secondary['client_id']] = [
+                                'role' => 'secondary',
+                                'order' => $order
+                            ];
+                            $order++;
+                        }
+                    }
+                }
+
+                if (!empty($clientPivotData)) {
+                    $contract->clients()->sync($clientPivotData);
+                }
+            }
+            
+            // CRÉER AUTOMATIQUEMENT LA TRANSACTION DE REVENU
+            if ($contract->total_amount > 0) {
+                app(AutoTransactionService::class)
+                    ->createRevenueFromReservation($contract);
+            }
             
             $this->createNotification('store', 'rental-contract', $contract);
 
@@ -244,6 +287,41 @@ class RentalContractController extends Controller
                     $data['contract_number'] = 'CTR-' . date('Ymd') . '-' . str_pad(rand(1, 9999), 4, '0', STR_PAD_LEFT);
                     
                     $contract = RentalContract::create($data);
+                    
+                    // Attach clients again
+                    if (!empty($clientsData)) {
+                        $clientPivotData = [];
+                        
+                        if (!empty($clientsData['primary']['client_id'])) {
+                            $clientPivotData[$clientsData['primary']['client_id']] = [
+                                'role' => 'primary',
+                                'order' => 1
+                            ];
+                        }
+
+                        if (!empty($clientsData['secondary'])) {
+                            $order = 2;
+                            foreach ($clientsData['secondary'] as $secondary) {
+                                if (!empty($secondary['client_id'])) {
+                                    $clientPivotData[$secondary['client_id']] = [
+                                        'role' => 'secondary',
+                                        'order' => $order
+                                    ];
+                                    $order++;
+                                }
+                            }
+                        }
+
+                        if (!empty($clientPivotData)) {
+                            $contract->clients()->sync($clientPivotData);
+                        }
+                    }
+                    
+                    // CRÉER AUTOMATIQUEMENT LA TRANSACTION DE REVENU
+                    if ($contract->total_amount > 0) {
+                        app(AutoTransactionService::class)
+                            ->createRevenueFromReservation($contract);
+                    }
                     
                     $this->createNotification('store', 'rental-contract', $contract);
                     
@@ -299,7 +377,12 @@ class RentalContractController extends Controller
             abort(403, 'Vous n\'avez pas la permission de voir les contrats.');
         }
         
-        $rentalContract->load(['vehicle', 'primaryClient', 'secondaryClient', 'createdBy', 'updatedBy', 'agency']);
+        $rentalContract->load(['vehicle', 'clients', 'createdBy', 'updatedBy', 'agency']);
+
+        // Récupérer la transaction associée
+        $transaction = FinancialTransaction::where('source_type', 'rental_contract')
+            ->where('source_id', $rentalContract->id)
+            ->first();
 
         // ✅ Passer les permissions à la vue
         $permissions = [
@@ -307,7 +390,7 @@ class RentalContractController extends Controller
             'can_delete' => auth()->user()->can('rental-contracts.general.delete'),
         ];
 
-        return view('backoffice.rental-contracts.show', compact('rentalContract', 'permissions'));
+        return view('backoffice.rental-contracts.show', compact('rentalContract', 'permissions', 'transaction'));
     }
 
     /**
@@ -325,7 +408,10 @@ class RentalContractController extends Controller
         $vehicles = Vehicle::where('agency_id', $agencyId)->orderBy('registration_number')->get();
         $clients = Client::where('agency_id', $agencyId)->orderBy('first_name')->get();
 
-        return view('backoffice.rental-contracts.partials._modal_edit', compact('rentalContract', 'vehicles', 'clients'));
+        // Load clients with pivot data
+        $rentalContract->load('clients');
+
+        return view('backoffice.rental-contracts.edit', compact('rentalContract', 'vehicles', 'clients'));
     }
 
     /**
@@ -349,7 +435,6 @@ class RentalContractController extends Controller
             // Handle empty values
             $data['deposit_amount'] = !empty($data['deposit_amount']) ? $data['deposit_amount'] : null;
             $data['observations'] = !empty($data['observations']) ? $data['observations'] : null;
-            $data['secondary_client_id'] = !empty($data['secondary_client_id']) ? $data['secondary_client_id'] : null;
 
             // Recalculate total amount if rates changed
             if (isset($data['daily_rate']) || isset($data['discount_amount']) || 
@@ -360,7 +445,7 @@ class RentalContractController extends Controller
                 $dailyRate = $data['daily_rate'] ?? $rentalContract->daily_rate;
                 $discount = $data['discount_amount'] ?? $rentalContract->discount_amount;
 
-                $days = $startDate->diffInDays($endDate);
+                $days = $startDate->diffInDays($endDate) + 1;
                 $data['planned_days'] = $days > 0 ? $days : 1;
                 
                 $total = ($dailyRate * $data['planned_days']) - $discount;
@@ -370,11 +455,45 @@ class RentalContractController extends Controller
                 $startTime = $data['start_time'] ?? $rentalContract->start_time;
                 $endTime = $data['end_time'] ?? $rentalContract->end_time;
                 
-                $data['start_at'] = Carbon::parse($startDate->format('Y-m-d') . ' ' . ($startTime ?? '00:00'));
-                $data['end_at'] = Carbon::parse($endDate->format('Y-m-d') . ' ' . ($endTime ?? '23:59'));
+                $data['start_at'] = Carbon::parse($startDate->format('Y-m-d') . ' ' . ($startTime ?? '10:00'));
+                $data['end_at'] = Carbon::parse($endDate->format('Y-m-d') . ' ' . ($endTime ?? '10:00'));
             }
 
+            // Remove clients data from main data array
+            $clientsData = $data['clients'] ?? [];
+            unset($data['clients']);
+
+            // Update the contract
             $rentalContract->update($data);
+
+            // Update clients
+            if (!empty($clientsData)) {
+                $clientPivotData = [];
+                
+                // Primary client
+                if (!empty($clientsData['primary']['client_id'])) {
+                    $clientPivotData[$clientsData['primary']['client_id']] = [
+                        'role' => 'primary',
+                        'order' => 1
+                    ];
+                }
+
+                // Secondary clients
+                if (!empty($clientsData['secondary'])) {
+                    $order = 2;
+                    foreach ($clientsData['secondary'] as $secondary) {
+                        if (!empty($secondary['client_id'])) {
+                            $clientPivotData[$secondary['client_id']] = [
+                                'role' => 'secondary',
+                                'order' => $order
+                            ];
+                            $order++;
+                        }
+                    }
+                }
+
+                $rentalContract->clients()->sync($clientPivotData);
+            }
             
             $this->createNotification('update', 'rental-contract', $rentalContract);
 
@@ -413,6 +532,27 @@ class RentalContractController extends Controller
 
         try {
             DB::beginTransaction();
+            
+            // Supprimer la transaction associée
+            $transaction = FinancialTransaction::where('source_type', 'rental_contract')
+                ->where('source_id', $rentalContract->id)
+                ->first();
+                
+            if ($transaction) {
+                // Inverser l'effet sur le solde du compte
+                $account = $transaction->account;
+                if ($transaction->type === 'income') {
+                    $account->current_balance -= $transaction->amount;
+                } else {
+                    $account->current_balance += $transaction->amount;
+                }
+                $account->save();
+                
+                $transaction->delete();
+            }
+            
+            // Detach clients first (though cascade should handle this)
+            $rentalContract->clients()->detach();
             
             $contractData = clone $rentalContract;
             $rentalContract->delete();
@@ -465,6 +605,24 @@ class RentalContractController extends Controller
             if ($request->status === 'cancelled') {
                 $data['cancelled_at'] = now();
                 $data['cancellation_reason'] = $request->cancellation_reason;
+                
+                // Si annulé, supprimer la transaction associée
+                $transaction = FinancialTransaction::where('source_type', 'rental_contract')
+                    ->where('source_id', $rentalContract->id)
+                    ->first();
+                    
+                if ($transaction) {
+                    // Inverser l'effet sur le solde du compte
+                    $account = $transaction->account;
+                    if ($transaction->type === 'income') {
+                        $account->current_balance -= $transaction->amount;
+                    } else {
+                        $account->current_balance += $transaction->amount;
+                    }
+                    $account->save();
+                    
+                    $transaction->delete();
+                }
             } elseif ($request->status === 'in_progress') {
                 $data['actual_start_at'] = now();
             } elseif ($request->status === 'completed') {
@@ -497,4 +655,4 @@ class RentalContractController extends Controller
             ]);
         }
     }
-}
+}   

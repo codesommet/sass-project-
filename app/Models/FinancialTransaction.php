@@ -9,7 +9,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class FinancialTransaction extends Model
 {
     use HasFactory, SoftDeletes;
-  protected $dates = ['deleted_at'];
+    
+    protected $dates = ['deleted_at'];
     protected $table = 'financial_transactions';
 
     protected $fillable = [
@@ -21,8 +22,9 @@ class FinancialTransaction extends Model
         'type',
         'description',
         'reference',
-        'related_type',
-        'related_id',
+        'source_type',
+        'source_id',
+        'metadata',
         'created_by',
         'currency',
     ];
@@ -30,6 +32,7 @@ class FinancialTransaction extends Model
     protected $casts = [
         'date' => 'date',
         'amount' => 'decimal:2',
+        'metadata' => 'array',
     ];
 
     /**
@@ -65,11 +68,65 @@ class FinancialTransaction extends Model
     }
 
     /**
-     * Get the related model (polymorphic).
+     * Get the source model (polymorphic-like relationship).
      */
-    public function related()
+    public function source()
     {
-        return $this->morphTo('related', 'related_type', 'related_id');
+        return $this->morphTo('source', 'source_type', 'source_id');
+    }
+
+    /**
+     * Get the rental contract associated with this transaction.
+     */
+    public function rentalContract()
+    {
+        return $this->belongsTo(RentalContract::class, 'source_id')
+            ->where('source_type', 'rental_contract');
+    }
+
+    /**
+     * Get the vignette associated with this transaction.
+     */
+    public function vignette()
+    {
+        return $this->belongsTo(VehicleVignette::class, 'source_id')
+            ->where('source_type', 'vignette');
+    }
+
+    /**
+     * Get the insurance associated with this transaction.
+     */
+    public function insurance()
+    {
+        return $this->belongsTo(VehicleInsurance::class, 'source_id')
+            ->where('source_type', 'insurance');
+    }
+
+    /**
+     * Get the technical check associated with this transaction.
+     */
+    public function technicalCheck()
+    {
+        return $this->belongsTo(VehicleTechnicalCheck::class, 'source_id')
+            ->where('source_type', 'technical_check');
+    }
+
+    /**
+     * Get the oil change associated with this transaction.
+     */
+    public function oilChange()
+    {
+        return $this->belongsTo(VehicleOilChange::class, 'source_id')
+            ->where('source_type', 'oil_change');
+    }
+
+    /**
+     * Get the credit payment associated with this transaction.
+     */
+    public function creditPayment()
+    {
+        return $this->belongsTo(CreditPayment::class, 'source_id')
+            ->where('source_type', 'credit_payment');
     }
 
     /**
@@ -78,7 +135,7 @@ class FinancialTransaction extends Model
     public function getFormattedAmountAttribute(): string
     {
         $prefix = $this->type === 'income' ? '+' : '-';
-        return $prefix . ' ' . number_format($this->amount, 2, ',', ' ') . ' ' . $this->currency;
+        return $prefix . ' ' . number_format($this->amount, 2, ',', ' ') . ' ' . ($this->currency ?? 'MAD');
     }
 
     /**
@@ -86,7 +143,7 @@ class FinancialTransaction extends Model
      */
     public function getFormattedDateAttribute(): string
     {
-        return $this->date->format('d/m/Y');
+        return $this->date ? $this->date->format('d/m/Y') : 'N/A';
     }
 
     /**
@@ -103,6 +160,49 @@ class FinancialTransaction extends Model
     public function getTypeTextAttribute(): string
     {
         return $this->type === 'income' ? 'Revenu' : 'Dépense';
+    }
+
+    /**
+     * Get source label and icon.
+     */
+    public function getSourceInfoAttribute(): array
+    {
+        $sources = [
+            'rental_contract' => ['label' => 'Contrat de location', 'icon' => 'ti ti-file-text', 'color' => 'primary'],
+            'vignette' => ['label' => 'Vignette', 'icon' => 'ti ti-ticket', 'color' => 'info'],
+            'insurance' => ['label' => 'Assurance', 'icon' => 'ti ti-shield', 'color' => 'success'],
+            'technical_check' => ['label' => 'Contrôle technique', 'icon' => 'ti ti-clipboard-check', 'color' => 'warning'],
+            'oil_change' => ['label' => 'Vidange', 'icon' => 'ti ti-droplet', 'color' => 'danger'],
+            'credit_payment' => ['label' => 'Paiement de crédit', 'icon' => 'ti ti-credit-card', 'color' => 'secondary'],
+        ];
+
+        return $sources[$this->source_type] ?? ['label' => 'Manuelle', 'icon' => 'ti ti-file', 'color' => 'secondary'];
+    }
+
+    /**
+     * Get source badge HTML.
+     */
+    public function getSourceBadgeAttribute(): string
+    {
+        $info = $this->source_info;
+        return '<span class="badge bg-' . $info['color'] . ' text-white"><i class="' . $info['icon'] . ' me-1"></i>' . $info['label'] . '</span>';
+    }
+
+    /**
+     * Get metadata as array.
+     */
+    public function getMetadataArrayAttribute(): array
+    {
+        return $this->metadata ? (is_string($this->metadata) ? json_decode($this->metadata, true) : $this->metadata) : [];
+    }
+
+    /**
+     * Get a specific metadata value.
+     */
+    public function getMetadataValue(string $key, $default = null)
+    {
+        $metadata = $this->metadata_array;
+        return $metadata[$key] ?? $default;
     }
 
     /**
@@ -127,6 +227,92 @@ class FinancialTransaction extends Model
     public function scopeInDateRange($query, $start, $end)
     {
         return $query->whereBetween('date', [$start, $end]);
+    }
+
+    /**
+     * Scope a query to filter by source type.
+     */
+    public function scopeOfSource($query, $type, $id = null)
+    {
+        if ($id) {
+            return $query->where('source_type', $type)->where('source_id', $id);
+        }
+        return $query->where('source_type', $type);
+    }
+
+    /**
+     * Scope a query to get transactions for a specific vehicle.
+     */
+    public function scopeForVehicle($query, $vehicleId)
+    {
+        return $query->where(function($q) use ($vehicleId) {
+            $q->whereHas('rentalContract', function($sub) use ($vehicleId) {
+                $sub->where('vehicle_id', $vehicleId);
+            })->orWhereHas('vignette', function($sub) use ($vehicleId) {
+                $sub->where('vehicle_id', $vehicleId);
+            })->orWhereHas('insurance', function($sub) use ($vehicleId) {
+                $sub->where('vehicle_id', $vehicleId);
+            })->orWhereHas('technicalCheck', function($sub) use ($vehicleId) {
+                $sub->where('vehicle_id', $vehicleId);
+            })->orWhereHas('oilChange', function($sub) use ($vehicleId) {
+                $sub->where('vehicle_id', $vehicleId);
+            })->orWhereHas('creditPayment', function($sub) use ($vehicleId) {
+                $sub->whereHas('credit', function($c) use ($vehicleId) {
+                    $c->where('vehicle_id', $vehicleId);
+                });
+            });
+        });
+    }
+
+    /**
+     * Get the color class for amount.
+     */
+    public function getAmountColorClassAttribute(): string
+    {
+        return $this->type === 'income' ? 'amount-income' : 'amount-expense';
+    }
+
+    /**
+     * Get the source link if available.
+     */
+    public function getSourceLinkAttribute(): ?string
+    {
+        switch ($this->source_type) {
+            case 'rental_contract':
+                return $this->source_id ? route('backoffice.rental-contracts.show', $this->source_id) : null;
+            case 'vignette':
+                return $this->source_id && $this->vignette && $this->vignette->vehicle 
+                    ? route('backoffice.vehicles.vignettes.show', ['vehicle' => $this->vignette->vehicle_id, 'vignette' => $this->source_id])
+                    : null;
+            case 'insurance':
+                return $this->source_id && $this->insurance && $this->insurance->vehicle
+                    ? route('backoffice.vehicles.insurances.show', ['vehicle' => $this->insurance->vehicle_id, 'insurance' => $this->source_id])
+                    : null;
+            case 'technical_check':
+                return $this->source_id && $this->technicalCheck && $this->technicalCheck->vehicle
+                    ? route('backoffice.vehicles.technical-checks.show', ['vehicle' => $this->technicalCheck->vehicle_id, 'technicalCheck' => $this->source_id])
+                    : null;
+            case 'oil_change':
+                return $this->source_id && $this->oilChange && $this->oilChange->vehicle
+                    ? route('backoffice.vehicles.oil-changes.show', ['vehicle' => $this->oilChange->vehicle_id, 'oilChange' => $this->source_id])
+                    : null;
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * Get the transaction summary for display.
+     */
+    public function getSummaryAttribute(): string
+    {
+        $info = $this->source_info;
+        
+        if ($this->source_type) {
+            return $info['label'] . ' - ' . $this->description;
+        }
+        
+        return $this->description ?? 'Transaction manuelle';
     }
 
     /**

@@ -7,6 +7,7 @@ use App\Models\Vehicle;
 use App\Models\VehicleVignette;
 use App\Http\Requests\Backoffice\VehicleVignette\VehicleVignetteStoreRequest;
 use App\Http\Requests\Backoffice\VehicleVignette\VehicleVignetteUpdateRequest;
+use App\Services\Finance\AutoTransactionService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -238,6 +239,12 @@ class VignetteController extends Controller
                 'notes' => $data['notes'] ?? null,
             ]);
             
+            // CRÉER AUTOMATIQUEMENT LA TRANSACTION DE DÉPENSE
+            if ($vignette->amount > 0) {
+                app(AutoTransactionService::class)
+                    ->createExpenseFromVignette($vignette);
+            }
+            
             $this->createNotification('store', 'vignette', $vignette);
             
             DB::commit();
@@ -368,6 +375,10 @@ class VignetteController extends Controller
         try {
             DB::beginTransaction();
             
+            // Supprimer la transaction associée
+            app(AutoTransactionService::class)
+                ->deleteTransactionForSource('vignette', $vignette->id);
+            
             // Store vignette data for notification before delete
             $vignetteData = clone $vignette;
             $vignette->delete();
@@ -400,7 +411,7 @@ class VignetteController extends Controller
             DB::rollBack();
             return redirect()->back()->with('toast', [
                 'title' => 'Erreur', 
-                'message' => 'Erreur lors de la suppression', 
+                'message' => 'Erreur lors de la suppression: ' . $e->getMessage(), 
                 'dot' => '#dc3545'
             ]);
         }

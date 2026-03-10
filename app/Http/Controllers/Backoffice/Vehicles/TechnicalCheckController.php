@@ -7,6 +7,7 @@ use App\Models\Vehicle;
 use App\Models\VehicleTechnicalCheck;
 use App\Http\Requests\Backoffice\VehicleTechnicalCheck\VehicleTechnicalCheckStoreRequest;
 use App\Http\Requests\Backoffice\VehicleTechnicalCheck\VehicleTechnicalCheckUpdateRequest;
+use App\Services\Finance\AutoTransactionService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -233,6 +234,12 @@ class TechnicalCheckController extends Controller
                 'notes' => $data['notes'] ?? null,
             ]);
             
+            // CRÉER AUTOMATIQUEMENT LA TRANSACTION DE DÉPENSE
+            if ($technicalCheck->amount > 0) {
+                app(AutoTransactionService::class)
+                    ->createExpenseFromTechnicalCheck($technicalCheck);
+            }
+            
             $this->createNotification('store', 'technical-check', $technicalCheck);
             
             DB::commit();
@@ -364,10 +371,12 @@ class TechnicalCheckController extends Controller
             abort(404);
         }
         
-        //$this->authorize('delete', $technicalCheck->vehicle);
-        
         try {
             DB::beginTransaction();
+            
+            // Supprimer la transaction associée
+            app(AutoTransactionService::class)
+                ->deleteTransactionForSource('technical_check', $technicalCheck->id);
             
             $technicalCheckData = clone $technicalCheck;
             $technicalCheck->delete();
@@ -400,7 +409,7 @@ class TechnicalCheckController extends Controller
             DB::rollBack();
             return redirect()->back()->with('toast', [
                 'title' => 'Erreur', 
-                'message' => 'Erreur lors de la suppression', 
+                'message' => 'Erreur lors de la suppression: ' . $e->getMessage(), 
                 'dot' => '#dc3545'
             ]);
         }

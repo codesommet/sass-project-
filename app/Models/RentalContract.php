@@ -64,6 +64,14 @@ class RentalContract extends Model
         return $this->belongsTo(Agency::class);
     }
 
+    /**
+ * Get the financial transaction associated with this contract.
+ */
+public function financialTransaction()
+{
+    return $this->morphOne(FinancialTransaction::class, 'source', 'source_type', 'source_id');
+}
+
     public function vehicle()
     {
         return $this->belongsTo(Vehicle::class);

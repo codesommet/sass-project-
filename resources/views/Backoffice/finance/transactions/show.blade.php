@@ -64,6 +64,46 @@
     .info-panel.active {
         display: block;
     }
+    
+    .metadata-card {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 15px;
+        margin-top: 15px;
+    }
+    .metadata-item {
+        display: flex;
+        margin-bottom: 10px;
+        border-bottom: 1px solid #dee2e6;
+        padding-bottom: 10px;
+    }
+    .metadata-item:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+    .metadata-key {
+        font-weight: 600;
+        width: 40%;
+        color: #495057;
+    }
+    .metadata-value {
+        width: 60%;
+        color: #212529;
+    }
+    
+    .source-badge-lg {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        font-size: 1rem;
+        font-weight: 600;
+    }
+    .source-badge-lg i {
+        margin-right: 0.5rem;
+        font-size: 1.2rem;
+    }
 </style>
 
 <div class="page-wrapper">
@@ -103,10 +143,19 @@
                                     </p>
                                 </div>
                             </div>
-                            <div>
+                            <div class="d-flex align-items-center gap-2">
                                 <span class="badge {{ $financialTransaction->type_badge_class }} fs-6 p-2">
                                     {{ $financialTransaction->type_text }}
                                 </span>
+                                @if($financialTransaction->source_type)
+                                    @php
+                                        $sourceInfo = $financialTransaction->source_info;
+                                    @endphp
+                                    <span class="source-badge-lg" style="background-color: {{ $sourceInfo['color'] }}20; color: {{ $sourceInfo['color'] }}; border: 1px solid {{ $sourceInfo['color'] }}40;">
+                                        <i class="{{ $sourceInfo['icon'] }}"></i>
+                                        {{ $sourceInfo['label'] }}
+                                    </span>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -132,6 +181,14 @@
                             Catégorie
                         </a>
                     </div>
+                    @if($financialTransaction->metadata)
+                    <div class="nav-item">
+                        <a class="nav-link" data-panel="4">
+                            <i class="ti ti-database"></i>
+                            Métadonnées
+                        </a>
+                    </div>
+                    @endif
                 </div>
 
                 <!-- Panel 1: Détails -->
@@ -250,6 +307,40 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Panel 4: Métadonnées -->
+                @if($financialTransaction->metadata)
+                <div class="info-panel" id="panel4">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="ti ti-database me-2"></i>
+                                Métadonnées de la transaction
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="metadata-card">
+                                @foreach($financialTransaction->metadata_array as $key => $value)
+                                    @if(!is_null($value) && $value !== '')
+                                    <div class="metadata-item">
+                                        <div class="metadata-key">
+                                            {{ ucfirst(str_replace('_', ' ', $key)) }}
+                                        </div>
+                                        <div class="metadata-value">
+                                            @if(is_array($value))
+                                                {{ json_encode($value) }}
+                                            @else
+                                                {{ $value }}
+                                            @endif
+                                        </div>
+                                    </div>
+                                    @endif
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @endif
 
             </div>
         </div>

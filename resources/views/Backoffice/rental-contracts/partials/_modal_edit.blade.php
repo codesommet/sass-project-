@@ -99,6 +99,29 @@
         cursor: pointer;
         border: none;
     }
+    .client-badge {
+        display: inline-block;
+        padding: 0.35rem 0.75rem;
+        border-radius: 50px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        margin-right: 5px;
+    }
+    .client-badge.primary {
+        background: #cce5ff;
+        color: #004085;
+    }
+    .client-badge.secondary {
+        background: #d4edda;
+        color: #155724;
+    }
+    .secondary-client-row {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        border: 1px solid #dee2e6;
+    }
 </style>
 
 <div class="page-wrapper">
@@ -159,6 +182,14 @@
                             <!-- Tab 1: Client & Véhicule -->
                             <fieldset class="fieldset active" id="tab1">
                                 <div class="row">
+                                    <!-- Contract Number (readonly) -->
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">N° Contrat</label>
+                                            <input type="text" class="form-control" value="{{ $rentalContract->contract_number }}" readonly>
+                                        </div>
+                                    </div>
+
                                     <!-- Vehicle -->
                                     <div class="col-md-6">
                                         <div class="mb-3">
@@ -170,7 +201,9 @@
                                                 @foreach($vehicles as $vehicle)
                                                     <option value="{{ $vehicle->id }}" 
                                                         {{ old('vehicle_id', $rentalContract->vehicle_id) == $vehicle->id ? 'selected' : '' }}>
-                                                        {{ $vehicle->registration_number }} - {{ $vehicle->model->name ?? 'N/C' }}
+                                                        {{ $vehicle->registration_number }} - 
+                                                        {{ optional($vehicle->model)->name ?? 'N/C' }}
+                                                        ({{ $vehicle->daily_rate }} MAD/jour)
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -179,44 +212,103 @@
                                             @enderror
                                         </div>
                                     </div>
+                                </div>
 
-                                    <!-- Primary Client -->
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">
-                                                Client principal <span class="text-danger">*</span>
-                                            </label>
-                                            <select name="primary_client_id" class="form-select @error('primary_client_id') is-invalid @enderror" required>
-                                                <option value="">Sélectionner un client</option>
-                                                @foreach($clients as $client)
-                                                    <option value="{{ $client->id }}" 
-                                                        {{ old('primary_client_id', $rentalContract->primary_client_id) == $client->id ? 'selected' : '' }}>
-                                                        {{ $client->first_name }} {{ $client->last_name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                            @error('primary_client_id')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
+                                <!-- Clients Section -->
+                                <div class="row mt-3">
+                                    <div class="col-12">
+                                        <h5 class="mb-3">Clients</h5>
+                                        
+                                        @php
+                                            $primaryClient = $rentalContract->clients()->wherePivot('role', 'primary')->first();
+                                            $secondaryClients = $rentalContract->clients()->wherePivot('role', 'secondary')->get();
+                                        @endphp
+
+                                        <!-- Primary Client -->
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">
+                                                    Client principal <span class="text-danger">*</span>
+                                                </label>
+                                                <select name="clients[primary][client_id]" class="form-select @error('clients.primary.client_id') is-invalid @enderror" required>
+                                                    <option value="">Sélectionner un client principal</option>
+                                                    @foreach($clients as $client)
+                                                        <option value="{{ $client->id }}" 
+                                                            {{ old('clients.primary.client_id', $primaryClient->id ?? '') == $client->id ? 'selected' : '' }}>
+                                                            {{ $client->first_name }} {{ $client->last_name }}
+                                                            @if($client->phone) - {{ $client->phone }} @endif
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                                <input type="hidden" name="clients[primary][role]" value="primary">
+                                                <input type="hidden" name="clients[primary][order]" value="1">
+                                                @error('clients.primary.client_id')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <!-- Secondary Client -->
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Client secondaire</label>
-                                            <select name="secondary_client_id" class="form-select @error('secondary_client_id') is-invalid @enderror">
-                                                <option value="">Aucun</option>
-                                                @foreach($clients as $client)
-                                                    <option value="{{ $client->id }}" 
-                                                        {{ old('secondary_client_id', $rentalContract->secondary_client_id) == $client->id ? 'selected' : '' }}>
-                                                        {{ $client->first_name }} {{ $client->last_name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                            @error('secondary_client_id')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
+                                        <!-- Secondary Clients Container -->
+                                        <div class="col-12">
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <h6>Clients secondaires</h6>
+                                                <button type="button" class="btn btn-sm btn-outline-primary" onclick="addSecondaryClient()">
+                                                    <i class="ti ti-plus me-1"></i>Ajouter un client secondaire
+                                                </button>
+                                            </div>
+                                            <div id="secondary-clients-container">
+                                                @if(old('clients.secondary'))
+                                                    @foreach(old('clients.secondary') as $index => $secondary)
+                                                        <div class="secondary-client-row">
+                                                            <div class="row">
+                                                                <div class="col-md-10">
+                                                                    <select name="clients[secondary][{{ $index }}][client_id]" class="form-select">
+                                                                        <option value="">Sélectionner un client</option>
+                                                                        @foreach($clients as $client)
+                                                                            <option value="{{ $client->id }}" {{ $secondary['client_id'] == $client->id ? 'selected' : '' }}>
+                                                                                {{ $client->first_name }} {{ $client->last_name }}
+                                                                                @if($client->phone) - {{ $client->phone }} @endif
+                                                                            </option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                    <input type="hidden" name="clients[secondary][{{ $index }}][role]" value="secondary">
+                                                                    <input type="hidden" name="clients[secondary][{{ $index }}][order]" value="{{ $index + 2 }}">
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    <button type="button" class="btn btn-sm btn-danger w-100" onclick="this.closest('.secondary-client-row').remove()">
+                                                                        <i class="ti ti-trash me-1"></i>Supprimer
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                @else
+                                                    @foreach($secondaryClients as $index => $client)
+                                                        <div class="secondary-client-row">
+                                                            <div class="row">
+                                                                <div class="col-md-10">
+                                                                    <select name="clients[secondary][{{ $index + 1 }}][client_id]" class="form-select">
+                                                                        <option value="">Sélectionner un client</option>
+                                                                        @foreach($clients as $clientOption)
+                                                                            <option value="{{ $clientOption->id }}" {{ $client->id == $clientOption->id ? 'selected' : '' }}>
+                                                                                {{ $clientOption->first_name }} {{ $clientOption->last_name }}
+                                                                                @if($clientOption->phone) - {{ $clientOption->phone }} @endif
+                                                                            </option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                    <input type="hidden" name="clients[secondary][{{ $index + 1 }}][role]" value="secondary">
+                                                                    <input type="hidden" name="clients[secondary][{{ $index + 1 }}][order]" value="{{ $index + 2 }}">
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    <button type="button" class="btn btn-sm btn-danger w-100" onclick="this.closest('.secondary-client-row').remove()">
+                                                                        <i class="ti ti-trash me-1"></i>Supprimer
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                @endif
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -340,7 +432,7 @@
                                                 Tarif journalier (MAD) <span class="text-danger">*</span>
                                             </label>
                                             <div class="input-group">
-                                                <input type="number" name="daily_rate" 
+                                                <input type="number" name="daily_rate" id="daily_rate" 
                                                        value="{{ old('daily_rate', $rentalContract->daily_rate) }}" 
                                                        class="form-control @error('daily_rate') is-invalid @enderror" 
                                                        step="0.01" min="0" required>
@@ -357,7 +449,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Remise (MAD)</label>
                                             <div class="input-group">
-                                                <input type="number" name="discount_amount" 
+                                                <input type="number" name="discount_amount" id="discount_amount" 
                                                        value="{{ old('discount_amount', $rentalContract->discount_amount) }}" 
                                                        class="form-control @error('discount_amount') is-invalid @enderror" 
                                                        step="0.01" min="0">
@@ -386,8 +478,20 @@
                                         </div>
                                     </div>
 
+                                    <!-- Total Amount -->
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label class="form-label">Montant total</label>
+                                            <div class="input-group">
+                                                <input type="text" id="total_amount_display" class="form-control" readonly 
+                                                       value="{{ number_format($rentalContract->total_amount, 2) }} MAD">
+                                                <input type="hidden" name="total_amount" id="total_amount" value="{{ $rentalContract->total_amount }}">
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <!-- Status -->
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="mb-3">
                                             <label class="form-label">Statut</label>
                                             <select name="status" class="form-select @error('status') is-invalid @enderror">
@@ -405,7 +509,7 @@
                                     </div>
 
                                     <!-- Acceptance Status -->
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="mb-3">
                                             <label class="form-label">Statut d'acceptation</label>
                                             <select name="acceptance_status" class="form-select @error('acceptance_status') is-invalid @enderror">
@@ -495,151 +599,52 @@
                                         <p class="text-muted small">Gérez les photos du véhicule pour documenter son état</p>
                                     </div>
 
-                                    <!-- Existing Photos -->
-                                    @if(isset($rentalContract->vehicle_photos) && count($rentalContract->vehicle_photos) > 0)
-                                    <div class="col-12 mb-4">
-                                        <label class="form-label fw-bold">Photos existantes</label>
-                                        <div class="d-flex flex-wrap">
-                                            @foreach($rentalContract->vehicle_photos as $index => $photo)
-                                            <div class="existing-photo">
-                                                <img src="{{ asset('storage/'.$photo) }}" alt="Photo véhicule">
-                                                <button type="button" class="delete-photo" onclick="deletePhoto({{ $index }})">
-                                                    <i class="ti ti-x"></i>
-                                                </button>
-                                                <input type="hidden" name="existing_photos[]" value="{{ $photo }}">
-                                            </div>
-                                            @endforeach
-                                        </div>
-                                    </div>
-                                    @endif
-                                    
-                                    <!-- Front View -->
-                                    <div class="col-md-3">
-                                        <div class="mb-4">
-                                            <span class="photo-label">Face avant</span>
-                                            <div class="upload-area rounded p-2 text-center" onclick="document.getElementById('front_image').click()">
-                                                <img id="front_preview" src="#" alt="Aperçu face avant" style="display: none;">
-                                                <div id="front_placeholder" class="py-4">
-                                                    <i class="ti ti-photo-plus fs-32 text-muted"></i>
-                                                    <p class="text-muted small mb-0">Cliquez pour uploader</p>
-                                                </div>
-                                            </div>
-                                            <input type="file" id="front_image" name="front_image" accept="image/*" style="display: none;" onchange="previewImage(this, 'front_preview', 'front_placeholder')">
-                                            <small class="text-muted d-block mt-1">Face avant du véhicule</small>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Rear View -->
-                                    <div class="col-md-3">
-                                        <div class="mb-4">
-                                            <span class="photo-label">Face arrière</span>
-                                            <div class="upload-area rounded p-2 text-center" onclick="document.getElementById('rear_image').click()">
-                                                <img id="rear_preview" src="#" alt="Aperçu face arrière" style="display: none;">
-                                                <div id="rear_placeholder" class="py-4">
-                                                    <i class="ti ti-photo-plus fs-32 text-muted"></i>
-                                                    <p class="text-muted small mb-0">Cliquez pour uploader</p>
-                                                </div>
-                                            </div>
-                                            <input type="file" id="rear_image" name="rear_image" accept="image/*" style="display: none;" onchange="previewImage(this, 'rear_preview', 'rear_placeholder')">
-                                            <small class="text-muted d-block mt-1">Face arrière du véhicule</small>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Left Side View -->
-                                    <div class="col-md-3">
-                                        <div class="mb-4">
-                                            <span class="photo-label">Côté gauche</span>
-                                            <div class="upload-area rounded p-2 text-center" onclick="document.getElementById('left_image').click()">
-                                                <img id="left_preview" src="#" alt="Aperçu côté gauche" style="display: none;">
-                                                <div id="left_placeholder" class="py-4">
-                                                    <i class="ti ti-photo-plus fs-32 text-muted"></i>
-                                                    <p class="text-muted small mb-0">Cliquez pour uploader</p>
-                                                </div>
-                                            </div>
-                                            <input type="file" id="left_image" name="left_image" accept="image/*" style="display: none;" onchange="previewImage(this, 'left_preview', 'left_placeholder')">
-                                            <small class="text-muted d-block mt-1">Côté gauche du véhicule</small>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Right Side View -->
-                                    <div class="col-md-3">
-                                        <div class="mb-4">
-                                            <span class="photo-label">Côté droit</span>
-                                            <div class="upload-area rounded p-2 text-center" onclick="document.getElementById('right_image').click()">
-                                                <img id="right_preview" src="#" alt="Aperçu côté droit" style="display: none;">
-                                                <div id="right_placeholder" class="py-4">
-                                                    <i class="ti ti-photo-plus fs-32 text-muted"></i>
-                                                    <p class="text-muted small mb-0">Cliquez pour uploader</p>
-                                                </div>
-                                            </div>
-                                            <input type="file" id="right_image" name="right_image" accept="image/*" style="display: none;" onchange="previewImage(this, 'right_preview', 'right_placeholder')">
-                                            <small class="text-muted d-block mt-1">Côté droit du véhicule</small>
-                                        </div>
-                                    </div>
+                                    @php
+                                        $imageFields = [
+                                            'front' => 'Face avant',
+                                            'rear' => 'Face arrière',
+                                            'left' => 'Côté gauche',
+                                            'right' => 'Côté droit',
+                                            'dashboard' => 'Tableau de bord',
+                                            'odometer' => 'Compteur',
+                                            'damage' => 'Dégâts',
+                                            'extra' => 'Autre'
+                                        ];
+                                    @endphp
 
-                                    <!-- Dashboard/Interior View -->
+                                    @foreach($imageFields as $field => $label)
                                     <div class="col-md-3">
                                         <div class="mb-4">
-                                            <span class="photo-label">Tableau de bord</span>
-                                            <div class="upload-area rounded p-2 text-center" onclick="document.getElementById('dashboard_image').click()">
-                                                <img id="dashboard_preview" src="#" alt="Aperçu tableau de bord" style="display: none;">
-                                                <div id="dashboard_placeholder" class="py-4">
+                                            <span class="photo-label">{{ $label }}</span>
+                                            
+                                            @if($rentalContract->{$field . '_image'})
+                                                <div class="existing-photo">
+                                                    <img src="{{ asset('storage/'.$rentalContract->{$field . '_image'}) }}" alt="{{ $label }}">
+                                                    <button type="button" class="delete-photo" onclick="deletePhoto('{{ $field }}')">
+                                                        <i class="ti ti-x"></i>
+                                                    </button>
+                                                </div>
+                                                <input type="hidden" name="existing_{{ $field }}_image" value="{{ $rentalContract->{$field . '_image'} }}">
+                                            @endif
+                                            
+                                            <div class="upload-area rounded p-2 text-center mt-2" onclick="document.getElementById('{{ $field }}_image').click()">
+                                                <img id="{{ $field }}_preview" src="#" alt="Aperçu {{ $label }}" style="display: none;">
+                                                <div id="{{ $field }}_placeholder" class="py-4" {{ $rentalContract->{$field . '_image'} ? 'style=display:none;' : '' }}>
                                                     <i class="ti ti-photo-plus fs-32 text-muted"></i>
-                                                    <p class="text-muted small mb-0">Cliquez pour uploader</p>
+                                                    <p class="text-muted small mb-0">
+                                                        @if($rentalContract->{$field . '_image'})
+                                                            Remplacer
+                                                        @else
+                                                            Cliquez pour uploader
+                                                        @endif
+                                                    </p>
                                                 </div>
                                             </div>
-                                            <input type="file" id="dashboard_image" name="dashboard_image" accept="image/*" style="display: none;" onchange="previewImage(this, 'dashboard_preview', 'dashboard_placeholder')">
-                                            <small class="text-muted d-block mt-1">Tableau de bord / Intérieur</small>
+                                            <input type="file" id="{{ $field }}_image" name="{{ $field }}_image" accept="image/*" style="display: none;" onchange="previewImage(this, '{{ $field }}_preview', '{{ $field }}_placeholder')">
+                                            <small class="text-muted d-block mt-1">{{ $label }}</small>
                                         </div>
                                     </div>
-                                    
-                                    <!-- Odometer Reading -->
-                                    <div class="col-md-3">
-                                        <div class="mb-4">
-                                            <span class="photo-label">Compteur kilométrique</span>
-                                            <div class="upload-area rounded p-2 text-center" onclick="document.getElementById('odometer_image').click()">
-                                                <img id="odometer_preview" src="#" alt="Aperçu compteur" style="display: none;">
-                                                <div id="odometer_placeholder" class="py-4">
-                                                    <i class="ti ti-photo-plus fs-32 text-muted"></i>
-                                                    <p class="text-muted small mb-0">Cliquez pour uploader</p>
-                                                </div>
-                                            </div>
-                                            <input type="file" id="odometer_image" name="odometer_image" accept="image/*" style="display: none;" onchange="previewImage(this, 'odometer_preview', 'odometer_placeholder')">
-                                            <small class="text-muted d-block mt-1">Lecture du compteur</small>
-                                        </div>
-                                    </div>
-
-                                    <!-- Damage Photos -->
-                                    <div class="col-md-3">
-                                        <div class="mb-4">
-                                            <span class="photo-label">Dégâts existants</span>
-                                            <div class="upload-area rounded p-2 text-center" onclick="document.getElementById('damage_image').click()">
-                                                <img id="damage_preview" src="#" alt="Aperçu dégâts" style="display: none;">
-                                                <div id="damage_placeholder" class="py-4">
-                                                    <i class="ti ti-photo-plus fs-32 text-muted"></i>
-                                                    <p class="text-muted small mb-0">Cliquez pour uploader</p>
-                                                </div>
-                                            </div>
-                                            <input type="file" id="damage_image" name="damage_image" accept="image/*" style="display: none;" onchange="previewImage(this, 'damage_preview', 'damage_placeholder')">
-                                            <small class="text-muted d-block mt-1">Dégâts existants</small>
-                                        </div>
-                                    </div>
-
-                                    <!-- Extra View -->
-                                    <div class="col-md-3">
-                                        <div class="mb-4">
-                                            <span class="photo-label">Autre angle</span>
-                                            <div class="upload-area rounded p-2 text-center" onclick="document.getElementById('extra_image').click()">
-                                                <img id="extra_preview" src="#" alt="Aperçu autre angle" style="display: none;">
-                                                <div id="extra_placeholder" class="py-4">
-                                                    <i class="ti ti-photo-plus fs-32 text-muted"></i>
-                                                    <p class="text-muted small mb-0">Cliquez pour uploader</p>
-                                                </div>
-                                            </div>
-                                            <input type="file" id="extra_image" name="extra_image" accept="image/*" style="display: none;" onchange="previewImage(this, 'extra_preview', 'extra_placeholder')">
-                                            <small class="text-muted d-block mt-1">Autre angle</small>
-                                        </div>
-                                    </div>
+                                    @endforeach
                                 </div>
 
                                 <div class="alert alert-info mt-2">
@@ -651,7 +656,7 @@
                                     <button type="button" class="btn btn-light prev-tab" data-prev="3">
                                         <i class="ti ti-chevron-left me-1"></i> Précédent
                                     </button>
-                                    <button type="submit" class="btn btn-primary">
+                                    <button type="submit" class="btn btn-success">
                                         <i class="ti ti-device-floppy me-1"></i> Mettre à jour
                                     </button>
                                 </div>
@@ -665,6 +670,8 @@
 </div>
 
 <script>
+let secondaryClientCount = {{ old('clients.secondary') ? count(old('clients.secondary')) : $secondaryClients->count() }};
+
 document.addEventListener('DOMContentLoaded', function() {
     // Tab Navigation
     const tabs = document.querySelectorAll('.nav-link[data-tab]');
@@ -699,6 +706,33 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // Calculate total amount
+    const startDate = document.querySelector('[name="start_date"]');
+    const endDate = document.querySelector('[name="end_date"]');
+    const dailyRateInput = document.getElementById('daily_rate');
+    const discountInput = document.getElementById('discount_amount');
+    
+    function calculateTotal() {
+        if (startDate && startDate.value && endDate && endDate.value && dailyRateInput && dailyRateInput.value) {
+            const start = new Date(startDate.value);
+            const end = new Date(endDate.value);
+            const diffTime = Math.abs(end - start);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+            
+            const dailyRate = parseFloat(dailyRateInput.value) || 0;
+            const discount = parseFloat(discountInput?.value) || 0;
+            const total = (diffDays * dailyRate) - discount;
+            
+            document.getElementById('total_amount_display').value = total.toFixed(2) + ' MAD';
+            document.getElementById('total_amount').value = total.toFixed(2);
+        }
+    }
+
+    if (startDate) startDate.addEventListener('change', calculateTotal);
+    if (endDate) endDate.addEventListener('change', calculateTotal);
+    if (dailyRateInput) dailyRateInput.addEventListener('input', calculateTotal);
+    if (discountInput) discountInput.addEventListener('input', calculateTotal);
+
     // Bootstrap validation
     const forms = document.querySelectorAll('.needs-validation');
     Array.from(forms).forEach(form => {
@@ -711,6 +745,34 @@ document.addEventListener('DOMContentLoaded', function() {
         }, false);
     });
 });
+
+// Add secondary client
+function addSecondaryClient() {
+    secondaryClientCount++;
+    const container = document.getElementById('secondary-clients-container');
+    const row = document.createElement('div');
+    row.className = 'secondary-client-row';
+    row.innerHTML = `
+        <div class="row">
+            <div class="col-md-10">
+                <select name="clients[secondary][${secondaryClientCount}][client_id]" class="form-select">
+                    <option value="">Sélectionner un client</option>
+                    @foreach($clients as $client)
+                        <option value="{{ $client->id }}">{{ $client->first_name }} {{ $client->last_name }} @if($client->phone) - {{ $client->phone }} @endif</option>
+                    @endforeach
+                </select>
+                <input type="hidden" name="clients[secondary][${secondaryClientCount}][role]" value="secondary">
+                <input type="hidden" name="clients[secondary][${secondaryClientCount}][order]" value="${secondaryClientCount + 1}">
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-sm btn-danger w-100" onclick="this.closest('.secondary-client-row').remove()">
+                    <i class="ti ti-trash me-1"></i>Supprimer
+                </button>
+            </div>
+        </div>
+    `;
+    container.appendChild(row);
+}
 
 // Image preview function
 function previewImage(input, previewId, placeholderId) {
@@ -737,17 +799,23 @@ function previewImage(input, previewId, placeholderId) {
 }
 
 // Delete photo function
-function deletePhoto(index) {
+function deletePhoto(field) {
     if (confirm('Voulez-vous supprimer cette photo ?')) {
         // Add hidden input to mark photo for deletion
         const input = document.createElement('input');
         input.type = 'hidden';
-        input.name = 'delete_photos[]';
-        input.value = index;
+        input.name = `delete_${field}_image`;
+        input.value = '1';
         document.querySelector('form').appendChild(input);
         
         // Remove the photo element
-        event.target.closest('.existing-photo').remove();
+        const photoDiv = event.target.closest('.existing-photo');
+        if (photoDiv) {
+            photoDiv.style.display = 'none';
+        }
+        
+        // Show the upload area again
+        document.getElementById(field + '_placeholder').style.display = 'block';
     }
 }
 
