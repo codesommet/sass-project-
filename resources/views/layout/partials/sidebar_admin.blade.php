@@ -386,7 +386,7 @@
                                     @endcan
                                     
                                     {{-- Catégories - visible si permission view --}}
-                                    <!-- @can('transaction-categories.general.view')
+                                    @can('transaction-categories.general.view')
                                         <li>
                                             <a href="{{ route('backoffice.finance.categories.index') }}"
                                                 class="{{ request()->routeIs('backoffice.finance.categories.*') ? 'active' : '' }}">
@@ -394,7 +394,7 @@
                                                 Catégories
                                             </a>
                                         </li>
-                                    @endcan -->
+                                    @endcan
                                     
                                     {{-- Transactions - visible si permission view --}}
                                     @can('financial-transactions.general.view')
