@@ -70,13 +70,13 @@
                         <div class="card-header py-0">
                             <ul class="nav nav-tabs nav-tabs-bottom tab-dark">
                                 <li class="nav-item">
-                                    <a class="nav-link active" href="#agent-overview" data-bs-toggle="tab">Overview</a>
+                                    <a class="nav-link active" href="#agent-overview" data-bs-toggle="tab">Aperçu</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="#agent-notes" data-bs-toggle="tab">Notes</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#agent-history" data-bs-toggle="tab">History</a>
+                                    <a class="nav-link" href="#agent-history" data-bs-toggle="tab">Historique</a>
                                 </li>
                             </ul>
                         </div>
@@ -240,8 +240,8 @@
         <!-- Footer-->
         <div class="footer d-sm-flex align-items-center justify-content-between bg-white p-3">
             <p class="mb-0">
-                <a href="javascript:void(0);">Privacy Policy</a>
-                <a href="javascript:void(0);" class="ms-4">Terms of Use</a>
+                <a href="javascript:void(0);">Politique de confidentialité</a>
+                <a href="javascript:void(0);" class="ms-4">Conditions d'utilisation</a>
             </p>
             <p>&copy; 2025 Dreamsrent, Made with <span class="text-danger">❤</span> by
                 <a href="javascript:void(0);" class="text-secondary">Dreams</a>

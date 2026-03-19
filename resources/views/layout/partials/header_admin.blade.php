@@ -36,35 +36,54 @@
 
                 <div class="d-flex align-items-center header-icons">
 
-                    <!-- Flag -->
+                    <!-- Flag / Language Switcher -->
+                    @php
+                        $currentLocale = app()->getLocale();
+                        $localeFlags = [
+                            'fr' => ['flag' => 'france.svg', 'label' => 'Français'],
+                            'en' => ['flag' => 'gb.svg', 'label' => 'English'],
+                            'ar' => ['flag' => 'sa.svg', 'label' => 'العربية'],
+                        ];
+                        $currentFlag = $localeFlags[$currentLocale] ?? $localeFlags['fr'];
+                    @endphp
                     <div class="nav-item dropdown has-arrow flag-nav nav-item-box">
                         <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);"
                             role="button">
-                            <img src="{{ URL::asset('admin_assets/img/flags/gb.svg') }}" alt="Language"
+                            <img src="{{ URL::asset('admin_assets/img/flags/' . $currentFlag['flag']) }}" alt="Language"
                                 class="img-fluid">
                         </a>
                         <ul class="dropdown-menu p-2">
+                            {{-- French (main language - switches directly) --}}
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item">
-                                    <img src="{{ URL::asset('admin_assets/img/flags/gb.svg') }}" alt=""
-                                        height="16">English
+                                <form method="POST" action="{{ route('locale.switch', 'fr') }}">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item d-flex align-items-center {{ $currentLocale === 'fr' ? 'active' : '' }}">
+                                        <img src="{{ URL::asset('admin_assets/img/flags/france.svg') }}" alt="" height="16" class="me-2">
+                                        Français
+                                    </button>
+                                </form>
+                            </li>
+                            {{-- English (starter version - show popup) --}}
+                            <li>
+                                <a href="javascript:void(0);" class="dropdown-item d-flex align-items-center {{ $currentLocale === 'en' ? 'active' : '' }}"
+                                   onclick="showStarterVersionModal('en')">
+                                    <img src="{{ URL::asset('admin_assets/img/flags/gb.svg') }}" alt="" height="16" class="me-2">
+                                    English
                                 </a>
                             </li>
+                            {{-- Arabic (coming soon) --}}
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item">
-                                    <img src="{{ URL::asset('admin_assets/img/flags/sa.svg') }}" alt=""
-                                        height="16">Arabic
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);" class="dropdown-item">
-                                    <img src="{{ URL::asset('admin_assets/img/flags/de.svg') }}" alt=""
-                                        height="16">German
+                                <a href="javascript:void(0);" class="dropdown-item d-flex align-items-center"
+                                   onclick="showComingSoonModal('العربية')">
+                                    <img src="{{ URL::asset('admin_assets/img/flags/sa.svg') }}" alt="" height="16" class="me-2">
+                                    العربية
                                 </a>
                             </li>
                         </ul>
                     </div>
-                    <!-- /Flag -->
+                    <!-- /Flag / Language Switcher -->
+
+                    <!-- /Starter Version Language Modal (moved outside .header to fix z-index/backdrop issue) -->
 
                     <div class="theme-item">
                         <a href="javascript:void(0);" id="dark-mode-toggle" class="theme-toggle btn btn-menubar">
@@ -319,3 +338,72 @@
     </div>
 </div>
 <!-- /Header -->
+
+<!-- Starter Version Language Modal (outside header to avoid z-index/backdrop issues) -->
+<div class="modal fade" id="starterVersionModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="true" data-bs-keyboard="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 420px;">
+        <div class="modal-content border-0 shadow-lg rounded-3 text-center p-4">
+            <div class="mb-3">
+                <span class="d-flex align-items-center justify-content-center mx-auto rounded-circle" style="width:60px;height:60px;background:rgba(255,193,7,0.12);">
+                    <i class="ti ti-language" style="font-size:28px;color:#f0a500;"></i>
+                </span>
+            </div>
+            <h5 class="fw-bold mb-2">Version Starter</h5>
+            <p class="text-muted mb-4" style="font-size: 14px; line-height: 1.6;">
+                Cette traduction est une <strong class="text-dark">version de démarrage</strong> (Starter).<br>
+                Certains textes peuvent ne pas être entièrement traduits.<br>
+                Voulez-vous continuer ?
+            </p>
+            <div class="d-flex justify-content-center gap-2">
+                <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">
+                    Non, annuler
+                </button>
+                <form id="localeForm" method="POST" action="" class="d-inline">
+                    @csrf
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="ti ti-check me-1"></i>Oui, continuer
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+function showStarterVersionModal(locale) {
+    var form = document.getElementById('localeForm');
+    form.action = '{{ url("/locale") }}/' + locale;
+    var modal = new bootstrap.Modal(document.getElementById('starterVersionModal'));
+    modal.show();
+}
+</script>
+<!-- /Starter Version Language Modal -->
+
+<!-- Coming Soon Language Modal -->
+<div class="modal fade" id="comingSoonModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content text-center p-4">
+            <div class="mb-3">
+                <span class="avatar avatar-lg bg-info-transparent rounded-circle text-info mx-auto">
+                    <i class="ti ti-clock fs-26"></i>
+                </span>
+            </div>
+            <h5 class="mb-2">Traduction bientôt disponible</h5>
+            <p class="text-muted mb-3">
+                La traduction en <strong id="comingSoonLangName"></strong> sera disponible prochainement.
+            </p>
+            <div class="d-flex justify-content-center">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+                    <i class="ti ti-check me-1"></i>OK, compris
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+function showComingSoonModal(langName) {
+    document.getElementById('comingSoonLangName').textContent = langName;
+    var modal = new bootstrap.Modal(document.getElementById('comingSoonModal'));
+    modal.show();
+}
+</script>
+<!-- /Coming Soon Language Modal -->

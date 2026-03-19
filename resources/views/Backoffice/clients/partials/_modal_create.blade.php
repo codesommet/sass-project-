@@ -307,7 +307,7 @@
                                     <!-- Email -->
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label">Email</label>
+                                            <label class="form-label">E-mail</label>
                                             <input type="email" name="email" value="{{ old('email') }}"
                                                 class="form-control @error('email') is-invalid @enderror" maxlength="150"
                                                 placeholder="client@example.com">

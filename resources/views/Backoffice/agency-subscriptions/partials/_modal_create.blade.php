@@ -134,14 +134,14 @@
                         {{-- Provider --}}
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label class="form-label">Provider <span class="text-danger">*</span></label>
+                                <label class="form-label">Fournisseur <span class="text-danger">*</span></label>
                                 <select name="provider" class="select @error('provider') is-invalid @enderror" required>
-                                    <option value="manual" @selected(old('provider', 'manual') === 'manual')>manual</option>
-                                    <option value="stripe" @selected(old('provider') === 'stripe')>stripe</option>
-                                    <option value="paypal" @selected(old('provider') === 'paypal')>paypal</option>
-                                    <option value="other" @selected(old('provider') === 'other')>other</option>
+                                    <option value="manual" @selected(old('provider', 'manual') === 'manual')>Manuel</option>
+                                    <option value="stripe" @selected(old('provider') === 'stripe')>Stripe</option>
+                                    <option value="paypal" @selected(old('provider') === 'paypal')>PayPal</option>
+                                    <option value="other" @selected(old('provider') === 'other')>Autre</option>
                                 </select>
-                                <div class="invalid-feedback">Veuillez sélectionner un provider.</div>
+                                <div class="invalid-feedback">Veuillez sélectionner un fournisseur.</div>
                                 @error('provider') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
                             </div>
                         </div>
@@ -149,7 +149,7 @@
                         {{-- Provider subscription id --}}
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label class="form-label">Provider subscription id</label>
+                                <label class="form-label">ID abonnement fournisseur</label>
                                 <input type="text"
                                        name="provider_subscription_id"
                                        value="{{ old('provider_subscription_id') }}"

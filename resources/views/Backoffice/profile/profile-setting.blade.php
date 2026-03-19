@@ -45,7 +45,7 @@
             <div class="col-lg-9">
                 <div class="card profile-setting-section">
                     <div class="card-header">
-                        <h5 class="fw-bold">Account Settings</h5>
+                        <h5 class="fw-bold">Paramètres du compte</h5>
                     </div>
 
                     <!-- CHANGED: Form action to agency profile update route -->
@@ -54,14 +54,14 @@
 
                         <div class="card-body pb-1">
 
-                            <h6 class="fw-bold mb-3">Basic Information</h6>
+                            <h6 class="fw-bold mb-3">Informations de base</h6>
 
                             <div class="border-bottom mb-3">
                                 <div class="row">
 
                                     <div class="col-md-12">
                                         <div class="mb-3">
-                                            <label class="form-label">Profile Photo</label>
+                                            <label class="form-label">Photo de profil</label>
                                             <div class="d-flex align-items-start flex-wrap row-gap-3 mb-3">
                                                 <div class="me-4 position-relative">
                                                     <!-- Delete button positioned above the photo -->
@@ -108,21 +108,21 @@
                                     <!-- CHANGED: These fields should now be for agency, not user -->
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label">Agency Name<span class="text-danger ms-1">*</span></label>
+                                            <label class="form-label">Nom de l'agence<span class="text-danger ms-1">*</span></label>
                                             <input type="text" class="form-control" name="name" value="{{ old('name', $agency->name ?? '') }}">
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label">Email Address</label>
+                                            <label class="form-label">Adresse e-mail</label>
                                             <input type="email" class="form-control" name="email" value="{{ old('email', $agency->email ?? '') }}">
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label">Phone Number</label>
+                                            <label class="form-label">Numéro de téléphone</label>
                                             <input type="text" class="form-control" name="phone" value="{{ old('phone', $agency->phone ?? '') }}">
                                         </div>
                                     </div>
@@ -130,33 +130,33 @@
                                 </div>
                             </div>
 
-                            <h6 class="fw-bold mb-3">Address Information</h6>
+                            <h6 class="fw-bold mb-3">Informations d'adresse</h6>
 
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="mb-3">
-                                        <label class="form-label">Address Line</label>
+                                        <label class="form-label">Adresse</label>
                                         <input type="text" class="form-control" name="address" value="{{ old('address', $agency->address ?? '') }}">
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label class="form-label">Country</label>
+                                        <label class="form-label">Pays</label>
                                         <select class="form-select" name="country">
-                                            <option value="">Select</option>
-                                            <option value="USA" {{ old('country', $agency->country ?? '') == 'USA' ? 'selected' : '' }}>USA</option>
+                                            <option value="">Sélectionner</option>
+                                            <option value="USA" {{ old('country', $agency->country ?? '') == 'USA' ? 'selected' : '' }}>États-Unis</option>
                                             <option value="Canada" {{ old('country', $agency->country ?? '') == 'Canada' ? 'selected' : '' }}>Canada</option>
-                                            <option value="UK" {{ old('country', $agency->country ?? '') == 'UK' ? 'selected' : '' }}>UK</option>
+                                            <option value="UK" {{ old('country', $agency->country ?? '') == 'UK' ? 'selected' : '' }}>Royaume-Uni</option>
                                             <option value="France" {{ old('country', $agency->country ?? '') == 'France' ? 'selected' : '' }}>France</option>
-                                            <option value="Morocco" {{ old('country', $agency->country ?? '') == 'Morocco' ? 'selected' : '' }}>Morocco</option>
+                                            <option value="Morocco" {{ old('country', $agency->country ?? '') == 'Morocco' ? 'selected' : '' }}>Maroc</option>
                                         </select>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label class="form-label">City</label>
+                                        <label class="form-label">Ville</label>
                                         <input type="text" class="form-control" name="city" value="{{ old('city', $agency->city ?? '') }}">
                                     </div>
                                 </div>
@@ -166,8 +166,8 @@
 
                         <div class="card-footer">
                             <div class="d-flex justify-content-end">
-                                <a href="{{ route('backoffice.agencies.settings.profile', $agency) }}" class="btn btn-light me-3">Cancel</a>
-                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                                <a href="{{ route('backoffice.agencies.settings.profile', $agency) }}" class="btn btn-light me-3">Annuler</a>
+                                <button type="submit" class="btn btn-primary">Enregistrer</button>
                             </div>
                         </div>
 

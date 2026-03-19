@@ -64,7 +64,7 @@
                             @endcan
                             <br>
                             <small>
-                                <i class="ti ti-phone me-1"></i>{{ $contract->primaryClient->phone ?? 'N/A' }}
+                                <i class="ti ti-phone me-1"></i>{{ $contract->primaryClient->phone ?? 'N/C' }}
                             </small>
                         @else
                             <span class="text-muted">-</span>
@@ -78,10 +78,10 @@
                             {{-- Lien vers véhicule - contrôlé par permission VIEW sur véhicules --}}
                             @can('vehicles.general.view')
                                 <a href="{{ route('backoffice.vehicles.show', $contract->vehicle_id) }}" class="fw-medium">
-                                    {{ $contract->vehicle->registration_number ?? 'N/A' }}
+                                    {{ $contract->vehicle->registration_number ?? 'N/C' }}
                                 </a>
                             @else
-                                <span class="fw-medium">{{ $contract->vehicle->registration_number ?? 'N/A' }}</span>
+                                <span class="fw-medium">{{ $contract->vehicle->registration_number ?? 'N/C' }}</span>
                             @endcan
                             <br>
                             <small>{{ $contract->vehicle->model->name ?? '' }}</small>
@@ -102,7 +102,7 @@
                 <td>
                     <span class="amount-badge">{{ $contract->formatted_total_amount }}</span>
                     @if($contract->deposit_amount)
-                        <br><small class="text-muted">Caution: {{ $contract->formatted_deposit }}</small>
+                        <br><small class="text-muted">Caution : {{ $contract->formatted_deposit }}</small>
                     @endif
                 </td>
                 

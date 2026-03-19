@@ -51,7 +51,7 @@
                 <th>Période</th>
                 <th>Essai</th>
                 <th>Cycle</th>
-                <th>Provider</th>
+                <th>Fournisseur</th>
                 {{-- Colonne Actions - visible seulement si au moins une permission d'action --}}
                 @canany(['agency-subscriptions.general.view', 'agency-subscriptions.general.edit', 'agency-subscriptions.general.delete'])
                 <th class="text-end">Actions</th>

@@ -1,6 +1,6 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Bootstrap validation for any forms
+    // Validation Bootstrap pour les formulaires
     const forms = document.querySelectorAll('.needs-validation');
     Array.from(forms).forEach((form) => {
         form.addEventListener('submit', (event) => {
@@ -12,6 +12,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }, false);
     });
     
-    console.log('Finance Categories Modals JS loaded');
+    console.log('JS Modals Catégories Financières chargé');
 });
 </script>

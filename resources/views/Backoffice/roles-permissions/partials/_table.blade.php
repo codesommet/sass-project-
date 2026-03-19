@@ -2,9 +2,9 @@
     <table class="table">
         <thead class="thead-light">
         <tr>
-            <th>ROLE</th>
-            <th>CREATED DATE</th>
-            <th>STATUS</th>
+            <th>RÔLE</th>
+            <th>DATE DE CRÉATION</th>
+            <th>STATUT</th>
             <th></th>
         </tr>
         </thead>
@@ -22,7 +22,7 @@
                 </td>
                 <td>
                     <span class="badge badge-dark-transparent">
-                        <i class="ti ti-point-filled text-success me-1"></i>Active
+                        <i class="ti ti-point-filled text-success me-1"></i>Actif
                     </span>
                 </td>
                 <td>
@@ -48,7 +48,7 @@
         <tr>
             <th>PERMISSION</th>
             <th>GUARD</th>
-            <th>CREATED DATE</th>
+            <th>DATE DE CRÉATION</th>
             <th></th>
         </tr>
         </thead>

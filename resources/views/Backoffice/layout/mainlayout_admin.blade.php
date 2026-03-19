@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ app()->getLocale() }}" dir="{{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}">
 
 <head>
     <meta charset="utf-8">
@@ -13,7 +13,19 @@
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="{{ URL::asset('admin_assets/img/favicon.png') }}">
 
+    @if(app()->getLocale() === 'ar')
+        <!-- Arabic Font -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    @endif
+
     @include('layout.partials.head_admin')
+
+    @if(app()->getLocale() === 'ar')
+        <!-- RTL CSS -->
+        <link rel="stylesheet" href="{{ URL::asset('admin_assets/css/rtl.css') }}">
+    @endif
 </head>
 
 <body>

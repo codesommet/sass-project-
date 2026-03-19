@@ -428,7 +428,7 @@ class VehicleCreditController extends Controller
     {
         // ✅ Vérifier la permission VIEW
         if (!auth()->user()->can('vehicle-credits.general.view')) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+            return response()->json(['error' => 'Non autorisé'], 403);
         }
 
         $payments = $vehicleCredit->payments()

@@ -135,8 +135,8 @@ function openUnblacklistModal(id, name, phone, cin, date, reason) {
         <strong>${name}</strong><br>
         <small class="text-muted">Tél: ${phone || 'N/A'} | CIN: ${cin || 'N/A'}</small>
         <hr>
-        <small class="text-danger">Blacklisté le: ${date || 'N/A'}</small><br>
-        <small class="text-danger">Raison: ${reason || 'N/A'}</small>
+        <small class="text-danger">Blacklisté le : ${date || 'N/A'}</small><br>
+        <small class="text-danger">Motif : ${reason || 'N/A'}</small>
     `;
     document.getElementById('unblacklistForm').action = `/backoffice/clients/${id}/unblacklist`;
     modal.show();
@@ -148,17 +148,17 @@ function openViewBlacklistModal(name, phone, cin, date, by, agency, reason, note
     content.innerHTML = `
         <div class="text-center mb-3">
             <i class="ti ti-alert-triangle fs-48 text-danger mb-3"></i>
-            <h5 class="text-danger">Client Blacklisté</h5>
+            <h5 class="text-danger">Client sur liste noire</h5>
         </div>
         <div class="alert alert-danger">
-            <p><strong>Nom:</strong> ${name}</p>
-            <p><strong>Téléphone:</strong> ${phone || 'N/A'}</p>
-            <p><strong>CIN:</strong> ${cin || 'N/A'}</p>
-            <p><strong>Blacklisté le:</strong> ${date}</p>
-            <p><strong>Par:</strong> ${by}</p>
-            <p><strong>Agence:</strong> ${agency}</p>
-            <p><strong>Raison:</strong> ${reason}</p>
-            ${notes ? `<p><strong>Notes:</strong> ${notes}</p>` : ''}
+            <p><strong>Nom :</strong> ${name}</p>
+            <p><strong>Téléphone :</strong> ${phone || 'N/A'}</p>
+            <p><strong>CIN :</strong> ${cin || 'N/A'}</p>
+            <p><strong>Blacklisté le :</strong> ${date}</p>
+            <p><strong>Par :</strong> ${by}</p>
+            <p><strong>Agence :</strong> ${agency}</p>
+            <p><strong>Motif :</strong> ${reason}</p>
+            ${notes ? `<p><strong>Notes :</strong> ${notes}</p>` : ''}
         </div>
     `;
     modal.show();

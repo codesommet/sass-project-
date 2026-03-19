@@ -192,11 +192,14 @@
                 @endcanany
             </tr>
             @empty
+            @php
+                $emptyColspan = 7
+                    + (!isset($vehicle) || !$vehicle ? 1 : 0)
+                    + (auth()->user()->can('vehicle-credits.general.delete') ? 1 : 0)
+                    + (auth()->user()->canAny(['vehicle-credits.general.view', 'vehicle-credits.general.edit', 'vehicle-credits.general.delete']) ? 1 : 0);
+            @endphp
             <tr>
-                @can('vehicle-credits.general.delete')
-                <td></td>
-                @endcan
-                <td colspan="{{ (!isset($vehicle) || !$vehicle ? 8 : 7) + (auth()->user()->can('vehicle-credits.general.delete') ? 1 : 0) }}" class="text-center py-5">
+                <td colspan="{{ $emptyColspan }}" class="text-center py-5">
                     <div class="text-center">
                         <i class="ti ti-credit-card-off fs-48 text-gray-4 mb-3"></i>
                         <h5 class="mb-2">Aucun crédit trouvé</h5>
@@ -208,9 +211,6 @@
                         @endcan
                     </div>
                 </td>
-                @canany(['vehicle-credits.general.view', 'vehicle-credits.general.edit', 'vehicle-credits.general.delete'])
-                <td></td>
-                @endcanany
             </tr>
             @endforelse
         </tbody>

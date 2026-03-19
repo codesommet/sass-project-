@@ -20,7 +20,7 @@ class AgencyRolesPermissionsSeeder extends Seeder
         $agency = Agency::where('email', 'contact@agency1.com')->first();
 
         if (!$agency) {
-            $this->command?->error('❌ Agency not found. Please run AgencyUserSeeder first.');
+            $this->command?->error('❌ Agence introuvable. Veuillez exécuter AgencyUserSeeder d\'abord.');
             return;
         }
 
@@ -127,23 +127,23 @@ class AgencyRolesPermissionsSeeder extends Seeder
         | Output Information
         |--------------------------------------------------------------------------
         */
-        $this->command?->info('✅ Agency roles & permissions seeded successfully');
+        $this->command?->info('✅ Rôles & permissions de l\'agence créés avec succès');
         $this->command?->info('');
-        $this->command?->info('📋 Created Users with Roles:');
-        $this->command?->info('  🔴 SUPER ADMIN');
-        $this->command?->info('     Email: super@admin.com | Password: password123');
-        $this->command?->info('     Access: FULL SYSTEM ACCESS - all agencies, all modules');
+        $this->command?->info('📋 Utilisateurs créés avec rôles :');
+        $this->command?->info('  🔴 SUPER ADMINISTRATEUR');
+        $this->command?->info('     Email : super@admin.com | Mot de passe : password123');
+        $this->command?->info('     Accès : ACCÈS TOTAL - toutes les agences, tous les modules');
         $this->command?->info('');
-        $this->command?->info('  🔵 AGENCY ADMIN');
-        $this->command?->info('     Email: admin@agency1.com | Password: password123');
-        $this->command?->info('     Access: Full access within Agency 1');
+        $this->command?->info('  🔵 ADMIN AGENCE');
+        $this->command?->info('     Email : admin@agency1.com | Mot de passe : password123');
+        $this->command?->info('     Accès : Accès complet dans l\'Agence 1');
         $this->command?->info('');
-        $this->command?->info('  🟢 AGENCY MANAGER');
-        $this->command?->info('     Email: manager@agency1.com | Password: password123');
-        $this->command?->info('     Access: View/Create/Edit (no delete) within Agency 1');
+        $this->command?->info('  🟢 MANAGER AGENCE');
+        $this->command?->info('     Email : manager@agency1.com | Mot de passe : password123');
+        $this->command?->info('     Accès : Voir/Créer/Modifier (pas de suppression) dans l\'Agence 1');
         $this->command?->info('');
-        $this->command?->info('  ⚪ AGENCY STAFF');
-        $this->command?->info('     Email: staff@agency1.com | Password: password123');
-        $this->command?->info('     Access: View only within Agency 1');
+        $this->command?->info('  ⚪ EMPLOYÉ AGENCE');
+        $this->command?->info('     Email : staff@agency1.com | Mot de passe : password123');
+        $this->command?->info('     Accès : Consultation uniquement dans l\'Agence 1');
     }
 }

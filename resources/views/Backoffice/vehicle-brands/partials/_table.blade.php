@@ -126,19 +126,18 @@
                 @endcanany
             </tr>
         @empty
+            @php
+                $emptyColspan = 3
+                    + (auth()->user()->can('vehicle-brands.general.delete') ? 1 : 0)
+                    + (auth()->user()->canAny(['vehicle-brands.general.view', 'vehicle-brands.general.edit', 'vehicle-brands.general.delete']) ? 1 : 0);
+            @endphp
             <tr>
-                @can('vehicle-brands.general.delete')
-                <td></td>
-                @endcan
-                <td colspan="{{ (auth()->user()->can('vehicle-brands.general.delete') ? 4 : 3) }}" class="text-center py-4">
+                <td colspan="{{ $emptyColspan }}" class="text-center py-4">
                     <div class="text-muted">
                         <i class="ti ti-car-off fs-4 mb-2"></i>
                         <p class="mb-0">Aucune marque trouvée.</p>
                     </div>
                 </td>
-                @canany(['vehicle-brands.general.view', 'vehicle-brands.general.edit', 'vehicle-brands.general.delete'])
-                <td></td>
-                @endcanany
             </tr>
         @endforelse
     </tbody>

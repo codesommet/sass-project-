@@ -1,5 +1,5 @@
 {{-- =========================
-DELETE ROLE
+SUPPRIMER UN RÔLE
 ========================= --}}
 <div class="modal fade" id="delete_role">
     <div class="modal-dialog modal-dialog-centered modal-sm">
@@ -27,7 +27,7 @@ DELETE ROLE
 
 
 {{-- =========================
-DELETE PERMISSION
+SUPPRIMER UNE PERMISSION
 ========================= --}}
 <div class="modal fade" id="delete_permission">
     <div class="modal-dialog modal-dialog-centered modal-sm">

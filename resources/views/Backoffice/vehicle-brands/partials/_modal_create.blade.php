@@ -10,7 +10,7 @@
                 <input type="hidden" name="_modal" value="add_brand">
 
                 <div class="modal-header">
-                    <h5 class="mb-0">Create Brand</h5>
+                    <h5 class="mb-0">Créer une marque</h5>
                     <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal"
                         aria-label="Close">
                         <i class="ti ti-x fs-16"></i>
@@ -22,7 +22,7 @@
                     {{-- BRAND IMAGE --}}
                     <div class="mb-3">
                         <label class="form-label">
-                            Brand Image <span class="text-danger">*</span>
+                            Image de la marque <span class="text-danger">*</span>
                         </label>
 
                         <div class="d-flex align-items-center flex-wrap row-gap-3 mb-2">
@@ -41,7 +41,7 @@
                                 <div class="profile-uploader d-flex align-items-center">
                                     <div class="drag-upload-btn btn btn-md btn-dark">
                                         <i class="ti ti-photo-up fs-14"></i>
-                                        Upload
+                                        Télécharger
                                         <input type="file" name="logo" id="addBrandLogoInput"
                                             class="form-control image-sign @error('logo') is-invalid @enderror"
                                             accept="image/*" required>
@@ -51,7 +51,7 @@
                                 {{-- CLIENT validation message --}}
                                 <div class="invalid-feedback d-block" id="addBrandLogoClientError"
                                     style="display:none;">
-                                    Please upload a brand image.
+                                    Veuillez télécharger une image de marque.
                                 </div>
 
                                 {{-- SERVER validation message --}}
@@ -63,7 +63,7 @@
 
                                 <div class="mt-2">
                                     <p class="fs-14 mb-0">
-                                        Upload Image size 180*180, within 5MB
+                                        Taille de l'image 180x180, max 5 Mo
                                     </p>
                                 </div>
                             </div>
@@ -73,13 +73,13 @@
                     {{-- BRAND NAME --}}
                     <div class="mb-3">
                         <label class="form-label">
-                            Brand Name <span class="text-danger">*</span>
+                            Nom de la marque <span class="text-danger">*</span>
                         </label>
                         <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
                             value="{{ old('name') }}" required>
 
                         <div class="invalid-feedback">
-                            Please enter a brand name.
+                            Veuillez saisir un nom de marque.
                         </div>
 
                         @error('name')
@@ -94,10 +94,10 @@
                 <div class="modal-footer">
                     <div class="d-flex justify-content-center">
                         <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">
-                            Cancel
+                            Annuler
                         </a>
                         <button type="submit" class="btn btn-primary">
-                            Create New
+                            Créer
                         </button>
                     </div>
                 </div>

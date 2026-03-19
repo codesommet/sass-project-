@@ -1,5 +1,5 @@
 {{-- =========================
-ADD ROLE
+AJOUTER UN RÔLE
 ========================= --}}
 <div class="modal fade" id="add_role">
     <div class="modal-dialog modal-dialog-centered modal-md">
@@ -56,7 +56,7 @@ ADD ROLE
 
 
 {{-- =========================
-ADD PERMISSION
+AJOUTER UNE PERMISSION
 ========================= --}}
 <div class="modal fade" id="add_permission">
     <div class="modal-dialog modal-dialog-centered modal-md">

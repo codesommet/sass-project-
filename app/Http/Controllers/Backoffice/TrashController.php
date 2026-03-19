@@ -122,7 +122,7 @@ class TrashController extends Controller
         ];
 
         if (!isset($models[$module])) {
-            return response()->json(['error' => 'Module not found'], 404);
+            return response()->json(['error' => 'Module introuvable'], 404);
         }
 
         $config = $models[$module];

@@ -120,13 +120,13 @@
                         </select>
                     </div>
                     <div class="col-md-3">
-                        <label class="form-label fw-medium">Provider</label>
+                        <label class="form-label fw-medium">Fournisseur</label>
                         <select name="provider" form="filterForm" class="form-select" onchange="this.form.submit()">
                             <option value="">Tous</option>
-                            <option value="manual" {{ request('provider') == 'manual' ? 'selected' : '' }}>manual</option>
-                            <option value="stripe" {{ request('provider') == 'stripe' ? 'selected' : '' }}>stripe</option>
-                            <option value="paypal" {{ request('provider') == 'paypal' ? 'selected' : '' }}>paypal</option>
-                            <option value="other" {{ request('provider') == 'other' ? 'selected' : '' }}>other</option>
+                            <option value="manual" {{ request('provider') == 'manual' ? 'selected' : '' }}>Manuel</option>
+                            <option value="stripe" {{ request('provider') == 'stripe' ? 'selected' : '' }}>Stripe</option>
+                            <option value="paypal" {{ request('provider') == 'paypal' ? 'selected' : '' }}>PayPal</option>
+                            <option value="other" {{ request('provider') == 'other' ? 'selected' : '' }}>Autre</option>
                         </select>
                     </div>
                     <div class="col-md-3 mt-2 d-flex align-items-end">
@@ -160,8 +160,8 @@
 
     <div class="footer d-sm-flex align-items-center justify-content-between bg-white p-3">
         <p class="mb-0">
-            <a href="#">Privacy Policy</a>
-            <a href="#" class="ms-4">Terms of Use</a>
+            <a href="#">Politique de confidentialité</a>
+            <a href="#" class="ms-4">Conditions d'utilisation</a>
         </p>
         <p>&copy; 2025 Dreamsrent, Made with <span class="text-danger">❤</span> by <a href="#" class="text-secondary">Dreams</a></p>
     </div>

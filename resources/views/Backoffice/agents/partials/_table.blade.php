@@ -154,11 +154,13 @@
             @endcanany
         </tr>
         @empty
+        @php
+            $emptyColspan = 6
+                + (auth()->user()->can('agents.general.delete') ? 1 : 0)
+                + (auth()->user()->canAny(['agents.general.view', 'agents.general.edit', 'agents.general.delete']) ? 1 : 0);
+        @endphp
         <tr>
-            @can('agents.general.delete')
-            <td></td>
-            @endcan
-            <td colspan="{{ (auth()->user()->can('agents.general.delete') ? 7 : 6) }}" class="text-center py-5">
+            <td colspan="{{ $emptyColspan }}" class="text-center py-5">
                 <div class="text-center">
                     <i class="ti ti-users-off fs-48 text-gray-4 mb-3"></i>
                     <h5 class="mb-2">Aucun agent trouvé</h5>
@@ -170,9 +172,6 @@
                     @endcan
                 </div>
             </td>
-            @canany(['agents.general.view', 'agents.general.edit', 'agents.general.delete'])
-            <td></td>
-            @endcanany
         </tr>
         @endforelse
     </tbody>

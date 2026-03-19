@@ -55,7 +55,7 @@
                                     <div class="profile-uploader d-flex align-items-center">
                                         <div class="drag-upload-btn btn btn-md btn-dark">
                                             <i class="ti ti-photo-up fs-14"></i>
-                                            Upload
+                                            Téléverser
                                             <input type="file"
                                                    name="avatar"
                                                    id="editUserAvatarInput"
@@ -64,7 +64,7 @@
                                         </div>
                                     </div>
                                     <div class="mt-2">
-                                        <p class="fs-14">Upload Image size 180*180, within 5MB</p>
+                                        <p class="fs-14">Taille d'image 180x180, max 5 Mo</p>
                                     </div>
 
                                     @error('avatar')
@@ -131,7 +131,7 @@
                                         name="status"
                                         class="select @error('status') is-invalid @enderror"
                                         required>
-                                    <option value="">Select</option>
+                                    <option value="">Sélectionner</option>
                                     <option value="active">Actif</option>
                                     <option value="inactive">Inactif</option>
                                     <option value="blocked">Bloqué</option>
@@ -153,7 +153,7 @@
                                                 name="agency_id"
                                                 class="select @error('agency_id') is-invalid @enderror"
                                                 required>
-                                            <option value="">Select</option>
+                                            <option value="">Sélectionner</option>
                                             @forelse($agencies ?? [] as $agency)
                                                 <option value="{{ $agency->id }}">{{ $agency->name }}</option>
                                             @empty
@@ -173,8 +173,8 @@
 
                 <div class="modal-footer">
                     <div class="d-flex justify-content-center">
-                        <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">Cancel</a>
-                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                        <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">Annuler</a>
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
                     </div>
                 </div>
 

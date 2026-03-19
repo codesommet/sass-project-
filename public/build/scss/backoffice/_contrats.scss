@@ -1,0 +1,115 @@
+// ============================================
+// GESTION DES CONTRATS (Rental Contracts)
+// Styles pour contrats de location
+// ============================================
+
+// --- Affichage montant ---
+.amount-display {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #198754;
+}
+
+.amount-large {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #198754;
+}
+
+// --- Badge client (primaire / secondaire) ---
+.client-badge {
+    display: inline-block;
+    padding: 0.35rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-left: 8px;
+
+    &.primary {
+        background: #cce5ff;
+        color: #004085;
+    }
+
+    &.secondary {
+        background: #d4edda;
+        color: #155724;
+    }
+}
+
+// --- Carte client ---
+.client-card {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    transition: all 0.3s;
+
+    &:hover {
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .client-role {
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+}
+
+// --- Galerie photos ---
+.photo-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.photo-item {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s;
+    cursor: pointer;
+
+    &:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    img {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+    }
+}
+
+.photo-caption {
+    padding: 10px;
+    background: #f8f9fa;
+    text-align: center;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+// --- Carte transaction ---
+.transaction-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+
+    .amount-large {
+        font-size: 2rem;
+        font-weight: 700;
+        color: white;
+    }
+}
+
+.transaction-link {
+    color: white;
+    text-decoration: underline;
+
+    &:hover {
+        color: #f8f9fa;
+    }
+}

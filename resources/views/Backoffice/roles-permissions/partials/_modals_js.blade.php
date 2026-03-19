@@ -2,7 +2,7 @@
 document.addEventListener('DOMContentLoaded', function () {
 
     /* ======================
-     | BOOTSTRAP VALIDATION
+     | VALIDATION BOOTSTRAP
      ====================== */
     const forms = document.querySelectorAll('.needs-validation');
     Array.prototype.slice.call(forms).forEach(function (form) {
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     /* ======================
-     | EDIT ROLE MODAL
+     | MODALE MODIFIER RÔLE
      ====================== */
     const editRoleModal = document.getElementById('edit_role');
     if (editRoleModal) {
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     /* ======================
-     | DELETE ROLE MODAL
+     | MODALE SUPPRIMER RÔLE
      ====================== */
     const deleteRoleModal = document.getElementById('delete_role');
     if (deleteRoleModal) {
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     /* ======================
-     | EDIT PERMISSION MODAL
+     | MODALE MODIFIER PERMISSION
      ====================== */
     const editPermissionModal = document.getElementById('edit_permission');
     if (editPermissionModal) {
@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     /* ======================
-     | DELETE PERMISSION MODAL
+     | MODALE SUPPRIMER PERMISSION
      ====================== */
     const deletePermissionModal = document.getElementById('delete_permission');
     if (deletePermissionModal) {

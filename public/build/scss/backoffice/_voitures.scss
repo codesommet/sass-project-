@@ -1,0 +1,72 @@
+// ============================================
+// GESTION DES VOITURES (Vehicles)
+// Styles pour vehicules, marques, modeles,
+// vignettes, assurances, controles techniques,
+// vidanges et credits
+// ============================================
+
+// --- Image voiture (tableau) ---
+.car-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    object-fit: cover;
+    background-color: #f8f9fa;
+}
+
+.car-image-placeholder {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    background-color: #e9ecef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6c757d;
+    font-size: 24px;
+}
+
+// --- Image voiture (page detail) ---
+.car-image-large {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+// --- Badges equipements ---
+.equipment-badge {
+    display: inline-block;
+    padding: 0.35rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 500;
+
+    &.yes {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    &.no {
+        background: #f8d7da;
+        color: #721c24;
+    }
+}
+
+// --- Carte info vehicule ---
+.info-card {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+// --- Credits vehicules ---
+.progress {
+    height: 6px;
+    border-radius: 3px;
+}
+
+.progress-bar {
+    border-radius: 3px;
+}

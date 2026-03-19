@@ -283,10 +283,10 @@
                     </li>	
 
                      <li class="login-link">
-                         <a href="{{ url('register') }}">Sign Up</a>
+                         <a href="{{ url('register') }}">S'inscrire</a>
                      </li>
                      <li class="login-link">
-                         <a href="{{ url('login') }}">Sign In</a>
+                         <a href="{{ url('login') }}">Se connecter</a>
                      </li>
                  </ul>
              </div>
@@ -331,7 +331,7 @@
                          <div class="dropdown-menu notifications">
                              <div class="topnav-dropdown-header">
                                  <span class="notification-title">Notifications</span>
-                                 <a href="javascript:void(0)" class="clear-noti"> Clear All </a>
+                                 <a href="javascript:void(0)" class="clear-noti"> Tout effacer</a>
                              </div>
                              <div class="noti-content">
                                  <ul class="notification-list">
@@ -423,7 +423,7 @@
                                  </ul>
                              </div>
                              <div class="topnav-dropdown-footer">
-                                 <a href="#">View all Notifications</a>
+                                 <a href="#">Voir toutes les notifications</a>
                              </div>
                          </div>
                      </li>
@@ -446,7 +446,7 @@
                                  <i class="feather-settings"></i> Settings
                              </a>
                              <a class="dropdown-item" href="{{ url('index') }}">
-                                 <i class="feather-power"></i> Logout
+                                 <i class="feather-power"></i> Déconnexion
                              </a>
                          </div>
                      </li>
@@ -488,11 +488,11 @@
                  <ul class="nav header-navbar-rht">
                      <li class="nav-item">
                          <a class="nav-link header-login" href="{{ url('login') }}"><span><i
-                                     class="fa-regular fa-user"></i></span>Sign In</a>
+                                     class="fa-regular fa-user"></i></span>Se connecter</a>
                      </li>
                      <li class="nav-item">
                          <a class="nav-link header-reg" href="{{ url('register') }}"><span><i
-                                     class="fa-solid fa-lock"></i></span>Sign Up</a>
+                                     class="fa-solid fa-lock"></i></span>S'inscrire</a>
                      </li>
                  </ul>
              @endif
@@ -504,7 +504,7 @@
                      </li>
                      <li class="nav-item">
                          <a class="nav-link header-reg" href="{{ url('listing-list') }}"><span><i
-                                     class="bx bx-plus-circle"></i></span>Add Listing</a>
+                                     class="bx bx-plus-circle"></i></span>Ajouter une annonce</a>
                      </li>
                  </ul>
              @endif
@@ -543,20 +543,20 @@
                                          <a class="dropdown-toggle nav-tog" data-bs-toggle="dropdown"
                                              href="javascript:void(0);">
                                              <img src="{{ URL::asset('/build/img/flags/us.png') }}"
-                                                 alt="Img">English
+                                                 alt="Img">Anglais
                                          </a>
                                          <div class="dropdown-menu dropdown-menu-end">
                                              <a href="javascript:void(0);" class="dropdown-item">
                                                  <img src="{{ URL::asset('/build/img/flags/fr.png') }}"
-                                                     alt="Img">French
+                                                     alt="Img">Français
                                              </a>
                                              <a href="javascript:void(0);" class="dropdown-item">
                                                  <img src="{{ URL::asset('/build/img/flags/es.png') }}"
-                                                     alt="Img">Spanish
+                                                     alt="Img">Espagnol
                                              </a>
                                              <a href="javascript:void(0);" class="dropdown-item">
                                                  <img src="{{ URL::asset('/build/img/flags/de.png') }}"
-                                                     alt="Img">German
+                                                     alt="Img">Allemand
                                              </a>
                                          </div>
                                      </div>
@@ -832,22 +832,22 @@
                          </ul>
                      </li>	
                              <li class="login-link">
-                                 <a href="{{ url('register') }}">Sign Up</a>
+                                 <a href="{{ url('register') }}">S'inscrire</a>
                              </li>
                              <li class="login-link">
-                                 <a href="{{ url('login') }}">Sign In</a>
+                                 <a href="{{ url('login') }}">Se connecter</a>
                              </li>
                          </ul>
                      </div>
                      <ul class="nav header-navbar-rht">
                          <li class="nav-item">
                              <a class="nav-link login-link" href="{{ url('login') }}"><span><i
-                                         class="bx bx-user me-2"></i></span>Sign In / </a>
+                                         class="bx bx-user me-2"></i></span>Se connecter / </a>
                              <a class="nav-link login-link ms-1" href="{{ url('register') }}">Register </a>
                          </li>
                          <li class="nav-item">
                              <a class="nav-link header-reg" href="{{ url('listing-list') }}"><span><i
-                                         class="bx bx-plus-circle"></i></span>Add Listing</a>
+                                         class="bx bx-plus-circle"></i></span>Ajouter une annonce</a>
                          </li>
                      </ul>
                  </nav>
@@ -1072,8 +1072,8 @@
                             <li class="has-submenu">
                                 <a href="javascript:void(0);">Authentication</a>
                                 <ul class="submenu">
-                                    <li><a href="{{url('register')}}">Sign Up</a></li>
-                                    <li><a href="{{url('login')}}">Sign In</a></li>
+                                    <li><a href="{{url('register')}}">S'inscrire</a></li>
+                                    <li><a href="{{url('login')}}">Se connecter</a></li>
                                     <li><a href="{{url('forgot-password')}}">Forgot Password</a></li>
                                     <li><a href="{{url('reset-password')}}">Reset Password</a></li>
                                 </ul>
@@ -1147,10 +1147,10 @@
                         </ul>
                     </li>	
                     <li class="login-link">
-                        <a href="{{url('register')}}">Sign Up</a>
+                        <a href="{{url('register')}}">S'inscrire</a>
                     </li>
                     <li class="login-link">
-                        <a href="{{url('login')}}">Sign In</a>
+                        <a href="{{url('login')}}">Se connecter</a>
                     </li>
                 </ul>
             </div>
@@ -1159,7 +1159,7 @@
                     <a class="nav-link header-user" href="{{url('register')}}"><i class="bx bx-user"></i></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link header-reg" href="{{url('listing-list')}}"><span><i class="bx bx-plus-circle"></i></span>Add Listing</a>
+                    <a class="nav-link header-reg" href="{{url('listing-list')}}"><span><i class="bx bx-plus-circle"></i></span>Ajouter une annonce</a>
                 </li>
             </ul>
         </nav>
@@ -1273,8 +1273,8 @@
                             <li class="has-submenu">
                                 <a href="javascript:void(0);">Authentication</a>
                                 <ul class="submenu">
-                                    <li><a href="{{url('register')}}">Sign Up</a></li>
-                                    <li><a href="{{url('login')}}">Sign In</a></li>
+                                    <li><a href="{{url('register')}}">S'inscrire</a></li>
+                                    <li><a href="{{url('login')}}">Se connecter</a></li>
                                     <li><a href="{{url('forgot-password')}}">Forgot Password</a></li>
                                     <li><a href="{{url('reset-password')}}">Reset Password</a></li>
                                 </ul>
@@ -1348,19 +1348,19 @@
                         </ul>
                     </li>	
                     <li class="login-link">
-                        <a href="{{url('register')}}">Sign Up</a>
+                        <a href="{{url('register')}}">S'inscrire</a>
                     </li>
                     <li class="login-link">
-                        <a href="{{url('login')}}">Sign In</a>
+                        <a href="{{url('login')}}">Se connecter</a>
                     </li>
                 </ul>
             </div>
             <ul class="nav header-navbar-rht">
                 <li class="nav-item">
-                    <a class="nav-link header-login" href="{{url('login')}}"><span><i class="fa-regular fa-user"></i></span>Sign In</a>
+                    <a class="nav-link header-login" href="{{url('login')}}"><span><i class="fa-regular fa-user"></i></span>Se connecter</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link header-reg" href="{{url('register')}}"><span><i class="fa-solid fa-lock"></i></span>Sign Up</a>
+                    <a class="nav-link header-reg" href="{{url('register')}}"><span><i class="fa-solid fa-lock"></i></span>S'inscrire</a>
                 </li>
             </ul>
         </nav>

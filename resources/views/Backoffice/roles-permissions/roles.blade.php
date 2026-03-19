@@ -61,7 +61,7 @@
                                     <th>RÔLE</th>
                                     <th>PERMISSIONS</th>
                                     <th>DATE CRÉATION</th>
-                                    <th>STATUS</th>
+                                    <th>STATUT</th>
                                     {{-- Colonne Actions - visible seulement si au moins une permission d'action --}}
                                     @canany(['roles-permissions.general.view', 'roles-permissions.general.edit', 'roles-permissions.general.delete'])
                                     <th></th>
@@ -93,7 +93,7 @@
                                         </td>
                                         <td>
                                             <span class="badge badge-dark-transparent">
-                                                <i class="ti ti-point-filled text-success me-1"></i>Active
+                                                <i class="ti ti-point-filled text-success me-1"></i>Actif
                                             </span>
                                         </td>
                                         
@@ -190,10 +190,10 @@
         <!-- Footer -->
         <div class="footer d-sm-flex align-items-center justify-content-between bg-white p-3">
             <p class="mb-0">
-                <a href="javascript:void(0);">Privacy Policy</a>
-                <a href="javascript:void(0);" class="ms-4">Terms of Use</a>
+                <a href="javascript:void(0);">Politique de confidentialité</a>
+                <a href="javascript:void(0);" class="ms-4">Conditions d'utilisation</a>
             </p>
-            <p>&copy; 2025 Dreamsrent, Made with <span class="text-danger">❤</span> by
+            <p>&copy; 2025 Dreamsrent, Fait avec <span class="text-danger">❤</span> par
                 <a href="javascript:void(0);" class="text-secondary">Dreams</a>
             </p>
         </div>

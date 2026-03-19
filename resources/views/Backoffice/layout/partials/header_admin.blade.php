@@ -29,42 +29,61 @@
                     <div class="add-dropdown">
                         <a href="{{ url('admin/add-reservation') }}"
                             class="btn btn-dark d-inline-flex align-items-center">
-                            <i class="ti ti-plus me-1"></i>New Reservation
+                            <i class="ti ti-plus me-1"></i>Nouvelle réservation
                         </a>
                     </div>
                 </div>
 
                 <div class="d-flex align-items-center header-icons">
 
-                    <!-- Flag -->
+                    <!-- Flag / Language Switcher -->
+                    @php
+                        $currentLocale = app()->getLocale();
+                        $localeFlags = [
+                            'fr' => ['flag' => 'france.svg', 'label' => 'Français'],
+                            'en' => ['flag' => 'gb.svg', 'label' => 'English'],
+                            'ar' => ['flag' => 'sa.svg', 'label' => 'العربية'],
+                        ];
+                        $currentFlag = $localeFlags[$currentLocale] ?? $localeFlags['fr'];
+                    @endphp
                     <div class="nav-item dropdown has-arrow flag-nav nav-item-box">
                         <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);"
                             role="button">
-                            <img src="{{ URL::asset('admin_assets/img/flags/gb.svg') }}" alt="Language"
+                            <img src="{{ URL::asset('admin_assets/img/flags/' . $currentFlag['flag']) }}" alt="Language"
                                 class="img-fluid">
                         </a>
                         <ul class="dropdown-menu p-2">
+                            {{-- French (main language - switches directly) --}}
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item">
-                                    <img src="{{ URL::asset('admin_assets/img/flags/gb.svg') }}" alt=""
-                                        height="16">English
+                                <form method="POST" action="{{ route('locale.switch', 'fr') }}">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item d-flex align-items-center {{ $currentLocale === 'fr' ? 'active' : '' }}">
+                                        <img src="{{ URL::asset('admin_assets/img/flags/france.svg') }}" alt="" height="16" class="me-2">
+                                        Français
+                                    </button>
+                                </form>
+                            </li>
+                            {{-- English (starter version - show popup) --}}
+                            <li>
+                                <a href="javascript:void(0);" class="dropdown-item d-flex align-items-center {{ $currentLocale === 'en' ? 'active' : '' }}"
+                                   onclick="showStarterVersionModal('en')">
+                                    <img src="{{ URL::asset('admin_assets/img/flags/gb.svg') }}" alt="" height="16" class="me-2">
+                                    English
                                 </a>
                             </li>
+                            {{-- Arabic (coming soon) --}}
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item">
-                                    <img src="{{ URL::asset('admin_assets/img/flags/sa.svg') }}" alt=""
-                                        height="16">Arabic
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);" class="dropdown-item">
-                                    <img src="{{ URL::asset('admin_assets/img/flags/de.svg') }}" alt=""
-                                        height="16">German
+                                <a href="javascript:void(0);" class="dropdown-item d-flex align-items-center"
+                                   onclick="showComingSoonModal('العربية')">
+                                    <img src="{{ URL::asset('admin_assets/img/flags/sa.svg') }}" alt="" height="16" class="me-2">
+                                    العربية
                                 </a>
                             </li>
                         </ul>
                     </div>
-                    <!-- /Flag -->
+                    <!-- /Flag / Language Switcher -->
+
+                    <!-- /Starter Version Language Modal (moved outside .header to fix z-index/backdrop issue) -->
 
                     <div class="theme-item">
                         <a href="javascript:void(0);" id="dark-mode-toggle" class="theme-toggle btn btn-menubar">
@@ -86,11 +105,11 @@
                                 <h5 class="notification-title">Notifications</h5>
                                 <ul class="nav nav-tabs nav-tabs-bottom">
                                     <li class="nav-item"><a class="nav-link active" href="#active-notification"
-                                            data-bs-toggle="tab">Active<span class="count ms-2">2</span></a></li>
+                                            data-bs-toggle="tab">Actives<span class="count ms-2">2</span></a></li>
                                     <li class="nav-item"><a class="nav-link" href="#unread-notification"
-                                            data-bs-toggle="tab">Unread</a></li>
+                                            data-bs-toggle="tab">Non lues</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#archieve-notification"
-                                            data-bs-toggle="tab">Archieve</a></li>
+                                            data-bs-toggle="tab">Archivées</a></li>
                                 </ul>
                             </div>
                             <div class="noti-content">
@@ -244,7 +263,7 @@
                                             <div class="text-center ">
                                                 <img src="{{ URL::asset('admin_assets/img/icons/nodata.svg') }}"
                                                     class="mb-2" alt="nodata">
-                                                <p class="text-gray-5">No Data Available</p>
+                                                <p class="text-gray-5">Aucune donnée disponible</p>
                                             </div>
                                         </div>
                                     </div>
@@ -253,13 +272,13 @@
                             <div class="d-flex align-items-center justify-content-between topnav-dropdown-footer">
                                 <div class="d-flex align-items-center">
                                     <a href="javascript:void(0);"
-                                        class="link-primary text-decoration-underline me-3">Mark all as Read</a>
-                                    <a href="javascript:void(0);" class="link-danger text-decoration-underline">Clear
-                                        All</a>
+                                        class="link-primary text-decoration-underline me-3">Tout marquer comme lu</a>
+                                    <a href="javascript:void(0);" class="link-danger text-decoration-underline">Tout
+                                        effacer</a>
                                 </div>
                                 <a href="javascript:void(0);"
-                                    class="btn btn-primary btn-sm d-inline-flex align-items-center">View All
-                                    Notifications<i class="ti ti-chevron-right ms-1"></i></a>
+                                    class="btn btn-primary btn-sm d-inline-flex align-items-center">Voir toutes les
+                                    notifications<i class="ti ti-chevron-right ms-1"></i></a>
                             </div>
                         </div>
                     </div>
@@ -278,37 +297,37 @@
                                 <li>
                                     <a href="{{ url('admin/add-car') }}"
                                         class="dropdown-item d-inline-flex align-items-center">
-                                        <i class="ti ti-car me-2"></i>Car
+                                        <i class="ti ti-car me-2"></i>Véhicule
                                     </a>
                                 </li>
                                 <li>
                                     <a href="{{ url('admin/add-quotations') }}"
                                         class="dropdown-item d-inline-flex align-items-center">
-                                        <i class="ti ti-file-symlink me-2"></i>Quotation
+                                        <i class="ti ti-file-symlink me-2"></i>Devis
                                     </a>
                                 </li>
                                 <li>
                                     <a href="{{ url('admin/pricing') }}"
                                         class="dropdown-item d-inline-flex align-items-center">
-                                        <i class="ti ti-file-dollar me-2"></i>Seasonal Pricing
+                                        <i class="ti ti-file-dollar me-2"></i>Tarification saisonnière
                                     </a>
                                 </li>
                                 <li>
                                     <a href="{{ url('admin/extra-services') }}"
                                         class="dropdown-item d-inline-flex align-items-center">
-                                        <i class="ti ti-script-plus me-2"></i>Extra Service
+                                        <i class="ti ti-script-plus me-2"></i>Service supplémentaire
                                     </a>
                                 </li>
                                 <li>
                                     <a href="{{ url('admin/inspections') }}"
                                         class="dropdown-item d-inline-flex align-items-center">
-                                        <i class="ti ti-dice-6 me-2"></i>Inspection
+                                        <i class="ti ti-dice-6 me-2"></i>Contrôle
                                     </a>
                                 </li>
                                 <li>
                                     <a href="{{ url('admin/maintenance') }}"
                                         class="dropdown-item d-inline-flex align-items-center">
-                                        <i class="ti ti-color-filter me-2"></i>Maintenance
+                                        <i class="ti ti-color-filter me-2"></i>Entretien
                                     </a>
                                 </li>
                             </ul>
@@ -340,33 +359,33 @@
                             </div>
                             <a class="dropdown-item d-flex align-items-center"
                                 href="{{ url('admin/profile-setting') }}">
-                                <i class="ti ti-user-edit me-2"></i>Edit Profile
+                                <i class="ti ti-user-edit me-2"></i>Modifier le profil
                             </a>
                             <a class="dropdown-item d-flex align-items-center" href="{{ url('admin/payments') }}">
-                                <i class="ti ti-credit-card me-2"></i>Payments
+                                <i class="ti ti-credit-card me-2"></i>Paiements
                             </a>
                             <div class="dropdown-divider my-2"></div>
                             <div class="dropdown-item">
                                 <div
                                     class="form-check form-switch  form-check-reverse  d-flex align-items-center justify-content-between">
                                     <label class="form-check-label" for="notify">
-                                        <i class="ti ti-bell me-2"></i>Notificaions</label>
+                                        <i class="ti ti-bell me-2"></i>Notifications</label>
                                     <input class="form-check-input" type="checkbox" role="switch" id="notify"
                                         checked>
                                 </div>
                             </div>
                             <a class="dropdown-item d-flex align-items-center"
                                 href="{{ url('admin/security-setting') }}">
-                                <i class="ti ti-exchange me-2"></i>Change Password
+                                <i class="ti ti-exchange me-2"></i>Changer le mot de passe
                             </a>
                             <a class="dropdown-item d-flex align-items-center"
                                 href="{{ url('admin/profile-setting') }}">
-                                <i class="ti ti-settings me-2"></i>Settings
+                                <i class="ti ti-settings me-2"></i>Paramètres
                             </a>
                             <div class="dropdown-divider my-2"></div>
                             <a class="dropdown-item logout d-flex align-items-center justify-content-between"
                                 href="{{ url('admin/login') }}">
-                                <span><i class="ti ti-logout me-2"></i>Logout Account</span> <i
+                                <span><i class="ti ti-logout me-2"></i>Déconnexion</span> <i
                                     class="ti ti-chevron-right"></i>
                             </a>
                         </div>
@@ -382,9 +401,9 @@
                 <i class="fa fa-ellipsis-v"></i>
             </a>
             <div class="dropdown-menu dropdown-menu-end">
-                <a class="dropdown-item" href="{{ url('admin/profile') }}">My Profile</a>
-                <a class="dropdown-item" href="{{ url('admin/profile-setting') }}">Settings</a>
-                <a class="dropdown-item" href="{{ url('admin/login') }}">Logout</a>
+                <a class="dropdown-item" href="{{ url('admin/profile') }}">Mon profil</a>
+                <a class="dropdown-item" href="{{ url('admin/profile-setting') }}">Paramètres</a>
+                <a class="dropdown-item" href="{{ url('admin/login') }}">Déconnexion</a>
             </div>
         </div>
         <!-- /Mobile Menu -->
@@ -393,3 +412,72 @@
 
 </div>
 <!-- /Header -->
+
+<!-- Starter Version Language Modal (outside header to avoid z-index/backdrop issues) -->
+<div class="modal fade" id="starterVersionModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content text-center p-4">
+            <div class="mb-3">
+                <span class="avatar avatar-lg bg-warning-transparent rounded-circle text-warning mx-auto">
+                    <i class="ti ti-language fs-26"></i>
+                </span>
+            </div>
+            <h5 class="mb-2">Version Starter</h5>
+            <p class="text-muted mb-3">
+                Cette traduction est une <strong>version de démarrage</strong> (Starter).
+                Certains textes peuvent ne pas être entièrement traduits.<br>
+                Voulez-vous continuer ?
+            </p>
+            <div class="d-flex justify-content-center gap-2">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                    Non, annuler
+                </button>
+                <form id="localeForm" method="POST" action="" class="d-inline">
+                    @csrf
+                    <button type="submit" class="btn btn-primary">
+                        <i class="ti ti-check me-1"></i>Oui, continuer
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+function showStarterVersionModal(locale) {
+    var form = document.getElementById('localeForm');
+    form.action = '{{ url("/locale") }}/' + locale;
+    var modal = new bootstrap.Modal(document.getElementById('starterVersionModal'));
+    modal.show();
+}
+</script>
+<!-- /Starter Version Language Modal -->
+
+<!-- Coming Soon Language Modal -->
+<div class="modal fade" id="comingSoonModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content text-center p-4">
+            <div class="mb-3">
+                <span class="avatar avatar-lg bg-info-transparent rounded-circle text-info mx-auto">
+                    <i class="ti ti-clock fs-26"></i>
+                </span>
+            </div>
+            <h5 class="mb-2">Traduction bientôt disponible</h5>
+            <p class="text-muted mb-3">
+                La traduction en <strong id="comingSoonLangName"></strong> sera disponible prochainement.
+            </p>
+            <div class="d-flex justify-content-center">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+                    <i class="ti ti-check me-1"></i>OK, compris
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+function showComingSoonModal(langName) {
+    document.getElementById('comingSoonLangName').textContent = langName;
+    var modal = new bootstrap.Modal(document.getElementById('comingSoonModal'));
+    modal.show();
+}
+</script>
+<!-- /Coming Soon Language Modal -->

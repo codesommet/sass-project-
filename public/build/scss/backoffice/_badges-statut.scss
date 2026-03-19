@@ -1,0 +1,123 @@
+// ============================================
+// BADGES DE STATUT - Backoffice
+// Tous les badges de statut du systeme
+// ============================================
+
+// --- Style de base pour badges ---
+%badge-base {
+    padding: 0.35rem 0.75rem;
+    border-radius: 50px;
+    font-weight: 500;
+    font-size: 0.85rem;
+    display: inline-block;
+}
+
+// --- Badges transparents (couleurs de base) ---
+$badge-colors: (
+    success: (#d4edda, #155724),
+    danger: (#f8d7da, #721c24),
+    warning: (#fff3cd, #856404),
+    info: (#cce5ff, #004085),
+    primary: (#cfe2ff, #084298),
+    secondary: (#e2e3e5, #41464b),
+    dark: (#d3d3d4, #1a1e21),
+);
+
+@each $color, $values in $badge-colors {
+    .bg-#{$color}-transparent {
+        background-color: nth($values, 1) !important;
+        color: nth($values, 2) !important;
+    }
+}
+
+// --- Statuts des contrats ---
+.badge-draft { @extend %badge-base; background: #e2e3e5; color: #383d41; }
+.badge-pending { @extend %badge-base; background: #fff3cd; color: #856404; }
+.badge-accepted { @extend %badge-base; background: #cce5ff; color: #004085; }
+.badge-in_progress { @extend %badge-base; background: #d1ecf1; color: #0c5460; }
+.badge-completed { @extend %badge-base; background: #d4edda; color: #155724; }
+.badge-cancelled { @extend %badge-base; background: #f8d7da; color: #721c24; }
+
+// --- Statuts des factures ---
+.badge-sent { @extend %badge-base; background: #cce5ff; color: #004085; }
+.badge-paid { @extend %badge-base; background: #d4edda; color: #155724; }
+.badge-partially-paid { @extend %badge-base; background: #fff3cd; color: #856404; }
+
+// --- Methodes de paiement ---
+.badge-cash { @extend %badge-base; background: #d4edda; color: #155724; }
+.badge-card { @extend %badge-base; background: #cce5ff; color: #004085; }
+.badge-bank_transfer { @extend %badge-base; background: #e2e3e5; color: #383d41; }
+.badge-cheque { @extend %badge-base; background: #fff3cd; color: #856404; }
+.badge-other { @extend %badge-base; background: #f5f5f5; color: #6c757d; }
+
+// --- Statuts de paiement ---
+.badge-confirmed { @extend %badge-base; background: #d4edda; color: #155724; }
+.badge-refunded { @extend %badge-base; background: #f8d7da; color: #721c24; }
+
+// --- Finance (types de transaction) ---
+.badge-income { @extend %badge-base; background: #d4edda; color: #155724; }
+.badge-expense { @extend %badge-base; background: #f8d7da; color: #721c24; }
+.badge-both { @extend %badge-base; background: #cce5ff; color: #004085; }
+
+// --- Comptes financiers ---
+.badge-info { @extend %badge-base; background: #cce5ff; color: #004085; }
+.badge-success { @extend %badge-base; background: #d4edda; color: #155724; }
+.badge-secondary { @extend %badge-base; background: #e2e3e5; color: #383d41; }
+.badge-warning { @extend %badge-base; background: #fff3cd; color: #856404; }
+.badge-danger { @extend %badge-base; background: #f8d7da; color: #721c24; }
+
+// --- Montants ---
+.balance-badge {
+    @extend %badge-base;
+    background: #e8f5e9;
+    color: #2e7d32;
+    white-space: nowrap;
+}
+
+.default-badge {
+    background: #ffc107;
+    color: #856404;
+    padding: 0.25rem 0.5rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    display: inline-block;
+}
+
+// --- Urgence ---
+.badge-urgent {
+    background: #dc3545;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 50px;
+    font-size: 0.75rem;
+}
+
+// --- Credits vehicules ---
+.badge-amount {
+    @extend %badge-base;
+    background: #e8f5e9;
+    color: #2e7d32;
+    white-space: nowrap;
+}
+
+.badge-remaining {
+    @extend %badge-base;
+    background: #fff3e0;
+    color: #e65100;
+}
+
+.badge-defaulted {
+    @extend %badge-base;
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.badge-count {
+    background: #dc3545;
+    color: white;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    margin-left: 10px;
+}

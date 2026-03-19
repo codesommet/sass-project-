@@ -5,7 +5,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <div class="form-header text-start mb-0">
-                            <h4 class="mb-0 text-dark fw-bold">Availability Details</h4>
+                            <h4 class="mb-0 text-dark fw-bold">Détails de disponibilité</h4>
                         </div>
                         <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                             <span class="align-center" aria-hidden="true">&times;</span>
@@ -15,48 +15,48 @@
                         <div class="row">
                             <div class="col-lg-12 col-md-12">
                                 <div class="available-for-ride">
-                                    <p><i class="fa-regular fa-circle-check"></i>Chevrolet Camaro is available for a ride</p>
+                                    <p><i class="fa-regular fa-circle-check"></i>Chevrolet Camaro est disponible à la location</p>
                                 </div>
                             </div>
                             <div class="col-lg-12 col-md-12">
                                 <div class="row booking-info">
                                     <div class="col-md-4 pickup-address">
-                                        <h5>Pickup</h5>
+                                        <h5>Lieu de prise</h5>
                                         <p>45, 4th Avanue  Mark Street USA</p>
-                                        <span>Date & time : 11 Jan 2023</span>
+                                        <span>Date & heure : 11 Jan 2023</span>
                                     </div>
                                     <div class="col-md-4 drop-address">
-                                        <h5>Drop Off</h5>
+                                        <h5>Lieu de retour</h5>
                                         <p>78, 10th street Laplace USA</p>
-                                        <span>Date & time : 11 Jan 2023</span>
+                                        <span>Date & heure : 11 Jan 2023</span>
                                     </div>
                                     <div class="col-md-4 booking-amount">
-                                        <h5>Booking Amount</h5>
+                                        <h5>Montant de la réservation</h5>
                                         <h6><span>$300 </span> /day</h6>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-lg-12 col-md-12">
                                 <div class="booking-info seat-select">
-                                    <h6>Extra Service</h6>
+                                    <h6>Service supplémentaire</h6>
                                     <label class="custom_check">
                                         <input type="checkbox" name="rememberme" class="rememberme">
                                         <span class="checkmark"></span>
-                                        Baby Seat - <span class="ms-2">$10</span>
+                                        Siège bébé - <span class="ms-2">$10</span>
                                     </label>
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="booking-info pay-amount">
-                                    <h6>Deposit Option</h6>
+                                    <h6>Option de dépôt</h6>
                                     <div class="radio radio-btn">
                                         <label>
-                                            <input type="radio" name="radio"> Pay Deposit
+                                            <input type="radio" name="radio"> Payer un acompte
                                         </label>
                                     </div>
                                     <div class="radio">
                                         <label>
-                                            <input type="radio" name="radio"> Full Amount
+                                            <input type="radio" name="radio"> Montant total
                                         </label>
                                     </div>
                                 </div>
@@ -65,20 +65,20 @@
                             <div class="col-md-6">
                                 <div class="booking-info service-tax">
                                     <ul>
-                                        <li>Booking Price <span>$300</span></li>
-                                        <li>Extra Service <span>$10</span></li>
-                                        <li>Tax <span>$5</span></li>
+                                        <li>Prix de réservation <span>$300</span></li>
+                                        <li>Service supplémentaire <span>$10</span></li>
+                                        <li>Taxe <span>$5</span></li>
                                     </ul>
                                 </div>
                                 <div class="grand-total">
-                                    <h5>Grand Total</h5>
+                                    <h5>Total général</h5>
                                     <span>$315</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <a href="{{url('booking')}}" class="btn btn-back">Go to Details<i class="fa-solid fa-arrow-right"></i></a>
+                        <a href="{{url('booking')}}" class="btn btn-back">Voir les détails<i class="fa-solid fa-arrow-right"></i></a>
                     </div>
                 </div>
             </div>
@@ -90,7 +90,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Enquiry</h4>
+                    <h4 class="modal-title">Demande de renseignements</h4>
                     <button type="button" class="close-btn" data-bs-dismiss="modal"><span>×</span></button>
                 </div>
                 <div class="modal-body">
@@ -102,21 +102,21 @@
                                 </div>
                                 <div class="book-info">
                                     <h6>Chevrolet Camaro</h6>
-                                    <p><i class="feather-map-pin"></i> Location : Miami St, Destin, FL 32550, USA</p>
+                                    <p><i class="feather-map-pin"></i> Emplacement : Miami St, Destin, FL 32550, USA</p>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-form-group">
-                            <label>Name</label>
-                            <input type="text" class="form-control" placeholder="Enter Name">
+                            <label>Nom</label>
+                            <input type="text" class="form-control" placeholder="Entrez le nom">
                         </div>
                         <div class="modal-form-group">
                             <label>Email</label>
-                            <input type="email" class="form-control" placeholder="Enter Email Address">
+                            <input type="email" class="form-control" placeholder="Entrez l'adresse e-mail">
                         </div>
                         <div class="modal-form-group">
-                            <label>Phone Number</label>
-                            <input type="text" class="form-control" placeholder="Enter Email Address">
+                            <label>Numéro de téléphone</label>
+                            <input type="text" class="form-control" placeholder="Entrez l'adresse e-mail">
                         </div>
                         <div class="modal-form-group">
                             <label>Message</label>
@@ -124,11 +124,11 @@
                         </div>
                         <label class="custom_check w-100">
                             <input type="checkbox" name="username">
-                            <span class="checkmark"></span> I Agree with <a href="javascript:void(0);">Terms of Service</a> & <a href="javascript:void(0);">Privacy Policy</a>
+                            <span class="checkmark"></span> J'accepte les <a href="javascript:void(0);">Conditions d'utilisation</a> & <a href="javascript:void(0);">Politique de confidentialité</a>
                         </label>
                         <div class="modal-btn modal-btn-sm">
                             <button type="submit" class="btn btn-primary w-100">
-                                Submit
+                                Soumettre
                             </button>
                         </div>
                     </form>
@@ -143,7 +143,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Fare Details</h4>
+                    <h4 class="modal-title">Détails du tarif</h4>
                     <button type="button" class="close-btn" data-bs-dismiss="modal"><span>×</span></button>
                 </div>
                 <div class="modal-body">
@@ -155,7 +155,7 @@
                                 </div>
                                 <div class="book-info">
                                     <h6>Chevrolet Camaro</h6>
-                                    <p><i class="feather-map-pin"></i> Location : Miami St, Destin, FL 32550, USA</p>
+                                    <p><i class="feather-map-pin"></i> Emplacement : Miami St, Destin, FL 32550, USA</p>
                                 </div>
                             </div>
                         </div>
@@ -165,39 +165,39 @@
                                     <tbody>
                                         <tr>
                                             <td>
-                                                Doorstep delivery <span>(1 day )</span>
-                                                <p class="text-danger">(This does not include fuel)</p>
+                                                Livraison à domicile <span>(1 day )</span>
+                                                <p class="text-danger">(Le carburant n'est pas inclus)</p>
                                             </td>
                                             <td>
                                                 <select class="select">
-                                                    <option>Per Day</option>
-                                                    <option>Per Hr</option>
+                                                    <option>Par jour</option>
+                                                    <option>Par heure</option>
                                                 </select>
                                             </td>
                                             <td class="amt text-end">+ $300</td>
                                         </tr>
                                         <tr>
-                                            <td>Door delivery & Pickup</td>
+                                            <td>Livraison & récupération</td>
                                             <td colspan="2" class="amt text-end"> + $60</td>
                                         </tr>
                                         <tr>
-                                            <td>Trip Protection Fees</td>
+                                            <td>Frais de protection voyage</td>
                                             <td colspan="2" class="amt text-end"> + $25</td>
                                         </tr>
                                         <tr>
-                                            <td>Convenience Fees</td>
+                                            <td>Frais de service</td>
                                             <td colspan="2" class="amt text-end"> + $2</td>
                                         </tr>
                                         <tr>
-                                            <td>Tax</td>
+                                            <td>Taxe</td>
                                             <td colspan="2" class="amt text-end"> + $2</td>
                                         </tr>
                                         <tr>
-                                            <td>Refundable Deposit</td>
+                                            <td>Dépôt remboursable</td>
                                             <td colspan="2" class="amt text-end">+$1200</td>
                                         </tr>
                                         <tr>
-                                            <th>Subtotal</th>
+                                            <th>Sous-total</th>
                                             <th colspan="2" class="amt text-end">+$1604</th>
                                         </tr>
                                     </tbody>
@@ -315,7 +315,7 @@
                             </div>
                             <div class="book-info">
                                 <h6>Chevrolet Camaro</h6>
-                                <p><i class="feather-map-pin"></i> Location : Miami St, Destin, FL 32550, USA</p>
+                                <p><i class="feather-map-pin"></i> Emplacement : Miami St, Destin, FL 32550, USA</p>
                             </div>
                         </div>
                         <div class="book-amount">
@@ -343,7 +343,7 @@
                                 </div>
                                 <div class="col-lg-4 col-md-6">
                                     <div class="booking-view">
-                                        <h6>Extra Service</h6>
+                                        <h6>Service supplémentaire</h6>
                                         <p>Mobile Charging</p>
                                     </div>
                                 </div>
@@ -561,7 +561,7 @@
                                     <div class="invoice-bill-info">
                                         <h6>Billed to</h6>
                                         <p>
-                                            Customer Name <br>
+                                            Nom du client <br>
                                             9087484288 <br>
                                             Address line 1, <br>
                                             Address line 2 <br>
@@ -573,7 +573,7 @@
                                     <div class="invoice-bill-info">
                                         <h6>Invoice From</h6>
                                         <p>
-                                            Company Name <br>
+                                            Nom de l'entreprise <br>
                                             9087484288 <br>
                                             Address line 1, <br>
                                             Address line 2 <br>
@@ -633,10 +633,10 @@
                                 <div class="col-lg-6 col-md-12">
                                     <div class="invoice-total-box">
                                         <div class="invoice-total-inner">
-                                            <p><b>Trip Amount (This does not include fuel)</b> <span>$2592</span></p>
-                                            <p>Trip Protection Fees <span>+ $25</span></p>
-                                            <p>Convenience Fees <span>+ $2</span></p>
-                                            <p>Refundable Deposit <span>+ $2000</span></p>
+                                            <p><b>Trip Amount (Le carburant n'est pas inclus)</b> <span>$2592</span></p>
+                                            <p>Frais de protection voyage <span>+ $25</span></p>
+                                            <p>Frais de service <span>+ $2</span></p>
+                                            <p>Dépôt remboursable <span>+ $2000</span></p>
                                         </div>
                                     </div>
                                 </div>
@@ -743,7 +743,7 @@
                                 Go Back
                             </a>
                             <a href="javascript:void(0);" data-bs-dismiss="modal" class="btn btn-primary">
-                                Submit
+                                Soumettre
                             </a>
                         </div>
                     </form>
@@ -799,7 +799,7 @@
                         </div>
                         <div class="modal-btn modal-btn-sm">
                             <button type="submit" class="btn btn-secondary">Cancel</button>
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="submit" class="btn btn-primary">Soumettre</button>
                         </div>
                     </form>
                 </div>
@@ -808,27 +808,27 @@
     </div>
     <!-- /Change Password Modal -->
 
-    <!-- Change Phone Number Modal -->
+    <!-- Changer le numéro de téléphone Modal -->
     <div class="modal new-modal multi-step fade" id="change_phone_number" data-keyboard="false"
         data-backdrop="static">
         <div class="modal-dialog modal-dialog-centered modal-md">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Change Phone Number</h4>
+                    <h4 class="modal-title">Changer le numéro de téléphone</h4>
                     <button type="button" class="close-btn" data-bs-dismiss="modal"><span>×</span></button>
                 </div>
                 <div class="modal-body">
                     <form action="#">
                         <div class="modal-form-group">
-                            <label>Current Phone Number <span class="text-danger">*</span></label>
+                            <label>Numéro de téléphone actuel <span class="text-danger">*</span></label>
                             <input type="text" class="form-control">
                         </div>
                         <div class="modal-form-group">
-                            <label>New Phone Number <span class="text-danger">*</span></label>
+                            <label>Nouveau numéro de téléphone <span class="text-danger">*</span></label>
                             <input type="text" class="form-control">
                         </div>
                         <div class="modal-form-group">
-                            <p><i class="feather-alert-circle"></i> New Phone Number Only Updated Once You Verified
+                            <p><i class="feather-alert-circle"></i> Le nouveau numéro de téléphone ne sera mis à jour qu'une fois vérifié
                             </p>
                         </div>
                     </form>
@@ -845,7 +845,7 @@
             </div>
         </div>
     </div>
-    <!-- /Change Phone Number Modal -->
+    <!-- /Changer le numéro de téléphone Modal -->
 
     <!-- OTP Verification Modal -->
     <div class="modal new-modal multi-step fade" id="otp_verification" data-keyboard="false" data-backdrop="static">
@@ -892,7 +892,7 @@
                         </div>
                     </div>
                     <div class="verified-box">
-                        <p><i class="feather-check"></i> Your Phone Number has been Successfully Verified</p>
+                        <p><i class="feather-check"></i> Votre numéro de téléphone a été vérifié avec succès</p>
                     </div>
                 </div>
             </div>
@@ -911,7 +911,7 @@
                             <img src="{{ URL::asset('/build/img/icons/check-icon.svg') }}" alt="Icon">
                         </span>
                         <h4>Successful</h4>
-                        <p>You Phone number has been successfully Verified.</p>
+                        <p>Votre numéro de téléphone a été vérifié avec succès.</p>
                         <div class="modal-btn">
                             <a href="{{ url('user-security') }}" class="btn btn-secondary">
                                 Back to Settings <i class="feather-arrow-right"></i>
@@ -924,26 +924,26 @@
     </div>
     <!-- /Verification Success Modal -->
 
-    <!-- Change Email Modal -->
+    <!-- Changer l'e-mail Modal -->
     <div class="modal new-modal multi-step fade" id="change_email" data-keyboard="false" data-backdrop="static">
         <div class="modal-dialog modal-dialog-centered modal-md">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Change Email Address</h4>
+                    <h4 class="modal-title">Changer l'adresse e-mail</h4>
                     <button type="button" class="close-btn" data-bs-dismiss="modal"><span>×</span></button>
                 </div>
                 <div class="modal-body">
                     <form action="#">
                         <div class="modal-form-group">
-                            <label>Current Email Address <span class="text-danger">*</span></label>
+                            <label>Adresse e-mail actuelle <span class="text-danger">*</span></label>
                             <input type="text" class="form-control">
                         </div>
                         <div class="modal-form-group">
-                            <label>New Email Address <span class="text-danger">*</span></label>
+                            <label>Nouvelle adresse e-mail <span class="text-danger">*</span></label>
                             <input type="text" class="form-control">
                         </div>
                         <div class="modal-form-group">
-                            <p><i class="feather-alert-circle"></i> New Email Address Only Updated Once You Verified
+                            <p><i class="feather-alert-circle"></i> La nouvelle adresse e-mail ne sera mise à jour qu'une fois vérifiée
                             </p>
                         </div>
                     </form>
@@ -953,22 +953,22 @@
                         </a>
                         <a href="javascript:void(0);" class="btn btn-primary" data-bs-target="#email_verification"
                             data-bs-toggle="modal" data-bs-dismiss="modal">
-                            Change Email
+                            Changer l'e-mail
                         </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- /Change Email Modal -->
+    <!-- /Changer l'e-mail Modal -->
 
-    <!-- Email Verification Modal -->
+    <!-- Vérification de l'e-mail Modal -->
     <div class="modal new-modal multi-step fade" id="email_verification" data-keyboard="false"
         data-backdrop="static">
         <div class="modal-dialog modal-dialog-centered modal-md">
             <div class="modal-content">
                 <div class="modal-header justify-content-center">
-                    <h4 class="modal-title">Email Verification</h4>
+                    <h4 class="modal-title">Vérification de l'e-mail</h4>
                     <button type="button" class="close-btn" data-bs-dismiss="modal"><span>×</span></button>
                 </div>
                 <div class="modal-body">
@@ -1000,9 +1000,9 @@
             </div>
         </div>
     </div>
-    <!-- /Email Verification Modal -->
+    <!-- /Vérification de l'e-mail Modal -->
 
-    <!-- Email Verification Success Modal -->
+    <!-- Vérification de l'e-mail Success Modal -->
     <div class="modal new-modal verification-success-modal fade" id="email_verification_success"
         data-keyboard="false" data-backdrop="static">
         <div class="modal-dialog modal-dialog-centered">
@@ -1013,7 +1013,7 @@
                             <img src="{{ URL::asset('/build/img/icons/check-icon.svg') }}" alt="Icon">
                         </span>
                         <h4>Successful</h4>
-                        <p>You Email has been successfully Verified.</p>
+                        <p>Votre e-mail a été vérifié avec succès.</p>
                         <div class="modal-btn">
                             <a href="{{ url('user-security') }}" class="btn btn-secondary">
                                 Back to Settings <i class="feather-arrow-right"></i>
@@ -1024,7 +1024,7 @@
             </div>
         </div>
     </div>
-    <!-- /Email Verification Success Modal -->
+    <!-- /Vérification de l'e-mail Success Modal -->
 
     <!-- Deactive Account Modal -->
     <div class="modal new-modal fade" id="deactive_account" data-keyboard="false" data-backdrop="static">
@@ -1141,8 +1141,8 @@
                             <input type="text" class="form-control" placeholder="Enter Card Number">
                         </div>
                         <div class="modal-form-group">
-                            <label>Name on Card <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" placeholder="Enter Card Name">
+                            <label>Nom sur la carte <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" placeholder="Entrez le nom sur la carte">
                         </div>
                         <div class="row">
                             <div class="col-md-6">
@@ -1479,7 +1479,7 @@
                                 Cancel
                             </a>
                             <a href="javascript:void(0);" data-bs-dismiss="modal" class="btn btn-primary">
-                                Submit
+                                Soumettre
                             </a>
                         </div>
                     </form>
@@ -1504,7 +1504,7 @@
                             </div>
                             <div class="book-info">
                                 <h6>Chevrolet Camaro</h6>
-                                <p><i class="feather-map-pin"></i> Location : Miami St, Destin, FL 32550, USA</p>
+                                <p><i class="feather-map-pin"></i> Emplacement : Miami St, Destin, FL 32550, USA</p>
                             </div>
                         </div>
                         <div class="book-amount">
@@ -1532,7 +1532,7 @@
                                 </div>
                                 <div class="col-lg-4 col-md-6">
                                     <div class="booking-view">
-                                        <h6>Extra Service</h6>
+                                        <h6>Service supplémentaire</h6>
                                         <p>Mobile Charging</p>
                                     </div>
                                 </div>
@@ -1640,7 +1640,7 @@
                             </div>
                             <div class="book-info">
                                 <h6>Chevrolet Camaro</h6>
-                                <p><i class="feather-map-pin"></i> Location : Miami St, Destin, FL 32550, USA</p>
+                                <p><i class="feather-map-pin"></i> Emplacement : Miami St, Destin, FL 32550, USA</p>
                             </div>
                         </div>
                         <div class="book-amount">
@@ -1663,7 +1663,7 @@
                                         <div class="modal-form-group">
                                             <label class="d-sm-block">&nbsp;</label>
                                             <a href="javascript:void(0);" class="btn btn-secondary"><i
-                                                    class="fa-solid fa-location-crosshairs"></i> Current Location</a>
+                                                    class="fa-solid fa-location-crosshairs"></i> Localisation actuelle</a>
                                         </div>
                                     </div>
                                 </div>
@@ -1747,13 +1747,13 @@
                         </div>
                         <div class="booking-wrapper">
                             <div class="booking-title">
-                                <h6><span class="title-icon"><i class="fa-solid fa-medal"></i></span>Extra Service
+                                <h6><span class="title-icon"><i class="fa-solid fa-medal"></i></span>Service supplémentaire
                                 </h6>
                             </div>
                             <div class="selectbox-cont">
                                 <label class="custom_check w-100">
                                     <input type="checkbox" name="username">
-                                    <span class="checkmark"></span> Baby Seat - <span class="amt">$10</span>
+                                    <span class="checkmark"></span> Siège bébé - <span class="amt">$10</span>
                                 </label>
                                 <label class="custom_check w-100">
                                     <input type="checkbox" name="username" checked>
@@ -1800,7 +1800,7 @@
                             </div>
                             <div class="book-info">
                                 <h6>Chevrolet Camaro</h6>
-                                <p><i class="feather-map-pin"></i> Location : Miami St, Destin, FL 32550, USA</p>
+                                <p><i class="feather-map-pin"></i> Emplacement : Miami St, Destin, FL 32550, USA</p>
                             </div>
                         </div>
                         <div class="book-amount">
@@ -1861,7 +1861,7 @@
                             </div>
                             <div class="book-info">
                                 <h6>Chevrolet Camaro</h6>
-                                <p><i class="feather-map-pin"></i> Location : Miami St, Destin, FL 32550, USA</p>
+                                <p><i class="feather-map-pin"></i> Emplacement : Miami St, Destin, FL 32550, USA</p>
                             </div>
                         </div>
                         <div class="book-amount">
@@ -1889,7 +1889,7 @@
                                 </div>
                                 <div class="col-lg-4 col-md-6">
                                     <div class="booking-view">
-                                        <h6>Extra Service</h6>
+                                        <h6>Service supplémentaire</h6>
                                         <p>Mobile Charging</p>
                                     </div>
                                 </div>
@@ -2003,7 +2003,7 @@
                             </div>
                             <div class="book-info">
                                 <h6>Chevrolet Camaro</h6>
-                                <p><i class="feather-map-pin"></i> Location : Miami St, Destin, FL 32550, USA</p>
+                                <p><i class="feather-map-pin"></i> Emplacement : Miami St, Destin, FL 32550, USA</p>
                             </div>
                         </div>
                         <div class="book-amount">
@@ -2031,7 +2031,7 @@
                                 </div>
                                 <div class="col-lg-4 col-md-6">
                                     <div class="booking-view">
-                                        <h6>Extra Service</h6>
+                                        <h6>Service supplémentaire</h6>
                                         <p>Mobile Charging</p>
                                     </div>
                                 </div>
@@ -2134,7 +2134,7 @@
                         </div>
                         <div class="book-info">
                             <h6>Chevrolet Camaro</h6>
-                            <p><i class="feather-map-pin"></i> Location : Miami St, Destin, FL 32550, USA</p>
+                            <p><i class="feather-map-pin"></i> Emplacement : Miami St, Destin, FL 32550, USA</p>
                         </div>
                     </div>
                     <div class="book-amount">
@@ -2162,7 +2162,7 @@
                             </div>
                             <div class="col-lg-4 col-md-6">								
                                 <div class="booking-view">
-                                    <h6>Extra Service</h6>
+                                    <h6>Service supplémentaire</h6>
                                     <p>Mobile Charging</p>
                                 </div>
                             </div>
@@ -2266,7 +2266,7 @@
                         </div>
                         <div class="book-info">
                             <h6>Chevrolet Camaro</h6>
-                            <p><i class="feather-map-pin"></i> Location : Miami St, Destin, FL 32550, USA</p>
+                            <p><i class="feather-map-pin"></i> Emplacement : Miami St, Destin, FL 32550, USA</p>
                         </div>
                     </div>
                     <div class="book-amount">
@@ -2391,7 +2391,7 @@
 							</div>
 							<div class="book-info">
 								<h6>Chevrolet Camaro</h6>
-								<p><i class="feather-map-pin"></i> Location : Miami St, Destin, FL 32550, USA</p>
+								<p><i class="feather-map-pin"></i> Emplacement : Miami St, Destin, FL 32550, USA</p>
 							</div>
 						</div>
 						<div class="book-amount">
@@ -2419,7 +2419,7 @@
 								</div>
 								<div class="col-lg-4 col-md-6">								
 									<div class="booking-view">
-										<h6>Extra Service</h6>
+										<h6>Service supplémentaire</h6>
 										<p>Mobile Charging</p>
 									</div>
 								</div>
@@ -2664,7 +2664,7 @@
 							</div>
 							<div class="book-info">
 								<h6>Chevrolet Camaro</h6>
-								<p><i class="feather-map-pin"></i> Location : Miami St, Destin, FL 32550, USA</p>
+								<p><i class="feather-map-pin"></i> Emplacement : Miami St, Destin, FL 32550, USA</p>
 							</div>
 						</div>
 						<div class="book-amount">
@@ -2692,7 +2692,7 @@
 								</div>
 								<div class="col-lg-4 col-md-6">								
 									<div class="booking-view">
-										<h6>Extra Service</h6>
+										<h6>Service supplémentaire</h6>
 										<p>Mobile Charging</p>
 									</div>
 								</div>
@@ -2857,7 +2857,7 @@
 							</div>
 							<div class="book-info">
 								<h6>Chevrolet Camaro</h6>
-								<p><i class="feather-map-pin"></i> Location : Miami St, Destin, FL 32550, USA</p>
+								<p><i class="feather-map-pin"></i> Emplacement : Miami St, Destin, FL 32550, USA</p>
 							</div>
 						</div>
 						<div class="book-amount">
@@ -2885,7 +2885,7 @@
 								</div>
 								<div class="col-lg-4 col-md-6">								
 									<div class="booking-view">
-										<h6>Extra Service</h6>
+										<h6>Service supplémentaire</h6>
 										<p>Mobile Charging</p>
 									</div>
 								</div>
@@ -2991,7 +2991,7 @@
 							</div>
 							<div class="book-info">
 								<h6>Chevrolet Camaro</h6>
-								<p><i class="feather-map-pin"></i> Location : Miami St, Destin, FL 32550, USA</p>
+								<p><i class="feather-map-pin"></i> Emplacement : Miami St, Destin, FL 32550, USA</p>
 							</div>
 						</div>
 						<div class="book-amount">
@@ -3013,7 +3013,7 @@
 										</div>							
 										<div class="modal-form-group">
 											<label class="d-sm-block">&nbsp;</label>
-											<a href="javascript:void(0);" class="btn btn-secondary"><i class="fa-solid fa-location-crosshairs"></i> Current Location</a>
+											<a href="javascript:void(0);" class="btn btn-secondary"><i class="fa-solid fa-location-crosshairs"></i> Localisation actuelle</a>
 										</div>
 									</div>
 								</div>
@@ -3094,12 +3094,12 @@
 						</div>
 						<div class="booking-wrapper">
 							<div class="booking-title">
-								<h6><span class="title-icon"><i class="fa-solid fa-medal"></i></span>Extra Service</h6>
+								<h6><span class="title-icon"><i class="fa-solid fa-medal"></i></span>Service supplémentaire</h6>
 							</div>
 							<div class="selectbox-cont">
 								<label class="custom_check w-100">
 									<input type="checkbox" name="username">
-									<span class="checkmark"></span>  Baby Seat  - <span class="amt">$10</span>
+									<span class="checkmark"></span>  Siège bébé  - <span class="amt">$10</span>
 								</label>
 								<label class="custom_check w-100">
 									<input type="checkbox" name="username" checked>
@@ -3169,7 +3169,7 @@
 								Cancel
 							</a>
 							<a href="javascript:void(0);" data-bs-dismiss="modal" class="btn btn-primary">
-								Submit
+								Soumettre
 							</a>
 						</div>
 					</form>

@@ -7,7 +7,7 @@
     <div class="page-wrapper">
         <div class="content me-4">
 
-            <!-- Breadcrumb / Back Link -->
+            <!-- Fil d'Ariane / Lien retour -->
             <div class="my-auto mb-3 pb-1">
                 <a href="{{ route('backoffice.roles-permissions.roles') }}" class="mb-1 text-gray-9 fw-medium">
                     <i class="ti ti-arrow-left me-1"></i>Retour à la liste
@@ -15,7 +15,7 @@
             </div>
             <!-- /Breadcrumb -->
 
-            {{-- Role Header --}}
+            {{-- En-tête du rôle --}}
             <div class="filterbox mb-3 d-flex align-items-center">
                 <span class="avatar avatar-lg bg-white text-secondary rounded-2 me-2">
                     <i class="ti ti-user-shield fs-25 fw-normal"></i>
@@ -38,7 +38,7 @@
                     $actionOrder = ['create', 'edit', 'delete', 'view'];
                 @endphp
 
-                {{-- Cards by Module (Group) --}}
+                {{-- Cartes par module (groupe) --}}
                 @forelse(($matrix ?? []) as $module => $resources)
                     @php
                         $groupId = 'select-all-' . preg_replace('/[^a-z0-9\-]/i', '-', strtolower($module));
@@ -56,7 +56,7 @@
                                         <input class="form-check-input js-group-allow-all" type="checkbox"
                                             id="{{ $groupId }}" data-group="{{ $groupId }}"
                                             @disabled($readOnly ?? false)>
-                                        <label class="form-check-label" for="{{ $groupId }}">Allow All</label>
+                                        <label class="form-check-label" for="{{ $groupId }}">Tout sélectionner</label>
                                     </div>
                                 </div>
                             </div>
@@ -67,17 +67,17 @@
                                 <table class="table">
                                     <thead class="thead-light">
                                         <tr>
-                                            <th>RESOURCE</th>
-                                            <th class="text-center">CREATE</th>
-                                            <th class="text-center">EDIT</th>
-                                            <th class="text-center">DELETE</th>
-                                            <th class="text-center">VIEW</th>
-                                            <th class="text-center">ALLOW ALL</th>
+                                            <th>RESSOURCE</th>
+                                            <th class="text-center">CRÉATION</th>
+                                            <th class="text-center">MODIFICATION</th>
+                                            <th class="text-center">SUPPRESSION</th>
+                                            <th class="text-center">CONSULTATION</th>
+                                            <th class="text-center">TOUT SÉLECTIONNER</th>
                                         </tr>
                                     </thead>
 
                                     <tbody>
-                                        {{-- Iterate over resources within this module --}}
+                                        {{-- Itérer sur les ressources de ce module --}}
                                         @forelse($resources as $resource => $actions)
                                             @php
                                                 $rowKey = 'row-' . md5($module . '-' . $resource);
@@ -137,7 +137,7 @@
                     </div>
                 @endforelse
 
-                {{-- Footer Actions --}}
+                {{-- Actions du pied de page --}}
                 @if(($permissions['can_edit'] ?? false) && !($readOnly ?? false))
                 <div class="card mb-0">
                     <div class="card-body py-2 my-1">
@@ -160,10 +160,10 @@
         <!-- Footer -->
         <div class="footer d-sm-flex align-items-center justify-content-between bg-white p-3">
             <p class="mb-0">
-                <a href="javascript:void(0);">Privacy Policy</a>
-                <a href="javascript:void(0);" class="ms-4">Terms of Use</a>
+                <a href="javascript:void(0);">Politique de confidentialité</a>
+                <a href="javascript:void(0);" class="ms-4">Conditions d'utilisation</a>
             </p>
-            <p>&copy; 2025 Dreamsrent, Made with <span class="text-danger">❤</span> by
+            <p>&copy; 2025 Dreamsrent, Fait avec <span class="text-danger">❤</span> par
                 <a href="javascript:void(0);" class="text-secondary">Dreams</a>
             </p>
         </div>
@@ -171,11 +171,11 @@
     </div>
     <!-- /Page Wrapper -->
 
-    {{-- JS (Allow All Checkboxes Logic) --}}
+    {{-- JS (Logique des cases Tout sélectionner) --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
 
-            // Row "Allow All" -> checks/unchecks all perms in that row (ignore disabled)
+            // "Tout sélectionner" par ligne -> coche/décoche toutes les permissions de la ligne (ignore les désactivées)
             document.querySelectorAll('.js-row-allow-all').forEach(function(cb) {
                 cb.addEventListener('change', function() {
                     const group = this.dataset.group;
@@ -191,7 +191,7 @@
                 });
             });
 
-            // Group "Allow All" -> checks/unchecks all perms in that group (ignore disabled)
+            // "Tout sélectionner" par groupe -> coche/décoche toutes les permissions du groupe (ignore les désactivées)
             document.querySelectorAll('.js-group-allow-all').forEach(function(cb) {
                 cb.addEventListener('change', function() {
                     const group = this.dataset.group;
@@ -207,7 +207,7 @@
                 });
             });
 
-            // When any permission checkbox changes -> sync allow-all states
+            // Quand une case de permission change -> synchroniser les états "tout sélectionner"
             document.querySelectorAll('.js-perm').forEach(function(cb) {
                 cb.addEventListener('change', function() {
                     syncRowAllowAll(this.dataset.group, this.dataset.row);

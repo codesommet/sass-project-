@@ -7,14 +7,14 @@
             <div class="page-header">
                 <div class="add-item d-flex" style="justify-content: space-between; align-items: center;">
                     <div>
-                        <h3>Booking Calendar</h3>
+                        <h3>Calendrier des réservations</h3>
                         <ul class="breadcrumb">
-                            <li><a href="{{ route('backoffice.dashboard') }}">Dashboard</a></li>
-                            <li class="active">Booking Calendar</li>
+                            <li><a href="{{ route('backoffice.dashboard') }}">Accueil</a></li>
+                            <li class="active">Calendrier des réservations</li>
                         </ul>
                     </div>
                     <a href="{{ route('backoffice.bookings.create') }}" class="btn btn-primary">
-                        <i class="fa fa-plus"></i> New Booking
+                        <i class="fa fa-plus"></i> Nouvelle réservation
                     </a>
                 </div>
             </div>
@@ -25,7 +25,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="card-title">Bookings Calendar</h5>
+                            <h5 class="card-title">Calendrier des réservations</h5>
                         </div>
                         <div class="card-body">
                             <div id="calendar" style="background: white; padding: 20px; border-radius: 5px;"></div>
@@ -34,12 +34,12 @@
                 </div>
             </div>
 
-            <!-- Bookings List -->
+            <!-- Liste des réservations -->
             <div class="row mt-4">
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="card-title">All Bookings</h5>
+                            <h5 class="card-title">Toutes les réservations</h5>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -47,12 +47,12 @@
                                     <thead>
                                         <tr>
                                             <th>Client</th>
-                                            <th>Vehicle</th>
-                                            <th>Start Date</th>
-                                            <th>End Date</th>
-                                            <th>Pickup Location</th>
-                                            <th>Dropoff Location</th>
-                                            <th>Status</th>
+                                            <th>Véhicule</th>
+                                            <th>Date de début</th>
+                                            <th>Date de fin</th>
+                                            <th>Lieu de prise en charge</th>
+                                            <th>Lieu de retour</th>
+                                            <th>Statut</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -61,19 +61,25 @@
                                             <tr>
                                                 <td>
                                                     <strong>
-                                                        {{ $booking->client->first_name ?? 'N/A' }}
+                                                        {{ $booking->client->first_name ?? 'N/C' }}
                                                         {{ $booking->client->last_name ?? '' }}
                                                     </strong>
                                                 </td>
-                                                <td>{{ $booking->vehicle->registration_number ?? 'N/A' }}</td>
-                                                <td>{{ $booking->start_date->format('M d, Y') }}</td>
-                                                <td>{{ $booking->end_date->format('M d, Y') }}</td>
+                                                <td>{{ $booking->vehicle->registration_number ?? 'N/C' }}</td>
+                                                <td>{{ $booking->start_date->format('d/m/Y') }}</td>
+                                                <td>{{ $booking->end_date->format('d/m/Y') }}</td>
                                                 <td>{{ $booking->pickup_location }}</td>
                                                 <td>{{ $booking->dropoff_location }}</td>
                                                 <td>
                                                     <span
                                                         class="badge badge-{{ $booking->status === 'confirmed' ? 'success' : ($booking->status === 'pending' ? 'warning' : 'danger') }}">
-                                                        {{ ucfirst($booking->status) }}
+                                                        @switch($booking->status)
+                                                            @case('pending') En attente @break
+                                                            @case('confirmed') Confirmé @break
+                                                            @case('cancelled') Annulé @break
+                                                            @case('converted') Converti @break
+                                                            @default {{ ucfirst($booking->status) }}
+                                                        @endswitch
                                                     </span>
                                                 </td>
                                                 <td>
@@ -90,8 +96,8 @@
                                         @empty
                                             <tr>
                                                 <td colspan="8" class="text-center text-muted py-4">
-                                                    No bookings found. <a
-                                                        href="{{ route('backoffice.bookings.create') }}">Create one</a>
+                                                    Aucune réservation trouvée. <a
+                                                        href="{{ route('backoffice.bookings.create') }}">Créer une réservation</a>
                                                 </td>
                                             </tr>
                                         @endforelse
@@ -117,7 +123,7 @@
             var events = [
                 @foreach ($bookings as $booking)
                     {
-                        title: '{{ $booking->client->first_name ?? 'Booking' }} - {{ $booking->vehicle->registration_number ?? 'Vehicle' }}',
+                        title: '{{ $booking->client->first_name ?? 'Réservation' }} - {{ $booking->vehicle->registration_number ?? 'Véhicule' }}',
                         start: '{{ $booking->start_date->format('Y-m-d') }}',
                         end: '{{ $booking->end_date->format('Y-m-d\TH:i:s') }}',
                         backgroundColor: '{{ $booking->status === 'confirmed' ? '#28a745' : ($booking->status === 'pending' ? '#ffc107' : '#dc3545') }}',
@@ -135,6 +141,7 @@
             ];
 
             var calendar = new FullCalendar.Calendar(calendarEl, {
+                locale: 'fr',
                 initialView: 'dayGridMonth',
                 headerToolbar: {
                     left: 'prev,next today',
@@ -147,16 +154,16 @@
                     var event = info.event;
                     var props = event.extendedProps;
                     alert(
-                        'Booking Details:\n\n' +
-                        'Client: ' + props.client + '\n' +
-                        'Vehicle: ' + props.vehicle + '\n' +
-                        'Pickup: ' + props.pickupLocation + '\n' +
-                        'Dropoff: ' + props.dropoffLocation + '\n' +
-                        'Status: ' + props.status
+                        'Détails de la réservation :\n\n' +
+                        'Client : ' + props.client + '\n' +
+                        'Véhicule : ' + props.vehicle + '\n' +
+                        'Prise en charge : ' + props.pickupLocation + '\n' +
+                        'Restitution : ' + props.dropoffLocation + '\n' +
+                        'Statut : ' + props.status
                     );
                 },
                 datesSet: function(info) {
-                    console.log('Calendar dates changed', info.start, info.end);
+                    console.log('Dates du calendrier changées', info.start, info.end);
                 }
             });
 

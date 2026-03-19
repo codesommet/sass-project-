@@ -130,7 +130,7 @@
                                         <div class="info-value">{{ $contractClient->client->phone ?? 'N/A' }}</div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="info-label">Email</div>
+                                        <div class="info-label">E-mail</div>
                                         <div class="info-value">{{ $contractClient->client->email ?? 'N/A' }}</div>
                                     </div>
                                 </div>

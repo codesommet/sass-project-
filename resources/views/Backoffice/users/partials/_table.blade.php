@@ -137,17 +137,17 @@
                 @endcanany
             </tr>
         @empty
+            @php
+                $emptyColspan = 4
+                    + (auth()->user()->can('users.general.delete') ? 1 : 0)
+                    + (auth('backoffice')->user()->hasRole('super-admin') ? 1 : 0)
+                    + (auth()->user()->canAny(['users.general.view', 'users.general.edit', 'users.general.delete']) ? 1 : 0);
+            @endphp
             <tr>
-                @can('users.general.delete')
-                <td></td>
-                @endcan
-                <td colspan="{{ (auth()->user()->can('users.general.delete') ? 6 : 5) }}" class="text-center py-4">
+                <td colspan="{{ $emptyColspan }}" class="text-center py-4">
                     <i class="ti ti-users-off fs-24 text-muted mb-2"></i>
                     <p class="text-muted mb-0">Aucun utilisateur trouvé.</p>
                 </td>
-                @canany(['users.general.view', 'users.general.edit', 'users.general.delete'])
-                <td></td>
-                @endcanany
             </tr>
         @endforelse
     </tbody>

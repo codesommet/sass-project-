@@ -255,6 +255,9 @@ Template Name: Dreams rent - Bootstrap Admin Template
 	}
 
 	// Datatable
+	if ($.fn.dataTable) {
+		$.fn.dataTable.ext.errMode = 'none';
+	}
 
 	if($('.datatable').length > 0) {
 		$('.datatable').DataTable({

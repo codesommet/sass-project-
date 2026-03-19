@@ -52,7 +52,7 @@
                             <a href="{{ route('backoffice.dashboard') }}">Accueil</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="{{ route('backoffice.dashboard') }}">Dashboard</a>
+                            <a href="{{ route('backoffice.dashboard') }}">Tableau de bord</a>
                         </li>
                         <li class="breadcrumb-item active">Statistiques</li>
                     </ol>
@@ -399,10 +399,10 @@
     <!-- Footer -->
     <div class="footer d-sm-flex align-items-center justify-content-between bg-white p-3">
         <p class="mb-0">
-            <a href="javascript:void(0);">Privacy Policy</a>
-            <a href="javascript:void(0);" class="ms-4">Terms of Use</a>
+            <a href="javascript:void(0);">Politique de confidentialité</a>
+            <a href="javascript:void(0);" class="ms-4">Conditions d'utilisation</a>
         </p>
-        <p>&copy; 2025 Dreamsrent, Made with <span class="text-danger">❤</span> by <a href="javascript:void(0);" class="text-secondary">Dreams</a></p>
+        <p>&copy; 2025 Dreamsrent, Fait avec <span class="text-danger">❤</span> par <a href="javascript:void(0);" class="text-secondary">Dreams</a></p>
     </div>
 </div>
 

@@ -55,16 +55,16 @@
         <!-- Breadcrumb -->
         <div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
             <div class="my-auto mb-2">
-                <h2 class="mb-1">Agency Settings</h2>
+                <h2 class="mb-1">Paramètres de l'agence</h2>
                 <nav>
                     <ol class="breadcrumb mb-0">
                         <li class="breadcrumb-item">
-                            <a href="{{ route('backoffice.dashboard') }}">Home</a>
+                            <a href="{{ route('backoffice.dashboard') }}">Accueil</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="{{ route('backoffice.agencies.index') }}">Agencies</a>
+                            <a href="{{ route('backoffice.agencies.index') }}">Agences</a>
                         </li>
-                        <li class="breadcrumb-item active" aria-current="page">Invoice Settings</li>
+                        <li class="breadcrumb-item active" aria-current="page">Paramètres de facturation</li>
                     </ol>
                 </nav>
             </div>
@@ -80,7 +80,7 @@
             <div class="col-lg-9">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="fw-bold">Invoice Settings</h5>
+                        <h5 class="fw-bold">Paramètres de facturation</h5>
                     </div>
                     <form action="{{ route('backoffice.agencies.settings.invoice-settings.update', $agency) }}" method="POST" enctype="multipart/form-data">
                         @csrf
@@ -91,22 +91,22 @@
                             
                             <!-- Invoice Logo Section -->
                             <div class="settings-section">
-                                <h6>📎 Invoice Logo</h6>
+                                <h6>📎 Logo de facture</h6>
                                 <div class="row">
                                     <div class="col-md-12 mb-3">
-                                        <label class="form-label required">Invoice Logo</label>
+                                        <label class="form-label required">Logo de facture</label>
                                         <div class="logo-preview" id="logoPreview">
                                             @if($agency->getFirstMediaUrl('logo'))
                                                 <img src="{{ $agency->getFirstMediaUrl('logo') }}" alt="Invoice Logo">
                                             @else
                                                 <div class="placeholder">
                                                     <i class="ti ti-photo"></i>
-                                                    <p>No logo uploaded</p>
+                                                    <p>Aucun logo téléchargé</p>
                                                 </div>
                                             @endif
                                         </div>
                                         <input type="file" name="invoice_logo" class="form-control" accept="image/*" onchange="previewLogo(this)">
-                                        <small class="text-muted">Upload image size 180*180, within 5MB</small>
+                                        <small class="text-muted">Taille de l'image 180×180, max 5 Mo</small>
                                         @error('invoice_logo')
                                             <div class="text-danger mt-1">{{ $message }}</div>
                                         @enderror
@@ -116,92 +116,92 @@
 
                             <!-- Invoice Format Section -->
                             <div class="settings-section">
-                                <h6>📄 Invoice Format</h6>
+                                <h6>📄 Format de facture</h6>
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label required">Invoice Prefix</label>
-                                        <input type="text" name="invoice_prefix" class="form-control" 
-                                               value="{{ old('invoice_prefix', $agency->settings['invoice']['invoice_prefix'] ?? 'INV-') }}" 
-                                               placeholder="e.g., INV-, FCT-">
-                                        <small class="text-muted">Prefix before invoice number</small>
+                                        <label class="form-label required">Préfixe de facture</label>
+                                        <input type="text" name="invoice_prefix" class="form-control"
+                                               value="{{ old('invoice_prefix', $agency->settings['invoice']['invoice_prefix'] ?? 'INV-') }}"
+                                               placeholder="ex. : INV-, FCT-">
+                                        <small class="text-muted">Préfixe avant le numéro de facture</small>
                                     </div>
                                     
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label required">Invoice Number Start</label>
-                                        <input type="number" name="invoice_start" class="form-control" 
-                                               value="{{ old('invoice_start', $agency->settings['invoice']['invoice_start'] ?? '1') }}" 
+                                        <label class="form-label required">Numéro de début</label>
+                                        <input type="number" name="invoice_start" class="form-control"
+                                               value="{{ old('invoice_start', $agency->settings['invoice']['invoice_start'] ?? '1') }}"
                                                min="1">
-                                        <small class="text-muted">Starting number for new invoices</small>
+                                        <small class="text-muted">Numéro de départ pour les nouvelles factures</small>
                                     </div>
                                     
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label required">Invoice Due</label>
+                                        <label class="form-label required">Échéance de facture</label>
                                         <div class="input-group">
-                                            <input type="number" name="invoice_due_days" class="form-control" 
-                                                   value="{{ old('invoice_due_days', $agency->settings['invoice']['invoice_due_days'] ?? '15') }}" 
+                                            <input type="number" name="invoice_due_days" class="form-control"
+                                                   value="{{ old('invoice_due_days', $agency->settings['invoice']['invoice_due_days'] ?? '15') }}"
                                                    min="0" max="90">
-                                            <span class="input-group-text">Days</span>
+                                            <span class="input-group-text">Jours</span>
                                         </div>
-                                        <small class="text-muted">Number of days until invoice is due</small>
+                                        <small class="text-muted">Nombre de jours avant l'échéance</small>
                                     </div>
                                     
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label required">Invoice Round Off</label>
+                                        <label class="form-label required">Arrondi de facture</label>
                                         <select name="invoice_round_off" class="form-select">
-                                            <option value="0" {{ (old('invoice_round_off', $agency->settings['invoice']['invoice_round_off'] ?? '0') == '0') ? 'selected' : '' }}>No Rounding</option>
-                                            <option value="0.5" {{ (old('invoice_round_off', $agency->settings['invoice']['invoice_round_off'] ?? '') == '0.5') ? 'selected' : '' }}>Round to 0.50</option>
-                                            <option value="1" {{ (old('invoice_round_off', $agency->settings['invoice']['invoice_round_off'] ?? '') == '1') ? 'selected' : '' }}>Round to 1.00</option>
-                                            <option value="10" {{ (old('invoice_round_off', $agency->settings['invoice']['invoice_round_off'] ?? '') == '10') ? 'selected' : '' }}>Round to 10.00</option>
-                                            <option value="100" {{ (old('invoice_round_off', $agency->settings['invoice']['invoice_round_off'] ?? '') == '100') ? 'selected' : '' }}>Round to 100.00</option>
+                                            <option value="0" {{ (old('invoice_round_off', $agency->settings['invoice']['invoice_round_off'] ?? '0') == '0') ? 'selected' : '' }}>Pas d'arrondi</option>
+                                            <option value="0.5" {{ (old('invoice_round_off', $agency->settings['invoice']['invoice_round_off'] ?? '') == '0.5') ? 'selected' : '' }}>Arrondir à 0,50</option>
+                                            <option value="1" {{ (old('invoice_round_off', $agency->settings['invoice']['invoice_round_off'] ?? '') == '1') ? 'selected' : '' }}>Arrondir à 1,00</option>
+                                            <option value="10" {{ (old('invoice_round_off', $agency->settings['invoice']['invoice_round_off'] ?? '') == '10') ? 'selected' : '' }}>Arrondir à 10,00</option>
+                                            <option value="100" {{ (old('invoice_round_off', $agency->settings['invoice']['invoice_round_off'] ?? '') == '100') ? 'selected' : '' }}>Arrondir à 100,00</option>
                                         </select>
-                                        <small class="text-muted">Round total amounts to nearest</small>
+                                        <small class="text-muted">Arrondir les montants totaux au plus proche</small>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Company Details Section -->
                             <div class="settings-section">
-                                <h6>🏢 Company Details</h6>
+                                <h6>🏢 Informations de l'entreprise</h6>
                                 <div class="row">
                                     <div class="col-md-12 mb-3">
                                         <div class="form-check form-switch">
-                                            <input type="checkbox" class="form-check-input" name="show_company_details" value="1" 
+                                            <input type="checkbox" class="form-check-input" name="show_company_details" value="1"
                                                    id="showCompanyDetails"
                                                    {{ (old('show_company_details', $agency->settings['invoice']['show_company_details'] ?? true)) ? 'checked' : '' }}>
-                                            <label class="form-check-label" for="showCompanyDetails">Show Company Details on Invoice</label>
+                                            <label class="form-check-label" for="showCompanyDetails">Afficher les informations de l'entreprise sur la facture</label>
                                         </div>
-                                        <small class="text-muted">Display company name, address, phone, email on invoice</small>
+                                        <small class="text-muted">Afficher le nom, l'adresse, le téléphone et l'e-mail sur la facture</small>
                                     </div>
                                     
                                     <div class="col-md-12 mb-3" id="companyDetailsFields">
                                         <div class="row">
                                             <div class="col-md-6 mb-3">
-                                                <label class="form-label">Company Name</label>
+                                                <label class="form-label">Nom de l'entreprise</label>
                                                 <input type="text" name="company_name" class="form-control" 
                                                        value="{{ old('company_name', $agency->settings['invoice']['company_name'] ?? $agency->name) }}">
                                             </div>
                                             <div class="col-md-6 mb-3">
-                                                <label class="form-label">Registration Number</label>
+                                                <label class="form-label">Numéro d'immatriculation</label>
                                                 <input type="text" name="company_reg_number" class="form-control" 
                                                        value="{{ old('company_reg_number', $agency->settings['invoice']['company_reg_number'] ?? $agency->rc_number ?? '') }}">
                                             </div>
                                             <div class="col-md-6 mb-3">
-                                                <label class="form-label">Tax Number</label>
+                                                <label class="form-label">Numéro fiscal</label>
                                                 <input type="text" name="company_tax_number" class="form-control" 
                                                        value="{{ old('company_tax_number', $agency->settings['invoice']['company_tax_number'] ?? $agency->ice_number ?? '') }}">
                                             </div>
                                             <div class="col-md-6 mb-3">
-                                                <label class="form-label">Phone</label>
+                                                <label class="form-label">Téléphone</label>
                                                 <input type="text" name="company_phone" class="form-control" 
                                                        value="{{ old('company_phone', $agency->settings['invoice']['company_phone'] ?? $agency->phone) }}">
                                             </div>
                                             <div class="col-md-6 mb-3">
-                                                <label class="form-label">Email</label>
+                                                <label class="form-label">E-mail</label>
                                                 <input type="email" name="company_email" class="form-control" 
                                                        value="{{ old('company_email', $agency->settings['invoice']['company_email'] ?? $agency->email) }}">
                                             </div>
                                             <div class="col-md-6 mb-3">
-                                                <label class="form-label">Address</label>
+                                                <label class="form-label">Adresse</label>
                                                 <input type="text" name="company_address" class="form-control" 
                                                        value="{{ old('company_address', $agency->settings['invoice']['company_address'] ?? $agency->address) }}">
                                             </div>

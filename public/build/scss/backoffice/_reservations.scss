@@ -1,0 +1,29 @@
+// ============================================
+// GESTION DES RESERVATIONS (Bookings)
+// Styles pour reservations et calendrier
+// ============================================
+
+// --- Info reservation ---
+.booking-info {
+    font-size: 0.9rem;
+
+    small {
+        color: #6c757d;
+    }
+}
+
+// --- Calendrier ---
+.badge-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.badge-warning {
+    background-color: #ffc107;
+    color: black;
+}
+
+.badge-danger {
+    background-color: #dc3545;
+    color: white;
+}

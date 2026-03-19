@@ -401,10 +401,10 @@
                                     <div class="info-value">
                                         @can('vehicles.general.view')
                                             <a href="{{ route('backoffice.vehicles.show', $rentalContract->vehicle_id) }}" class="fw-medium">
-                                                {{ $rentalContract->vehicle->registration_number ?? 'N/A' }}
+                                                {{ $rentalContract->vehicle->registration_number ?? 'N/C' }}
                                             </a>
                                         @else
-                                            <span>{{ $rentalContract->vehicle->registration_number ?? 'N/A' }}</span>
+                                            <span>{{ $rentalContract->vehicle->registration_number ?? 'N/C' }}</span>
                                         @endcan
                                     </div>
                                 </div>
@@ -414,17 +414,17 @@
                                         @if($rentalContract->vehicle && $rentalContract->vehicle->model)
                                             {{ $rentalContract->vehicle->model->brand->name ?? '' }} {{ $rentalContract->vehicle->model->name ?? '' }}
                                         @else
-                                            N/A
+                                            N/C
                                         @endif
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="info-label">Année</div>
-                                    <div class="info-value">{{ $rentalContract->vehicle->year ?? 'N/A' }}</div>
+                                    <div class="info-value">{{ $rentalContract->vehicle->year ?? 'N/C' }}</div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="info-label">Couleur</div>
-                                    <div class="info-value">{{ ucfirst($rentalContract->vehicle->color ?? 'N/A') }}</div>
+                                    <div class="info-value">{{ ucfirst($rentalContract->vehicle->color ?? 'N/C') }}</div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="info-label">Kilométrage</div>
@@ -434,7 +434,7 @@
                                     <div class="info-label">Statut</div>
                                     <div class="info-value">
                                         <span class="badge {{ $rentalContract->vehicle->status_badge_class ?? 'badge-secondary' }}">
-                                            {{ $rentalContract->vehicle->status_text ?? 'N/A' }}
+                                            {{ $rentalContract->vehicle->status_text ?? 'N/C' }}
                                         </span>
                                     </div>
                                 </div>
@@ -692,7 +692,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="photoModalLabel">Photo du véhicule</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
             </div>
             <div class="modal-body text-center">
                 <img id="modalPhoto" src="" alt="Photo du véhicule" style="max-width: 100%; max-height: 80vh;">

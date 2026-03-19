@@ -1,0 +1,456 @@
+// ============================================
+// STYLES COMMUNS - Backoffice
+// Styles partages entre tous les modules
+// ============================================
+
+// --- Pagination ---
+.pagination {
+    margin: 0;
+    display: flex;
+    padding-left: 0;
+    list-style: none;
+    border-radius: 0.25rem;
+
+    .page-item {
+        &.active .page-link {
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+            color: white;
+            z-index: 3;
+        }
+
+        &:first-child .page-link {
+            margin-left: 0;
+            border-top-left-radius: 0.25rem;
+            border-bottom-left-radius: 0.25rem;
+        }
+
+        &:last-child .page-link {
+            border-top-right-radius: 0.25rem;
+            border-bottom-right-radius: 0.25rem;
+        }
+
+        &.disabled .page-link {
+            color: #6c757d;
+            pointer-events: none;
+            cursor: auto;
+            background-color: #fff;
+            border-color: #dee2e6;
+        }
+    }
+
+    .page-link {
+        position: relative;
+        display: block;
+        padding: 0.5rem 0.75rem;
+        margin-left: -1px;
+        line-height: 1.25;
+        color: #0d6efd;
+        background-color: #fff;
+        border: 1px solid #dee2e6;
+        text-decoration: none;
+        transition: all 0.2s ease;
+
+        &:hover {
+            background-color: #e9ecef;
+            border-color: #dee2e6;
+            color: #0a58ca;
+            z-index: 2;
+        }
+    }
+}
+
+.pagination-info {
+    color: #6c757d;
+    font-size: 14px;
+}
+
+.pagination-container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+@media (max-width: 768px) {
+    .pagination-container {
+        justify-content: center;
+        margin-top: 15px;
+    }
+}
+
+// --- Boutons d'action (icones) ---
+.btn-icon {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    color: #6c757d;
+    background: transparent;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+    cursor: pointer;
+
+    &:hover {
+        background: #f8f9fa;
+        border-color: #dee2e6;
+        color: #0d6efd;
+    }
+
+    i {
+        font-size: 18px;
+    }
+}
+
+// --- Tables ---
+.table-responsive,
+.custom-datatable-filter,
+.dataTables_wrapper {
+    overflow: visible !important;
+}
+
+.dataTables_wrapper .dropdown-menu {
+    z-index: 1055;
+}
+
+.table td,
+.table th {
+    vertical-align: middle;
+}
+
+// --- Menus deroulants ---
+.dropdown-menu {
+    z-index: 9999 !important;
+    display: block;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+
+    &.show {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+}
+
+// --- Cases a cocher (centrage) ---
+.form-check {
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+}
+
+// --- Filtre collapse ---
+.collapse {
+    display: none;
+
+    &.show {
+        display: block;
+    }
+}
+
+// --- Mise en page ---
+.page-wrapper {
+    min-height: calc(100vh - 60px);
+    display: flex;
+    flex-direction: column;
+}
+
+.content {
+    flex: 1 0 auto;
+}
+
+.footer {
+    flex-shrink: 0;
+    margin-top: auto;
+}
+
+// --- Montant ---
+.amount-badge {
+    background: #e8f5e9;
+    color: #2e7d32;
+    padding: 0.35rem 0.75rem;
+    border-radius: 50px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+// --- Etat vide ---
+.empty-state {
+    padding: 3rem 1rem;
+    text-align: center;
+
+    .empty-state-icon,
+    i {
+        font-size: 48px;
+        color: #adb5bd;
+        margin-bottom: 1rem;
+    }
+
+    h4 {
+        color: #6c757d;
+        margin-bottom: 10px;
+    }
+
+    p {
+        color: #adb5bd;
+    }
+}
+
+// --- Filtre ---
+.filter-bar {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+// --- Carte avec survol ---
+.card-hover {
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+}
+
+// --- Formulaires ---
+.form-section {
+    margin-bottom: 1.5rem;
+
+    .form-section-title {
+        font-weight: 600;
+        font-size: 15px;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #e9ecef;
+        color: #495057;
+    }
+}
+
+.required-star {
+    color: #dc3545;
+    margin-left: 2px;
+}
+
+// --- Informations (label / valeur) ---
+.info-label {
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin-bottom: 0.25rem;
+}
+
+.info-value {
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
+
+// --- Navigation par onglets (wizard) ---
+.wizard-nav {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 10px;
+
+    .nav-item {
+        flex: 1;
+        min-width: 150px;
+    }
+
+    .nav-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        background: white;
+        border-radius: 8px;
+        color: #6c757d;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.3s;
+        border: 1px solid #dee2e6;
+        cursor: pointer;
+
+        i {
+            margin-right: 8px;
+            font-size: 1.2rem;
+        }
+
+        &.active {
+            background: #0d6efd;
+            color: white;
+            border-color: #0d6efd;
+        }
+    }
+}
+
+.info-panel {
+    display: none;
+
+    &.active {
+        display: block;
+    }
+}
+
+// --- Modale ---
+.modal-content {
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+}
+
+.modal-fullscreen {
+    max-width: 90vw;
+    max-height: 90vh;
+
+    img {
+        width: 100%;
+        height: auto;
+        max-height: 80vh;
+        object-fit: contain;
+    }
+}
+
+// --- Apercu PDF ---
+.pdf-preview-container {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 20px;
+}
+
+.pdf-preview-header {
+    background: #f8f9fa;
+    padding: 12px 20px;
+    border-bottom: 1px solid #dee2e6;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pdf-preview {
+    width: 100%;
+    height: 600px;
+    border: none;
+}
+
+.pdf-placeholder {
+    background: #f8f9fa;
+    padding: 60px 20px;
+    text-align: center;
+    border: 2px dashed #dee2e6;
+    border-radius: 8px;
+
+    i {
+        font-size: 48px;
+        color: #dc3545;
+        margin-bottom: 15px;
+    }
+}
+
+// --- Avatars ---
+.avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    text-decoration: none;
+    background: #f8f9fa;
+}
+
+.avatar-sm { width: 32px; height: 32px; }
+.avatar-md { width: 42px; height: 42px; }
+.avatar-lg { width: 56px; height: 56px; }
+.avatar-xl { width: 72px; height: 72px; }
+.avatar-xxl {
+    width: 100px;
+    height: 100px;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+.avatar-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    font-size: 16px;
+    font-weight: 600;
+    color: #495057;
+    background: #f8f9fa;
+    border-radius: inherit;
+}
+
+.avatar-table {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    object-fit: cover;
+}
+
+.avatar-placeholder {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    overflow: hidden;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+// --- Upload fichier ---
+.drag-upload-btn {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+
+    input[type="file"] {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+    }
+}
+
+// --- Animations ---
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}

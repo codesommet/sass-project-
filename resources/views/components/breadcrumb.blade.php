@@ -7,7 +7,7 @@
                     <h2 class="breadcrumb-title">{{ $title }}</h2>
                     <nav aria-label="breadcrumb" class="page-breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ url('/') }}">Home</a></li>
+                            <li class="breadcrumb-item"><a href="{{ url('/') }}">Accueil</a></li>
                             <li class="breadcrumb-item"><a href="javascript:void(0);">{{ $li_1 }}</a></li>
                             <li class="breadcrumb-item active" aria-current="page">{{ $li_2 }}</li>
                         </ol>
@@ -50,7 +50,7 @@
                     <h2 class="breadcrumb-title">{{ $title }}</h2>
                     <nav aria-label="breadcrumb" class="page-breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{url('/')}}">Home</a></li>
+                            <li class="breadcrumb-item"><a href="{{url('/')}}">Accueil</a></li>
                             <li class="breadcrumb-item active" aria-current="page">{{ $li_1 }}</li>
                         </ol>
                     </nav>

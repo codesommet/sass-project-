@@ -12,6 +12,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }, false);
     });
     
-    console.log('Bookings Modals JS loaded');
+    console.log('Bookings Modals JS chargé');
 });
 </script>

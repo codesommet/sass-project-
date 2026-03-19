@@ -142,17 +142,17 @@
                         {{-- Provider --}}
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label class="form-label">Provider <span class="text-danger">*</span></label>
+                                <label class="form-label">Fournisseur <span class="text-danger">*</span></label>
                                 <select name="provider"
                                         id="editProvider"
                                         class="select @error('provider') is-invalid @enderror"
                                         required>
-                                    <option value="manual">manual</option>
-                                    <option value="stripe">stripe</option>
-                                    <option value="paypal">paypal</option>
-                                    <option value="other">other</option>
+                                    <option value="manual">Manuel</option>
+                                    <option value="stripe">Stripe</option>
+                                    <option value="paypal">PayPal</option>
+                                    <option value="other">Autre</option>
                                 </select>
-                                <div class="invalid-feedback">Veuillez sélectionner un provider.</div>
+                                <div class="invalid-feedback">Veuillez sélectionner un fournisseur.</div>
                                 @error('provider') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
                             </div>
                         </div>
@@ -160,7 +160,7 @@
                         {{-- Provider subscription id --}}
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label class="form-label">Provider subscription id</label>
+                                <label class="form-label">ID abonnement fournisseur</label>
                                 <input type="text"
                                        name="provider_subscription_id"
                                        id="editProviderSubscriptionId"

@@ -1,0 +1,104 @@
+// ============================================
+// CORBEILLE (Trash)
+// Styles pour la gestion des elements supprimes
+// ============================================
+
+// --- En-tete corbeille ---
+.trash-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+// --- Onglets corbeille ---
+.trash-tabs {
+    background: white;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid #dee2e6;
+
+    .nav-tabs {
+        border-bottom: 2px solid #dee2e6;
+    }
+
+    .nav-link {
+        color: #6c757d;
+        font-weight: 500;
+        border: none;
+        padding: 10px 20px;
+        margin-right: 5px;
+        border-radius: 5px 5px 0 0;
+
+        &:hover {
+            background: #f8f9fa;
+            color: #0d6efd;
+        }
+
+        &.active {
+            color: #0d6efd;
+            background: white;
+            border-bottom: 2px solid #0d6efd;
+        }
+
+        i {
+            margin-right: 8px;
+        }
+    }
+}
+
+.tab-count {
+    background: #e9ecef;
+    color: #495057;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    margin-left: 8px;
+
+    .nav-link.active & {
+        background: #0d6efd;
+        color: white;
+    }
+}
+
+// --- Carte module ---
+.module-card {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    border: 1px solid #dee2e6;
+}
+
+.module-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+// --- Boutons restaurer / supprimer ---
+.restore-btn {
+    color: #28a745;
+    cursor: pointer;
+    margin-right: 10px;
+    font-size: 18px;
+    display: inline-block;
+
+    &:hover {
+        transform: scale(1.1);
+    }
+}
+
+.delete-btn {
+    color: #dc3545;
+    cursor: pointer;
+    font-size: 18px;
+    display: inline-block;
+
+    &:hover {
+        transform: scale(1.1);
+    }
+}

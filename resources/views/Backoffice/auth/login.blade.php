@@ -22,8 +22,8 @@
                                     </div>
 
                                     <div class="text-center mb-3">
-                                        <h4 class="mb-1">Welcome Back</h4>
-                                        <p class="mb-0">Please enter your details to sign in</p>
+                                        <h4 class="mb-1">Bienvenue</h4>
+                                        <p class="mb-0">Veuillez saisir vos identifiants pour vous connecter</p>
                                     </div>
 
                                     {{-- Global error (email/password incorrect, compte désactivé, etc.) --}}
@@ -35,7 +35,7 @@
 
                                     <div class="mb-3">
                                         <label class="form-label">
-                                            Email / Username <span class="text-danger">*</span>
+                                            E-mail / Nom d'utilisateur <span class="text-danger">*</span>
                                         </label>
 
                                         <div class="input-group">
@@ -59,7 +59,7 @@
 
                                     <div class="mb-3">
                                         <label class="form-label">
-                                            Password <span class="text-danger">*</span>
+                                            Mot de passe <span class="text-danger">*</span>
                                         </label>
 
                                         <div class="pass-group">
@@ -89,20 +89,20 @@
                                                     {{ old('remember') ? 'checked' : '' }}
                                                 >
                                                 <label for="remember_me" class="form-check-label mt-0">
-                                                    Remember Me
+                                                    Se souvenir de moi
                                                 </label>
                                             </div>
                                         </div>
 
                                         <div class="text-end">
                                             <a href="{{ url('admin/forgot-password') }}" class="link-default text-decoration-underline">
-                                                Forgot Password
+                                                Mot de passe oublié
                                             </a>
                                         </div>
                                     </div>
 
                                     <div class="mt-3">
-                                        <button type="submit" class="btn btn-dark w-100">Login</button>
+                                        <button type="submit" class="btn btn-dark w-100">Se connecter</button>
                                     </div>
                                 </div>
                             </div>

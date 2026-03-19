@@ -1,0 +1,108 @@
+// ============================================
+//
+//  BACKOFFICE - Styles du panneau d'administration
+//
+//  Structure organisee par module metier :
+//  Chaque fichier correspond a une section
+//  du panneau d'administration.
+//
+// ============================================
+
+
+// =============================================
+//  STYLES COMMUNS
+//  (pagination, boutons, tableaux, modales...)
+// =============================================
+@use "../backoffice/commun";
+
+
+// =============================================
+//  BADGES DE STATUT
+//  (tous les badges de couleur du systeme)
+// =============================================
+@use "../backoffice/badges-statut";
+
+
+// =============================================
+//  TABLEAU DE BORD
+//  (cartes statistiques, graphiques)
+// =============================================
+@use "../backoffice/tableau-de-bord";
+
+
+// =============================================
+//  GESTION DES VOITURES
+//  (vehicules, marques, modeles, vignettes,
+//   assurances, controles techniques, vidanges,
+//   credits vehicules)
+// =============================================
+@use "../backoffice/voitures";
+
+
+// =============================================
+//  GESTION DES CLIENTS
+//  (clients, liste noire, documents)
+// =============================================
+@use "../backoffice/clients";
+
+
+// =============================================
+//  GESTION DES RESERVATIONS
+//  (reservations, calendrier)
+// =============================================
+@use "../backoffice/reservations";
+
+
+// =============================================
+//  GESTION DES CONTRATS
+//  (contrats de location, clients du contrat,
+//   galerie photos, apercu PDF)
+// =============================================
+@use "../backoffice/contrats";
+
+
+// =============================================
+//  GESTION DES FACTURES
+//  (factures, elements de facture)
+// =============================================
+@use "../backoffice/factures";
+
+
+// =============================================
+//  GESTION DES PAIEMENTS
+// =============================================
+@use "../backoffice/paiements";
+
+
+// =============================================
+//  GESTION FINANCIERE
+//  (comptes, transactions, categories)
+// =============================================
+@use "../backoffice/finance";
+
+
+// =============================================
+//  GESTION DES CONTROLES
+//  (controles vehicules, elements de controle)
+// =============================================
+@use "../backoffice/controles";
+
+
+// =============================================
+//  NOTIFICATIONS
+// =============================================
+@use "../backoffice/notifications";
+
+
+// =============================================
+//  CORBEILLE
+//  (elements supprimes, restauration)
+// =============================================
+@use "../backoffice/corbeille";
+
+
+// =============================================
+//  PARAMETRES & PROFIL
+//  (parametres agence, profil utilisateur)
+// =============================================
+@use "../backoffice/parametres";

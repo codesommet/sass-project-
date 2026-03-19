@@ -345,7 +345,7 @@ class FinancialTransactionController extends Controller
     {
         // ✅ Vérifier la permission VIEW
         if (!auth()->user()->can('financial-transactions.general.view')) {
-            return response()->json(['error' => 'Permission denied'], 403);
+            return response()->json(['error' => 'Accès refusé'], 403);
         }
 
         $agencyId = Auth::guard('backoffice')->user()->agency_id;

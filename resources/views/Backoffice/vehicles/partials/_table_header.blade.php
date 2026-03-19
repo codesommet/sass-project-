@@ -4,38 +4,38 @@
             <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center"
                 data-bs-toggle="dropdown">
                 <i class="ti ti-filter me-1"></i>
-                Sort By : {{ request('sort', 'latest') === 'latest' ? 'Latest' : ucfirst(request('sort')) }}
+                Trier par : {{ request('sort', 'latest') === 'latest' ? 'Plus récents' : ucfirst(request('sort')) }}
             </a>
 
             <ul class="dropdown-menu dropdown-menu-end p-2">
                 <li>
                     <a href="{{ route('backoffice.vehicles.index', array_merge(request()->query(), ['sort' => 'latest'])) }}"
                         class="dropdown-item rounded-1">
-                        Latest
+                        Plus récents
                     </a>
                 </li>
                 <li>
                     <a href="{{ route('backoffice.vehicles.index', array_merge(request()->query(), ['sort' => 'asc'])) }}"
                         class="dropdown-item rounded-1">
-                        Ascending
+                        Croissant
                     </a>
                 </li>
                 <li>
                     <a href="{{ route('backoffice.vehicles.index', array_merge(request()->query(), ['sort' => 'desc'])) }}"
                         class="dropdown-item rounded-1">
-                        Desending
+                        Décroissant
                     </a>
                 </li>
                 <li>
                     <a href="{{ route('backoffice.vehicles.index', array_merge(request()->query(), ['sort' => 'last_month'])) }}"
                         class="dropdown-item rounded-1">
-                        Last Month
+                        Mois dernier
                     </a>
                 </li>
                 <li>
                     <a href="{{ route('backoffice.vehicles.index', array_merge(request()->query(), ['sort' => 'last_7_days'])) }}"
                         class="dropdown-item rounded-1">
-                        Last 7 Days
+                        7 derniers jours
                     </a>
                 </li>
             </ul>
@@ -56,7 +56,7 @@
         <div class="dropdown">
             <a href="#filtercollapse" class="filtercollapse coloumn d-inline-flex align-items-center"
                 data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="filtercollapse">
-                <i class="ti ti-filter me-1"></i> Filter
+                <i class="ti ti-filter me-1"></i> Filtrer
                 <span
                     class="badge badge-xs rounded-pill bg-danger ms-2">{{ (int) request('filters_count', 0) }}</span>
             </a>
@@ -67,14 +67,14 @@
         <div class="dropdown me-2">
             <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center"
                 data-bs-toggle="dropdown">
-                <i class="ti ti-edit-circle me-1"></i> Bulk Actions
+                <i class="ti ti-edit-circle me-1"></i> Actions groupées
             </a>
             <ul class="dropdown-menu dropdown-menu-end p-2">
                 <li>
                     {{-- Si tu crées une route bulkDestroy: POST backoffice.vehicles.bulkDestroy --}}
                     <a href="javascript:void(0);" class="dropdown-item rounded-1"
                         onclick="document.getElementById('vehicles-bulk-delete-form')?.submit();">
-                        Delete
+                        Supprimer
                     </a>
                 </li>
             </ul>
@@ -96,21 +96,21 @@
             <div class="top-search-group">
                 <span class="input-icon"><i class="ti ti-search"></i></span>
                 <input type="text" class="form-control" name="q" value="{{ request('q') }}"
-                    placeholder="Search">
+                    placeholder="Rechercher">
             </div>
         </form>
 
         <div class="dropdown">
             <a href="javascript:void(0);" class="dropdown-toggle coloumn btn btn-white d-inline-flex align-items-center"
                 data-bs-toggle="dropdown">
-                <i class="ti ti-layout-board me-1"></i> Columns
+                <i class="ti ti-layout-board me-1"></i> Colonnes
             </a>
             <div class="dropdown-menu dropdown-menu-lg p-2">
                 <ul>
                     <li>
                         <div class="dropdown-item d-flex align-items-center justify-content-between rounded-1">
                             <span class="d-inline-flex align-items-center"><i class="ti ti-grip-vertical me-1"></i>
-                                CAR</span>
+                                VÉHICULE</span>
                             <div class="form-check form-check-sm form-switch mb-0">
                                 <input class="form-check-input form-label" type="checkbox" role="switch"
                                     checked="">
@@ -119,7 +119,7 @@
                     </li>
                     <li>
                         <div class="dropdown-item d-flex align-items-center justify-content-between rounded-1">
-                            <span><i class="ti ti-grip-vertical me-1"></i>BASE LOCATION</span>
+                            <span><i class="ti ti-grip-vertical me-1"></i>EMPLACEMENT</span>
                             <div class="form-check form-check-sm form-switch mb-0">
                                 <input class="form-check-input form-label" type="checkbox" role="switch"
                                     checked="">
@@ -128,7 +128,7 @@
                     </li>
                     <li>
                         <div class="dropdown-item d-flex align-items-center justify-content-between rounded-1">
-                            <span><i class="ti ti-grip-vertical me-1"></i>PRICE (PER DAY)</span>
+                            <span><i class="ti ti-grip-vertical me-1"></i>PRIX (PAR JOUR)</span>
                             <div class="form-check form-check-sm form-switch mb-0">
                                 <input class="form-check-input form-label" type="checkbox" role="switch"
                                     checked="">
@@ -137,7 +137,7 @@
                     </li>
                     <li>
                         <div class="dropdown-item d-flex align-items-center justify-content-between rounded-1">
-                            <span><i class="ti ti-grip-vertical me-1"></i>DAMAGES</span>
+                            <span><i class="ti ti-grip-vertical me-1"></i>DOMMAGES</span>
                             <div class="form-check form-check-sm form-switch mb-0">
                                 <input class="form-check-input form-label" type="checkbox" role="switch"
                                     checked="">
@@ -146,7 +146,7 @@
                     </li>
                     <li>
                         <div class="dropdown-item d-flex align-items-center justify-content-between rounded-1">
-                            <span><i class="ti ti-grip-vertical me-1"></i>IS FEATURED</span>
+                            <span><i class="ti ti-grip-vertical me-1"></i>EN VEDETTE</span>
                             <div class="form-check form-check-sm form-switch mb-0">
                                 <input class="form-check-input form-label" type="checkbox" role="switch"
                                     checked="">
@@ -155,7 +155,7 @@
                     </li>
                     <li>
                         <div class="dropdown-item d-flex align-items-center justify-content-between rounded-1">
-                            <span><i class="ti ti-grip-vertical me-1"></i>CREATED DATE</span>
+                            <span><i class="ti ti-grip-vertical me-1"></i>DATE DE CRÉATION</span>
                             <div class="form-check form-check-sm form-switch mb-0">
                                 <input class="form-check-input form-label" type="checkbox" role="switch"
                                     checked="">
@@ -164,7 +164,7 @@
                     </li>
                     <li>
                         <div class="dropdown-item d-flex align-items-center justify-content-between rounded-1">
-                            <span><i class="ti ti-grip-vertical me-1"></i>STATUS</span>
+                            <span><i class="ti ti-grip-vertical me-1"></i>STATUT</span>
                             <div class="form-check form-check-sm form-switch mb-0">
                                 <input class="form-check-input form-label" type="checkbox" role="switch"
                                     checked="">

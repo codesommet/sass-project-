@@ -244,7 +244,7 @@
                                         <!-- Photo Preview Frame -->
                                         <div id="avatarFrame">
                                             @if ($client->getFirstMediaUrl('avatar'))
-                                                <img id="avatarImg" src="{{ $client->getFirstMediaUrl('avatar') }}" alt="Client photo"
+                                                <img id="avatarImg" src="{{ $client->getFirstMediaUrl('avatar') }}" alt="Photo du client"
                                                     style="width:100%;height:100%;object-fit:cover;">
                                                 <a href="javascript:void(0);" id="avatarTrash"
                                                     class="position-absolute top-0 end-0 bg-light text-danger rounded-circle m-1"
@@ -254,7 +254,7 @@
                                                 <i id="avatarIcon" class="ti ti-photo-up text-gray-4 fs-32" style="display:none;"></i>
                                             @else
                                                 <i id="avatarIcon" class="ti ti-photo-up text-gray-4 fs-32"></i>
-                                                <img id="avatarImg" src="" alt="Client photo"
+                                                <img id="avatarImg" src="" alt="Photo du client"
                                                     style="display:none;width:100%;height:100%;object-fit:cover;">
                                                 <a href="javascript:void(0);" id="avatarTrash"
                                                     class="position-absolute top-0 end-0 bg-light text-danger rounded-circle m-1"
@@ -355,7 +355,7 @@
                                     <!-- Email -->
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label">Email</label>
+                                            <label class="form-label">E-mail</label>
                                             <input type="email" name="email"
                                                 value="{{ old('email', $client->email) }}"
                                                 class="form-control @error('email') is-invalid @enderror" maxlength="150"

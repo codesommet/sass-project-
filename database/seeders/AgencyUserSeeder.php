@@ -103,14 +103,14 @@ class AgencyUserSeeder extends Seeder
             ]
         );
 
-        $this->command?->info("✅ Agency users created successfully");
+        $this->command?->info("✅ Utilisateurs de l'agence créés avec succès");
         $this->command?->info("");
-        $this->command?->info("📋 Test Accounts (roles will be assigned in next seeder):");
+        $this->command?->info("📋 Comptes de test (les rôles seront attribués dans le prochain seeder) :");
         $this->command?->info("  super@admin.com / password123");
         $this->command?->info("  admin@agency1.com / password123");
         $this->command?->info("  manager@agency1.com / password123");
         $this->command?->info("  staff@agency1.com / password123");
         $this->command?->info("");
-        $this->command?->info("👉 Next: Run RolesAndSuperAdminSeeder then AgencyRolesPermissionsSeeder");
+        $this->command?->info("👉 Suivant : Exécuter RolesAndSuperAdminSeeder puis AgencyRolesPermissionsSeeder");
     }
 }

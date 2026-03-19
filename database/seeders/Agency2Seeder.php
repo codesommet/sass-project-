@@ -14,7 +14,7 @@ class Agency2Seeder extends Seeder
         $agency2 = Agency::where('email', 'contact@agency2.com')->first();
         
         if (!$agency2) {
-            $this->command->error('❌ Agency 2 not found!');
+            $this->command->error('❌ Agence 2 introuvable !');
             return;
         }
 
@@ -23,7 +23,7 @@ class Agency2Seeder extends Seeder
             ['email' => 'admin@agency2.com'],
             [
                 'agency_id' => $agency2->id,
-                'name' => 'Agency 2 Admin',
+                'name' => 'Admin Agence 2',
                 'password' => Hash::make('password123'),
                 'phone' => '+212600000020',
             ]
@@ -34,7 +34,7 @@ class Agency2Seeder extends Seeder
             ['email' => 'manager@agency2.com'],
             [
                 'agency_id' => $agency2->id,
-                'name' => 'Agency 2 Manager',
+                'name' => 'Manager Agence 2',
                 'password' => Hash::make('password123'),
                 'phone' => '+212600000021',
             ]
@@ -45,12 +45,12 @@ class Agency2Seeder extends Seeder
             ['email' => 'staff@agency2.com'],
             [
                 'agency_id' => $agency2->id,
-                'name' => 'Agency 2 Staff',
+                'name' => 'Employé Agence 2',
                 'password' => Hash::make('password123'),
                 'phone' => '+212600000022',
             ]
         );
 
-        $this->command->info('✅ Agency 2 users created');
+        $this->command->info('✅ Utilisateurs de l\'Agence 2 créés');
     }
 }

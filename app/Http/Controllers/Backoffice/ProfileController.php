@@ -61,7 +61,7 @@ public function update(UpdateProfileRequest $request)
                 ->toMediaCollection('avatar');
             file_put_contents(storage_path('logs/debug.txt'), 'Photo saved with ID: ' . $media->id . PHP_EOL, FILE_APPEND);
         } catch (\Exception $e) {
-            file_put_contents(storage_path('logs/debug.txt'), 'Error: ' . $e->getMessage() . PHP_EOL, FILE_APPEND);
+            file_put_contents(storage_path('logs/debug.txt'), 'Erreur : ' . $e->getMessage() . PHP_EOL, FILE_APPEND);
         }
     }
 
@@ -137,7 +137,7 @@ public function updateWebsite(Request $request, Agency $agency): RedirectRespons
                     'message' => 'Photo de profil supprimée avec succès.'
                 ]);
             } catch (\Exception $e) {
-                Log::error('Error deleting photo: ' . $e->getMessage());
+                Log::error('Erreur suppression photo : ' . $e->getMessage());
                 return response()->json([
                     'success' => false,
                     'message' => 'Erreur lors de la suppression: ' . $e->getMessage()

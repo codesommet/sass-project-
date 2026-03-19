@@ -10,7 +10,7 @@
         @can('users.general.view')
         <li>
             <a class="dropdown-item rounded-1" href="{{ route('backoffice.users.show', $user) }}">
-                <i class="ti ti-eye me-1"></i>View Details
+                <i class="ti ti-eye me-1"></i>Voir détails
             </a>
         </li>
         @endcan

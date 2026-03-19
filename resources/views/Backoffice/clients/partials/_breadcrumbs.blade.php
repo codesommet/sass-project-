@@ -14,7 +14,7 @@
             <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <h6 class="text-white-50 mb-2">Total Clients</h6>
+                        <h6 class="text-white-50 mb-2">Total clients</h6>
                         <h3 class="text-white mb-0">{{ $totalClients }}</h3>
                     </div>
                     <i class="ti ti-users fs-40 opacity-50"></i>

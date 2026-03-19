@@ -20,7 +20,7 @@
             <a class="dropdown-item rounded-1" href="javascript:void(0);" data-bs-toggle="modal"
                 data-bs-target="#edit_brand" data-edit-action="{{ route('backoffice.vehicle-brands.update', $brand) }}"
                 data-brand-name="{{ $brand->name }}" data-brand-logo="{{ $logo ?? '' }}">
-                <i class="ti ti-edit me-1"></i>Edit
+                <i class="ti ti-edit me-1"></i>Modifier
             </a>
         </li>
         @endcan
@@ -31,7 +31,7 @@
             <a class="dropdown-item rounded-1" href="javascript:void(0);" data-bs-toggle="modal"
                 data-bs-target="#delete_brand"
                 data-delete-action="{{ route('backoffice.vehicle-brands.destroy', $brand) }}">
-                <i class="ti ti-trash me-1"></i>Delete
+                <i class="ti ti-trash me-1"></i>Supprimer
             </a>
         </li>
         @endcan

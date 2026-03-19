@@ -17,6 +17,8 @@ use App\Http\Controllers\Backoffice\RoleController;
 use App\Http\Controllers\Backoffice\PermissionController;
 use App\Http\Controllers\Backoffice\RolesPermissionsController;
 use App\Http\Controllers\Backoffice\AgencySettingsController;
+use App\Http\Controllers\Backoffice\BrandsModelsController;
+use App\Http\Controllers\Backoffice\Vehicles\VehicleDocumentController;
 use App\Http\Controllers\Backoffice\Vehicles\VignetteController;
 use App\Http\Controllers\Backoffice\Vehicles\InsuranceController;
 use App\Http\Controllers\Backoffice\Vehicles\TechnicalCheckController;
@@ -257,6 +259,9 @@ Route::prefix('clients')->name('clients.')->group(function () {
                 Route::delete('/{permission}', [PermissionController::class, 'destroy'])->name('destroy')
                     ->middleware('bo_permissions:roles-permissions.general.delete');
             });
+
+            // ==================== UNIFIED BRANDS & MODELS INDEX ====================
+            Route::get('/brands-models', [BrandsModelsController::class, 'index'])->name('brands-models.index');
 
             // ==================== VEHICLE BRANDS ====================
             Route::prefix('vehicle-brands')->name('vehicle-brands.')->group(function () {
@@ -660,6 +665,9 @@ Route::prefix('clients')->name('clients.')->group(function () {
                 Route::get('/{vehicleCredit}/payment-schedule', [VehicleCreditController::class, 'getPaymentSchedule'])->name('payment-schedule')
                     ->middleware('bo_permissions:vehicle-credits.general.view');
             });
+
+            // ==================== UNIFIED VEHICLE DOCUMENTS INDEX ====================
+            Route::get('/vehicle-documents', [VehicleDocumentController::class, 'index'])->name('vehicle-documents.index');
 
             // ==================== GLOBAL VEHICLE DOCUMENTS ====================
             Route::prefix('vehicle-documents')->name('vehicle-documents.')->group(function () {

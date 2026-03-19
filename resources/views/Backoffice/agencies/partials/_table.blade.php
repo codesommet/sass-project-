@@ -44,7 +44,7 @@
             </th>
             @endcan
             <th>NOM</th>
-            <th>TOTAL CARS</th>
+            <th>TOTAL VOITURES</th>
             <th>STATUT</th>
             {{-- Colonne Actions - visible seulement si au moins une permission d'action --}}
             @canany(['agencies.general.view', 'agencies.general.edit', 'agencies.general.delete'])
@@ -98,11 +98,11 @@
                 <td>
                     @if($isActive)
                         <span class="badge badge-dark-transparent">
-                            <i class="ti ti-point-filled text-success me-1"></i>Active
+                            <i class="ti ti-point-filled text-success me-1"></i>Actif
                         </span>
                     @else
                         <span class="badge badge-dark-transparent">
-                            <i class="ti ti-point-filled text-danger me-1"></i>Inactive
+                            <i class="ti ti-point-filled text-danger me-1"></i>Inactif
                         </span>
                     @endif
                 </td>
@@ -115,17 +115,16 @@
                 @endcanany
             </tr>
         @empty
+            @php
+                $emptyColspan = 3
+                    + (auth()->user()->can('agencies.general.delete') ? 1 : 0)
+                    + (auth()->user()->canAny(['agencies.general.view', 'agencies.general.edit', 'agencies.general.delete']) ? 1 : 0);
+            @endphp
             <tr>
-                @can('agencies.general.delete')
-                <td></td>
-                @endcan
-                <td colspan="{{ (auth()->user()->can('agencies.general.delete') ? 4 : 3) }}" class="text-center py-4">
+                <td colspan="{{ $emptyColspan }}" class="text-center py-4">
                     <i class="ti ti-building-off fs-24 text-muted mb-2"></i>
                     <p class="text-muted mb-0">Aucune agence trouvée.</p>
                 </td>
-                @canany(['agencies.general.view', 'agencies.general.edit', 'agencies.general.delete'])
-                <td></td>
-                @endcanany
             </tr>
         @endforelse
     </tbody>

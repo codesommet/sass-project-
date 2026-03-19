@@ -1,18 +1,18 @@
 <div class="collapse" id="filtercollapse">
     <div class="filterbox mb-3 d-flex align-items-center">
-        <h6 class="me-3">Filters</h6>
+        <h6 class="me-3">Filtres</h6>
 
         <div class="dropdown me-2">
             <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center"
                data-bs-toggle="dropdown" data-bs-auto-close="outside">
-                Select Cars
+                Sélectionner des véhicules
             </a>
             <ul class="dropdown-menu dropdown-menu-lg p-2">
                 <li>
                     <div class="top-search m-2">
                         <div class="top-search-group">
                             <span class="input-icon"><i class="ti ti-search"></i></span>
-                            <input type="text" class="form-control" placeholder="Search">
+                            <input type="text" class="form-control" placeholder="Rechercher">
                         </div>
                     </div>
                 </li>
@@ -34,40 +34,40 @@
         <div class="dropdown me-2">
             <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center"
                data-bs-toggle="dropdown" data-bs-auto-close="outside">
-                Type
+                Type de véhicule
             </a>
             <ul class="dropdown-menu dropdown-menu-lg p-2">
                 <li>
                     <div class="top-search m-2">
                         <div class="top-search-group">
                             <span class="input-icon"><i class="ti ti-search"></i></span>
-                            <input type="text" class="form-control" placeholder="Search">
+                            <input type="text" class="form-control" placeholder="Rechercher">
                         </div>
                     </div>
                 </li>
-                <li><label class="dropdown-item d-flex align-items-center rounded-1"><input class="form-check-input m-0 me-2" type="checkbox">Sedan</label></li>
-                <li><label class="dropdown-item d-flex align-items-center rounded-1"><input class="form-check-input m-0 me-2" type="checkbox">Hatchback</label></li>
+                <li><label class="dropdown-item d-flex align-items-center rounded-1"><input class="form-check-input m-0 me-2" type="checkbox">Berline</label></li>
+                <li><label class="dropdown-item d-flex align-items-center rounded-1"><input class="form-check-input m-0 me-2" type="checkbox">Compacte</label></li>
                 <li><label class="dropdown-item d-flex align-items-center rounded-1"><input class="form-check-input m-0 me-2" type="checkbox">SUV</label></li>
-                <li><label class="dropdown-item d-flex align-items-center rounded-1"><input class="form-check-input m-0 me-2" type="checkbox">Coupes</label></li>
-                <li><label class="dropdown-item d-flex align-items-center rounded-1"><input class="form-check-input m-0 me-2" type="checkbox">Convertible</label></li>
-                <li><label class="dropdown-item d-flex align-items-center rounded-1"><input class="form-check-input m-0 me-2" type="checkbox">Pickup Truck</label></li>
+                <li><label class="dropdown-item d-flex align-items-center rounded-1"><input class="form-check-input m-0 me-2" type="checkbox">Coupé</label></li>
+                <li><label class="dropdown-item d-flex align-items-center rounded-1"><input class="form-check-input m-0 me-2" type="checkbox">Cabriolet</label></li>
+                <li><label class="dropdown-item d-flex align-items-center rounded-1"><input class="form-check-input m-0 me-2" type="checkbox">Pick-up</label></li>
                 <li><label class="dropdown-item d-flex align-items-center rounded-1"><input class="form-check-input m-0 me-2" type="checkbox">Sport</label></li>
-                <li><label class="dropdown-item d-flex align-items-center rounded-1"><input class="form-check-input m-0 me-2" type="checkbox">Minivan</label></li>
-                <li><label class="dropdown-item d-flex align-items-center rounded-1"><input class="form-check-input m-0 me-2" type="checkbox">EV</label></li>
+                <li><label class="dropdown-item d-flex align-items-center rounded-1"><input class="form-check-input m-0 me-2" type="checkbox">Monospace</label></li>
+                <li><label class="dropdown-item d-flex align-items-center rounded-1"><input class="form-check-input m-0 me-2" type="checkbox">Électrique</label></li>
             </ul>
         </div>
 
         <div class="dropdown me-3">
             <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center"
                data-bs-toggle="dropdown" data-bs-auto-close="outside">
-                Location
+                Emplacement
             </a>
             <ul class="dropdown-menu dropdown-menu-lg p-2">
                 <li>
                     <div class="top-search m-2">
                         <div class="top-search-group">
                             <span class="input-icon"><i class="ti ti-search"></i></span>
-                            <input type="text" class="form-control" placeholder="Search">
+                            <input type="text" class="form-control" placeholder="Rechercher">
                         </div>
                     </div>
                 </li>
@@ -85,15 +85,15 @@
         <div class="dropdown me-3">
             <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center"
                data-bs-toggle="dropdown" data-bs-auto-close="outside">
-                Status
+                Statut
             </a>
             <ul class="dropdown-menu dropdown-menu-md p-2">
-                <li class="dropdown-item">Active</li>
-                <li class="dropdown-item">Inactive</li>
+                <li class="dropdown-item">Actif</li>
+                <li class="dropdown-item">Inactif</li>
             </ul>
         </div>
 
-        <a href="javascript:void(0);" class="me-2 text-purple links">Apply</a>
-        <a href="javascript:void(0);" class="text-danger links">Clear All</a>
+        <a href="javascript:void(0);" class="me-2 text-purple links">Appliquer</a>
+        <a href="javascript:void(0);" class="text-danger links">Tout effacer</a>
     </div>
 </div>

@@ -233,11 +233,13 @@
                     @endcanany
                 </tr>
             @empty
+                @php
+                    $emptyColspan = 5
+                        + (auth()->user()->can('vehicles.general.delete') ? 1 : 0)
+                        + (auth()->user()->canAny(['vehicles.general.view', 'vehicles.general.edit', 'vehicles.general.delete']) ? 1 : 0);
+                @endphp
                 <tr>
-                    @can('vehicles.general.delete')
-                    <td></td>
-                    @endcan
-                    <td colspan="{{ (auth()->user()->can('vehicles.general.delete') ? 6 : 5) }}" class="text-center py-5">
+                    <td colspan="{{ $emptyColspan }}" class="text-center py-5">
                         <div class="empty-state">
                             <i class="ti ti-car-off"></i>
                             <h5 class="mb-2">Aucun véhicule trouvé</h5>
@@ -249,9 +251,6 @@
                             @endcan
                         </div>
                     </td>
-                    @canany(['vehicles.general.view', 'vehicles.general.edit', 'vehicles.general.delete'])
-                    <td></td>
-                    @endcanany
                 </tr>
             @endforelse
         </tbody>

@@ -11,7 +11,7 @@
                                 <img src="{{URL::asset('build/img/logo-white.svg')}}" class="img-fluid aos" alt="logo">
                             </div>
                             <div class="footer-contact-info">
-                                <p>We offer a diverse fleet of vehicles to suit every need, including compact cars, sedans, SUVs and luxury vehicles. </p>
+                                <p>Nous offrons une flotte diversifiée de véhicules pour répondre à tous les besoins, y compris des voitures compactes, des berlines, des SUV et des véhicules de luxe.</p>
                             </div>	
                             <div class="d-flex align-items-center gap-1 app-icon">
                                 <a href="javascript:void(0);">
@@ -45,22 +45,22 @@
                             <div class="col-lg-4 col-md-6">
                                 <!-- Footer Widget -->
                                 <div class="footer-widget footer-menu">
-                                    <h5 class="footer-title">Quick Links</h5>
+                                    <h5 class="footer-title">Liens rapides</h5>
                                     <ul>
                                         <li>
-                                            <a href="javascript:void(0)">My account</a>
+                                            <a href="javascript:void(0)">Mon compte</a>
                                         </li>
                                         <li>
-                                            <a href="javascript:void(0)">Campaigns</a>
+                                            <a href="javascript:void(0)">Campagnes</a>
                                         </li>
                                         <li>
                                             <a href="javascript:void(0)">Dreams rent Dealers</a>
                                         </li>
                                         <li>
-                                            <a href="javascript:void(0)">Deals and Incentive</a>
+                                            <a href="javascript:void(0)">Offres et promotions</a>
                                         </li>
                                         <li>
-                                            <a href="javascript:void(0)">Financial Services</a>
+                                            <a href="javascript:void(0)">Services financiers</a>
                                         </li>							
                                     </ul>
                                 </div>
@@ -72,19 +72,19 @@
                                     <h5 class="footer-title">Pages</h5>
                                     <ul>
                                         <li>
-                                            <a href="{{url('about-us')}}">About Us</a>
+                                            <a href="{{url('about-us')}}">À propos de nous</a>
                                         </li>
                                         <li>
-                                            <a href="javascript:void(0)">Become a Partner</a>
+                                            <a href="javascript:void(0)">Devenir partenaire</a>
                                         </li>
                                         <li>
                                             <a href="{{url('faq')}}">Faq’s</a>
                                         </li>
                                         <li>
-                                            <a href="{{url('testimonial')}}">Testimonials</a>
+                                            <a href="{{url('testimonial')}}">Témoignages</a>
                                         </li>
                                         <li>
-                                            <a href="{{url('contact-us')}}">Contact Us</a>
+                                            <a href="{{url('contact-us')}}">Contactez-nous</a>
                                         </li>							
                                     </ul>
                                 </div>
@@ -93,22 +93,22 @@
                             <div class="col-lg-4 col-md-6">
                                 <!-- Footer Widget -->
                                 <div class="footer-widget footer-menu">
-                                    <h5 class="footer-title">Useful Links</h5>
+                                    <h5 class="footer-title">Liens utiles</h5>
                                     <ul>
                                         <li>
-                                            <a href="javascript:void(0)">My account</a>
+                                            <a href="javascript:void(0)">Mon compte</a>
                                         </li>
                                         <li>
-                                            <a href="javascript:void(0)">Campaigns</a>
+                                            <a href="javascript:void(0)">Campagnes</a>
                                         </li>
                                         <li>
                                             <a href="javascript:void(0)">Dreams rent Dealers</a>
                                         </li>
                                         <li>
-                                            <a href="javascript:void(0)">Deals and Incentive</a>
+                                            <a href="javascript:void(0)">Offres et promotions</a>
                                         </li>
                                         <li>
-                                            <a href="javascript:void(0)">Financial Services</a>
+                                            <a href="javascript:void(0)">Services financiers</a>
                                         </li>							
                                     </ul>
                                 </div>
@@ -129,7 +129,7 @@
                     <div class="row align-items-center row-gap-3">
                         <div class="col-lg-4">
                             <div class="copyright-text">
-                                <p>Copyright &copy; 2025 Dreams Rent. All Rights Reserved.</p>
+                                <p>Copyright &copy; 2025 Dreams Rent. Tous droits réservés.</p>
                             </div>
                         </div>
                         <div class="col-lg-4">
@@ -148,13 +148,13 @@
                         <div class="col-lg-4">
                             <ul class="privacy-link">
                                 <li>
-                                    <a href="{{url('privacy-policy')}}">Privacy</a>
+                                    <a href="{{url('privacy-policy')}}">Confidentialité</a>
                                 </li>
                                 <li>
-                                    <a href="{{url('terms-condition')}}">Terms & Condition</a>
+                                    <a href="{{url('terms-condition')}}">Conditions générales</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0);">Refund Policy</a>
+                                    <a href="javascript:void(0);">Politique de remboursement</a>
                                 </li>
                             </ul>
                         </div>
@@ -180,10 +180,10 @@
                             <div class="col-lg-4 col-md-6">
                                 <!-- Footer Widget -->
                                 <div class="footer-widget footer-menu">
-                                    <h5 class="footer-title">About Company</h5>
+                                    <h5 class="footer-title">À propos</h5>
                                     <ul>
                                         <li>
-                                            <a href="{{url('about-us')}}">Our Company</a>
+                                            <a href="{{url('about-us')}}">Notre entreprise</a>
                                         </li>
                                         <li>
                                             <a href="javascript:void(0)">Shop Toyota</a>
@@ -204,19 +204,19 @@
                             <div class="col-lg-4 col-md-6">
                                 <!-- Footer Widget -->
                                 <div class="footer-widget footer-menu">
-                                    <h5 class="footer-title">Vehicles Type</h5>
+                                    <h5 class="footer-title">Types de véhicules</h5>
                                     <ul>
                                         <li>
-                                            <a href="javascript:void(0)">All  Vehicles</a>
+                                            <a href="javascript:void(0)">Tous les véhicules</a>
                                         </li>
                                         <li>
                                             <a href="javascript:void(0)">SUVs</a>
                                         </li>
                                         <li>
-                                            <a href="javascript:void(0)">Trucks</a>
+                                            <a href="javascript:void(0)">Camions</a>
                                         </li>
                                         <li>
-                                            <a href="javascript:void(0)">Cars</a>
+                                            <a href="javascript:void(0)">Voitures</a>
                                         </li>
                                         <li>
                                             <a href="javascript:void(0)">Crossovers</a>
@@ -228,22 +228,22 @@
                             <div class="col-lg-4 col-md-6">
                                 <!-- Footer Widget -->
                                 <div class="footer-widget footer-menu">
-                                    <h5 class="footer-title">Quick links</h5>
+                                    <h5 class="footer-title">Liens rapides</h5>
                                     <ul>
                                         <li>
-                                            <a href="javascript:void(0)">My Account</a>
+                                            <a href="javascript:void(0)">Mon compte</a>
                                         </li>
                                         <li>
-                                            <a href="javascript:void(0)">Champaigns</a>
+                                            <a href="javascript:void(0)">Campagnes</a>
                                         </li>
                                         <li>
                                             <a href="javascript:void(0)">Dreamsrental Dealers</a>
                                         </li>
                                         <li>
-                                            <a href="javascript:void(0)">Deals and Incentive</a>
+                                            <a href="javascript:void(0)">Offres et promotions</a>
                                         </li>
                                         <li>
-                                            <a href="javascript:void(0)">Financial Services</a>
+                                            <a href="javascript:void(0)">Services financiers</a>
                                         </li>								
                                     </ul>
                                 </div>
@@ -253,7 +253,7 @@
                     </div>
                     <div class="col-lg-5">
                         <div class="footer-contact footer-widget">
-                            <h5 class="footer-title">Contact Info</h5>
+                            <h5 class="footer-title">Coordonnées</h5>
                             <div class="footer-contact-info">									
                                 <div class="footer-address">											
                                     <span><i class="feather-phone-call"></i></span>
@@ -270,7 +270,7 @@
                                 <div class="update-form">
                                     <form action="#">
                                         <span><i class="feather-mail"></i></span> 
-                                        <input type="email" class="form-control" placeholder="Enter You Email Here">
+                                        <input type="email" class="form-control" placeholder="Entrez votre email ici">
                                         <button type="submit" class="btn btn-subscribe"><span><i class="feather-send"></i></span></button>
                                     </form>
                                 </div>
@@ -309,7 +309,7 @@
                     <div class="row align-items-center">
                         <div class="col-md-6">
                             <div class="copyright-text">
-                                <p>© 2024 Dreams Rent. All Rights Reserved.</p>
+                                <p>© 2024 Dreams Rent. Tous droits réservés.</p>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -349,7 +349,7 @@
                                 <img src="{{URL::asset('/build/img/logo.svg')}}" class="img-fluid aos" alt="logo">
                             </div>
                             <div class="footer-contact-info">
-                                <h6>Want to book a bike instantly Contact Us !!!</h6>
+                                <h6>Vous souhaitez réserver instantanément ? Contactez-nous !!!</h6>
                                 <div class="footer-address">
                                     <div class="addr-info">
                                         <a href="tel:+1(888)7601940"><i class="bx bxs-phone"></i>+ 1 (888) 760 1940</a>
@@ -378,10 +378,10 @@
                     <div class="col-lg-2 col-md-6">
                         <!-- Footer Widget -->
                         <div class="footer-widget footer-menu">
-                            <h5 class="footer-title">Company</h5>
+                            <h5 class="footer-title">Entreprise</h5>
                             <ul>
                                 <li>
-                                    <a href="{{url('about-us')}}">Our Company</a>
+                                    <a href="{{url('about-us')}}">Notre entreprise</a>
                                 </li>
                                 <li>
                                     <a href="javascript:void(0)">Bike Rent</a>
@@ -402,7 +402,7 @@
                     <div class="col-lg-2 col-md-6">
                         <!-- Footer Widget -->
                         <div class="footer-widget footer-menu">
-                            <h5 class="footer-title">Vehicles Type</h5>
+                            <h5 class="footer-title">Types de véhicules</h5>
                             <ul>
                                 <li>
                                     <a href="javascript:void(0)">Electric</a>
@@ -414,10 +414,10 @@
                                     <a href="javascript:void(0)">Sports</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0)">Racing Bikes</a>
+                                    <a href="javascript:void(0)">Motos de course</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0)">Off-road</a>
+                                    <a href="javascript:void(0)">Tout-terrain</a>
                                 </li>							
                             </ul>
                         </div>
@@ -426,22 +426,22 @@
                     <div class="col-lg-2 col-md-6">
                         <!-- Footer Widget -->
                         <div class="footer-widget footer-menu">
-                            <h5 class="footer-title">Quick Links</h5>
+                            <h5 class="footer-title">Liens rapides</h5>
                             <ul>
                                 <li>
-                                    <a href="javascript:void(0)">My account</a>
+                                    <a href="javascript:void(0)">Mon compte</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0)">Campaigns</a>
+                                    <a href="javascript:void(0)">Campagnes</a>
                                 </li>
                                 <li>
                                     <a href="javascript:void(0)">Dreams rent Dealers</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0)">Deals and Incentive</a>
+                                    <a href="javascript:void(0)">Offres et promotions</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0)">Financial Services</a>
+                                    <a href="javascript:void(0)">Services financiers</a>
                                 </li>							
                             </ul>
                         </div>
@@ -450,22 +450,22 @@
                     <div class="col-lg-2 col-md-6">
                         <!-- Footer Widget -->
                         <div class="footer-widget footer-menu">
-                            <h5 class="footer-title">Resources</h5>
+                            <h5 class="footer-title">Ressources</h5>
                             <ul>
                                 <li>
-                                    <a href="javascript:void(0)">Support</a>
+                                    <a href="javascript:void(0)">Assistance</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0)">Security</a>
+                                    <a href="javascript:void(0)">Sécurité</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0)">Help Centers</a>
+                                    <a href="javascript:void(0)">Centres d'aide</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0)">Preferences</a>
+                                    <a href="javascript:void(0)">Préférences</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0)">Preferences</a>
+                                    <a href="javascript:void(0)">Préférences</a>
                                 </li>							
                             </ul>
                         </div>
@@ -474,7 +474,7 @@
                     <div class="col-lg-2 col-md-6">
                         <!-- Footer Widget -->
                         <div class="footer-widget footer-menu">
-                            <h5 class="footer-title">Getting Started</h5>
+                            <h5 class="footer-title">Pour commencer</h5>
                             <ul>
                                 <li>
                                     <a href="javascript:void(0)">Introduction</a>
@@ -508,7 +508,7 @@
                     <div class="row align-items-center">
                         <div class="col-lg-6">
                             <div class="copyright-text">
-                                <p>Copyright © 2024 <span>Dreams Rent</span>. All Rights Reserved.</p>
+                                <p>Copyright © 2024 <span>Dreams Rent</span>. Tous droits réservés.</p>
                             </div>
                         </div>
                         <div class="col-lg-6">
@@ -518,17 +518,17 @@
                                     <li class="country-flag">
                                         <div class="dropdown">
                                             <a class="dropdown-toggle nav-tog" data-bs-toggle="dropdown" href="javascript:void(0);">
-                                                <img src="{{URL::asset('/build/img/flags/us.png')}}" alt="Img">English
+                                                <img src="{{URL::asset('/build/img/flags/us.png')}}" alt="Img">Anglais
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-end">
                                                 <a href="javascript:void(0);" class="dropdown-item">
-                                                    <img src="{{URL::asset('/build/img/flags/fr.png')}}" alt="Img">French
+                                                    <img src="{{URL::asset('/build/img/flags/fr.png')}}" alt="Img">Français
                                                 </a>
                                                 <a href="javascript:void(0);" class="dropdown-item">
-                                                    <img src="{{URL::asset('/build/img/flags/es.png')}}" alt="Img">Spanish
+                                                    <img src="{{URL::asset('/build/img/flags/es.png')}}" alt="Img">Espagnol
                                                 </a>
                                                 <a href="javascript:void(0);" class="dropdown-item">
-                                                    <img src="{{URL::asset('/build/img/flags/de.png')}}" alt="Img">German
+                                                    <img src="{{URL::asset('/build/img/flags/de.png')}}" alt="Img">Allemand
                                                 </a>
                                             </div>
                                         </div>
@@ -593,9 +593,9 @@
                     <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
                         <div class="footer-widget">
                             <div class="widget-title">
-                                <h4>Company</h4>
+                                <h4>Entreprise</h4>
                                 <ul class="footer-links">
-                                    <li><a href="javascript:void(0);"><i class="fas fa-chevron-right"></i>Our Company</a></li>
+                                    <li><a href="javascript:void(0);"><i class="fas fa-chevron-right"></i>Notre entreprise</a></li>
                                     <li><a href="javascript:void(0);"><i class="fas fa-chevron-right"></i>Yacht Rent</a></li>
                                     <li><a href="javascript:void(0);"><i class="fas fa-chevron-right"></i>Dreams rent USA</a></li>
                                     <li><a href="javascript:void(0);"><i class="fas fa-chevron-right"></i>Dreams rent Worldwide</a></li>
@@ -607,13 +607,13 @@
                     <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
                         <div class="footer-widget">
                             <div class="widget-title">
-                                <h4>Vehicles Type</h4>
+                                <h4>Types de véhicules</h4>
                                 <ul class="footer-links">
                                     <li><a href="javascript:void(0);"><i class="fas fa-chevron-right"></i>Electric</a></li>
                                     <li><a href="javascript:void(0);"><i class="fas fa-chevron-right"></i>Scooters</a></li>
                                     <li><a href="javascript:void(0);"><i class="fas fa-chevron-right"></i>Sports</a></li>
-                                    <li><a href="javascript:void(0);"><i class="fas fa-chevron-right"></i>Racing Bikes</a></li>
-                                    <li><a href="javascript:void(0);"><i class="fas fa-chevron-right"></i>Off-road</a></li>
+                                    <li><a href="javascript:void(0);"><i class="fas fa-chevron-right"></i>Motos de course</a></li>
+                                    <li><a href="javascript:void(0);"><i class="fas fa-chevron-right"></i>Tout-terrain</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -621,13 +621,13 @@
                     <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
                         <div class="footer-widget">
                             <div class="widget-title">
-                                <h4>Quick links</h4>
+                                <h4>Liens rapides</h4>
                                 <ul class="footer-links">
-                                    <li><a href="javascript:void(0);"><i class="fas fa-chevron-right"></i>My account</a></li>
-                                    <li><a href="javascript:void(0);"><i class="fas fa-chevron-right"></i>Campaigns</a></li>
+                                    <li><a href="javascript:void(0);"><i class="fas fa-chevron-right"></i>Mon compte</a></li>
+                                    <li><a href="javascript:void(0);"><i class="fas fa-chevron-right"></i>Campagnes</a></li>
                                     <li><a href="javascript:void(0);"><i class="fas fa-chevron-right"></i>Dreams rent Dealers</a></li>
-                                    <li><a href="javascript:void(0);"><i class="fas fa-chevron-right"></i>Deals and Incentive</a></li>
-                                    <li><a href="javascript:void(0);"><i class="fas fa-chevron-right"></i>Financial Services</a></li>
+                                    <li><a href="javascript:void(0);"><i class="fas fa-chevron-right"></i>Offres et promotions</a></li>
+                                    <li><a href="javascript:void(0);"><i class="fas fa-chevron-right"></i>Services financiers</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -635,13 +635,13 @@
                     <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
                         <div class="footer-widget">
                             <div class="widget-title">
-                                <h4>Resources</h4>
+                                <h4>Ressources</h4>
                                 <ul class="footer-links">
-                                    <li><a href="javascript:void(0);"><i class="fas fa-chevron-right"></i>Support</a></li>
-                                    <li><a href="javascript:void(0);"><i class="fas fa-chevron-right"></i>Security</a></li>
-                                    <li><a href="javascript:void(0);"><i class="fas fa-chevron-right"></i>Help Centers</a></li>
-                                    <li><a href="javascript:void(0);"><i class="fas fa-chevron-right"></i>Preferences</a></li>
-                                    <li><a href="javascript:void(0);"><i class="fas fa-chevron-right"></i>Customers</a></li>
+                                    <li><a href="javascript:void(0);"><i class="fas fa-chevron-right"></i>Assistance</a></li>
+                                    <li><a href="javascript:void(0);"><i class="fas fa-chevron-right"></i>Sécurité</a></li>
+                                    <li><a href="javascript:void(0);"><i class="fas fa-chevron-right"></i>Centres d'aide</a></li>
+                                    <li><a href="javascript:void(0);"><i class="fas fa-chevron-right"></i>Préférences</a></li>
+                                    <li><a href="javascript:void(0);"><i class="fas fa-chevron-right"></i>Clients</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -649,7 +649,7 @@
                     <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
                         <div class="footer-widget">
                             <div class="widget-title">
-                                <h4>Getting Started</h4>
+                                <h4>Pour commencer</h4>
                                 <ul class="footer-links">
                                     <li><a href="javascript:void(0);"><i class="fas fa-chevron-right"></i>Introduction</a></li>
                                     <li><a href="javascript:void(0);"><i class="fas fa-chevron-right"></i>Documentation</a></li>
@@ -663,9 +663,9 @@
                     <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
                         <div class="footer-widget">
                             <div class="widget-title">
-                                <h4>24/7 Live Support</h4>
+                                <h4>Assistance 24h/24 7j/7</h4>
                                 <ul class="footer-address">
-                                    <li>Want to book a Yacht instantly Contact Us !!!</li>
+                                    <li>Vous souhaitez réserver instantanément ? Contactez-nous !!!</li>
                                     <li>Contact  : + 1 (888) 760 1940</li>
                                     <li>Emergency  : +1 68564 55664</li>
                                     <li>Email : support@example.com</li>
@@ -687,7 +687,7 @@
             </div>
             <div class="footer-bottom">
                 <div class="copy-right">
-                    <p>Copyright &copy; 2024 <span> Dreams Rent</span> . All Rights Reserved.</p>
+                    <p>Copyright &copy; 2024 <span> Dreams Rent</span> . Tous droits réservés.</p>
                 </div>
                 <div class="app-store-links d-flex align-items-center">
                     <span class="me-2"><a href="javascript:void(0);"><img src="{{URL::asset('build/img/icons/google-play.svg')}}" alt="Img"></a></span>

@@ -141,16 +141,14 @@
                 @endcanany
             </tr>
             @empty
+            @php
+                $emptyColspan = 5
+                    + ($isGlobalView ? 1 : 0)
+                    + (auth()->user()->can('vehicle-vignettes.general.delete') ? 1 : 0)
+                    + (auth()->user()->canAny(['vehicle-vignettes.general.view', 'vehicle-vignettes.general.edit', 'vehicle-vignettes.general.delete']) ? 1 : 0);
+            @endphp
             <tr>
-                @can('vehicle-vignettes.general.delete')
-                <td></td>
-                @endcan
-                
-                @if($isGlobalView)
-                <td colspan="8" class="text-center py-5">
-                @else
-                <td colspan="7" class="text-center py-5">
-                @endif
+                <td colspan="{{ $emptyColspan }}" class="text-center py-5">
                     <div class="text-center">
                         <i class="ti ti-ticket-off fs-48 text-gray-4 mb-3"></i>
                         <h5 class="mb-2">Aucune vignette trouvée</h5>
@@ -181,10 +179,6 @@
                         @endif
                     </div>
                 </td>
-                
-                @canany(['vehicle-vignettes.general.view', 'vehicle-vignettes.general.edit', 'vehicle-vignettes.general.delete'])
-                <td></td>
-                @endcanany
             </tr>
             @endforelse
         </tbody>

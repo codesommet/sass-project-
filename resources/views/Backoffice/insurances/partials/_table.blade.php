@@ -149,11 +149,14 @@
                 @endcanany
             </tr>
             @empty
+            @php
+                $emptyColspan = 7
+                    + (isset($isGlobalView) && $isGlobalView ? 1 : 0)
+                    + (auth()->user()->can('vehicle-insurances.general.delete') ? 1 : 0)
+                    + (auth()->user()->canAny(['vehicle-insurances.general.view', 'vehicle-insurances.general.edit', 'vehicle-insurances.general.delete']) ? 1 : 0);
+            @endphp
             <tr>
-                @can('vehicle-insurances.general.delete')
-                <td></td>
-                @endcan
-                <td colspan="{{ (isset($isGlobalView) && $isGlobalView ? 8 : 7) + (auth()->user()->can('vehicle-insurances.general.delete') ? 1 : 0) }}" class="text-center py-5">
+                <td colspan="{{ $emptyColspan }}" class="text-center py-5">
                     <div class="text-center">
                         <i class="ti ti-shield-off fs-48 text-gray-4 mb-3"></i>
                         <h5 class="mb-2">Aucune assurance trouvée</h5>
@@ -181,9 +184,6 @@
                         @endif
                     </div>
                 </td>
-                @canany(['vehicle-insurances.general.view', 'vehicle-insurances.general.edit', 'vehicle-insurances.general.delete'])
-                <td></td>
-                @endcanany
             </tr>
             @endforelse
         </tbody>

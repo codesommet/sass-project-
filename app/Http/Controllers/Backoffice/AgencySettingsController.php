@@ -267,7 +267,7 @@ public function updateInvoiceSettings(Request $request, Agency $agency): Redirec
         return redirect()
             ->route('backoffice.agencies.settings.company', $agency)
             ->with('toast', [
-                'title'   => 'Updated',
+                'title'   => 'Mis à jour',
                 'message' => "Les paramètres de l'agence « {$agency->name} » ont été mis à jour avec succès.",
                 'dot'     => '#0d6efd',
                 'delay'   => 3500,
@@ -324,7 +324,7 @@ public function updateInvoiceSettings(Request $request, Agency $agency): Redirec
         return redirect()
             ->route('backoffice.agencies.settings.edit', $agency)
             ->with('toast', [
-                'title'   => 'Updated',
+                'title'   => 'Mis à jour',
                 'message' => "Les paramètres de l'agence « {$agency->name} » ont été mis à jour avec succès.",
                 'dot'     => '#0d6efd',
                 'delay'   => 3500,

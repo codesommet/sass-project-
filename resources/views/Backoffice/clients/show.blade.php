@@ -149,7 +149,7 @@
                                                 <td><strong>{{ $client->phone }}</strong></td>
                                             </tr>
                                             <tr>
-                                                <td class="text-muted">Email:</td>
+                                                <td class="text-muted">E-mail :</td>
                                                 <td><strong>{{ $client->email ?? 'Non renseigné' }}</strong></td>
                                             </tr>
                                             <tr>

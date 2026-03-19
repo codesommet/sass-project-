@@ -10,7 +10,7 @@
                 <h3 class="page-title mb-1">Mon Abonnement</h3>
                 <nav>
                     <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item"><a href="{{ route('backoffice.dashboard') }}">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('backoffice.dashboard') }}">Accueil</a></li>
                         <li class="breadcrumb-item"><a href="{{ route('backoffice.profile.setting') }}">Profil</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Abonnement</li>
                     </ol>

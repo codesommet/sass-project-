@@ -21,7 +21,7 @@ class ContractInvoiceSeeder extends Seeder
         $agency = Agency::first();
 
         if (!$agency) {
-            $this->command?->error('No agency found. Run AgencyUserSeeder first.');
+            $this->command?->error('Aucune agence trouvée. Exécutez AgencyUserSeeder d\'abord.');
             return;
         }
 
@@ -87,7 +87,7 @@ class ContractInvoiceSeeder extends Seeder
             }
         }
 
-        $this->command?->info('Created ' . count($vehicles) . ' vehicles with brands & models.');
+        $this->command?->info(count($vehicles) . ' véhicules créés avec marques & modèles.');
 
         /*
         |--------------------------------------------------------------------------
@@ -122,7 +122,7 @@ class ContractInvoiceSeeder extends Seeder
             );
         }
 
-        $this->command?->info('Created ' . count($clients) . ' clients.');
+        $this->command?->info(count($clients) . ' clients créés.');
 
         /*
         |--------------------------------------------------------------------------
@@ -194,7 +194,7 @@ class ContractInvoiceSeeder extends Seeder
             $contractNum++;
         }
 
-        $this->command?->info('Created ' . count($contracts) . ' rental contracts.');
+        $this->command?->info(count($contracts) . ' contrats de location créés.');
 
         /*
         |--------------------------------------------------------------------------
@@ -271,8 +271,8 @@ class ContractInvoiceSeeder extends Seeder
             $invoiceNum++;
         }
 
-        $this->command?->info('Created invoices with items for completed/active contracts.');
-        $this->command?->info('✅ Contract & Invoice seeder completed successfully!');
+        $this->command?->info('Factures créées avec éléments pour les contrats terminés/actifs.');
+        $this->command?->info('✅ Seeder contrats & factures terminé avec succès !');
     }
 
     private function fakeRegistration(string $brand, string $model): string

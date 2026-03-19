@@ -45,11 +45,11 @@
         <!-- Page Header with Working Date Filter -->
         <div class="d-md-flex d-block align-items-center justify-content-between mb-3">
             <div class="my-auto mb-2">
-                <h3 class="page-title mb-1">Dashboard</h3>
+                <h3 class="page-title mb-1">Tableau de bord</h3>
                 <nav>
                     <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item"><a href="{{ route('backoffice.dashboard') }}">Home</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Admin Dashboard</li>
+                        <li class="breadcrumb-item"><a href="{{ route('backoffice.dashboard') }}">Accueil</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Tableau de bord admin</li>
                     </ol>
                 </nav>
             </div>
@@ -62,23 +62,23 @@
                     <ul class="dropdown-menu dropdown-menu-end p-3" style="min-width: 300px;" aria-labelledby="dateFilterDropdown">
                         <li>
                             <div class="mb-3">
-                                <label class="form-label">Quick Select</label>
+                                <label class="form-label">Sélection rapide</label>
                                 <select class="form-select" id="quickPeriodSelect">
-                                    <option value="today" {{ $period == 'today' ? 'selected' : '' }}>Today</option>
-                                    <option value="yesterday" {{ $period == 'yesterday' ? 'selected' : '' }}>Yesterday</option>
-                                    <option value="last7" {{ $period == 'last7' ? 'selected' : '' }}>Last 7 Days</option>
-                                    <option value="last30" {{ $period == 'last30' ? 'selected' : '' }}>Last 30 Days</option>
-                                    <option value="thisMonth" {{ $period == 'thisMonth' ? 'selected' : '' }}>This Month</option>
-                                    <option value="lastMonth" {{ $period == 'lastMonth' ? 'selected' : '' }}>Last Month</option>
-                                    <option value="custom" {{ $period == 'custom' ? 'selected' : '' }}>Custom Range</option>
+                                    <option value="today" {{ $period == 'today' ? 'selected' : '' }}>Aujourd'hui</option>
+                                    <option value="yesterday" {{ $period == 'yesterday' ? 'selected' : '' }}>Hier</option>
+                                    <option value="last7" {{ $period == 'last7' ? 'selected' : '' }}>7 derniers jours</option>
+                                    <option value="last30" {{ $period == 'last30' ? 'selected' : '' }}>30 derniers jours</option>
+                                    <option value="thisMonth" {{ $period == 'thisMonth' ? 'selected' : '' }}>Ce mois</option>
+                                    <option value="lastMonth" {{ $period == 'lastMonth' ? 'selected' : '' }}>Mois dernier</option>
+                                    <option value="custom" {{ $period == 'custom' ? 'selected' : '' }}>Période personnalisée</option>
                                 </select>
                             </div>
                         </li>
                         <li>
                             <div class="mb-3" id="customDateRange" style="{{ $period != 'custom' ? 'display: none;' : '' }}">
-                                <label class="form-label">Start Date</label>
+                                <label class="form-label">Date de début</label>
                                 <input type="date" class="form-control mb-2" id="startDate" value="{{ $startDate->format('Y-m-d') }}">
-                                <label class="form-label">End Date</label>
+                                <label class="form-label">Date de fin</label>
                                 <input type="date" class="form-control" id="endDate" value="{{ $endDate->format('Y-m-d') }}">
                             </div>
                         </li>
@@ -87,8 +87,8 @@
                         </li>
                         <li>
                             <div class="d-flex justify-content-end gap-2">
-                                <button type="button" class="btn btn-outline-secondary" id="cancelFilter">Cancel</button>
-                                <button type="button" class="btn btn-primary" id="applyFilter">Apply</button>
+                                <button type="button" class="btn btn-outline-secondary" id="cancelFilter">Annuler</button>
+                                <button type="button" class="btn btn-primary" id="applyFilter">Appliquer</button>
                             </div>
                         </li>
                     </ul>
@@ -107,8 +107,8 @@
                 <div class="card bg-primary text-white">
                     <div class="card-body d-flex align-items-center justify-content-between">
                         <div>
-                            <h4 class="text-white mb-2">Welcome, {{ auth()->user()->name ?? 'Admin' }}</h4>
-                            <p class="text-white-50 mb-0">{{ $availableVehicles }} Budget Friendly Cars Available for the rents</p>
+                            <h4 class="text-white mb-2">Bienvenue, {{ auth()->user()->name ?? 'Admin' }}</h4>
+                            <p class="text-white-50 mb-0">{{ $availableVehicles }} véhicules disponibles à la location</p>
                         </div>
                         <div>
                             <i class="ti ti-car fs-48 text-white-50"></i>
@@ -125,9 +125,9 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
-                                <span class="text-muted mb-2 d-block">Total No of Cars</span>
+                                <span class="text-muted mb-2 d-block">Nombre total de voitures</span>
                                 <h3 class="mb-0">{{ $totalVehicles }}</h3>
-                                <small class="text-muted">{{ $rentedVehicles }} In Rental</small>
+                                <small class="text-muted">{{ $rentedVehicles }} en location</small>
                             </div>
                             <div class="bg-primary-transparent rounded-circle p-3">
                                 <i class="ti ti-car text-primary fs-24"></i>
@@ -142,7 +142,7 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
-                                <span class="text-muted mb-2 d-block">Total Reservations</span>
+                                <span class="text-muted mb-2 d-block">Total réservations</span>
                                 <h3 class="mb-0">{{ $totalBookings }}</h3>
                                 @if($bookingsGrowth > 0)
                                 <small class="text-success">+{{ $bookingsGrowth }}%</small>
@@ -163,8 +163,8 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
-                                <span class="text-muted mb-2 d-block">Total Earnings</span>
-                                <h3 class="mb-0">${{ number_format($totalRevenue, 0) }}</h3>
+                                <span class="text-muted mb-2 d-block">Total bénéfices</span>
+                                <h3 class="mb-0">{{ number_format($totalRevenue, 0, ',', ' ') }} MAD</h3>
                                 @if($revenueGrowth > 0)
                                 <small class="text-success">+{{ $revenueGrowth }}%</small>
                                 @elseif($revenueGrowth < 0)
@@ -184,7 +184,7 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
-                                <span class="text-muted mb-2 d-block">Total Cars</span>
+                                <span class="text-muted mb-2 d-block">Total voitures</span>
                                 <h3 class="mb-0">{{ $totalVehicles }}</h3>
                                 @if($vehicleChange != 0)
                                 <small class="{{ $vehicleChange < 0 ? 'text-danger' : 'text-success' }}">{{ $vehicleChange }}%</small>
@@ -204,8 +204,8 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5>Newly Added Cars</h5>
-                        <a href="{{ route('backoffice.vehicles.index') }}" class="btn btn-sm btn-primary">View All</a>
+                        <h5>Voitures récemment ajoutées</h5>
+                        <a href="{{ route('backoffice.vehicles.index') }}" class="btn btn-sm btn-primary">Voir tout</a>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -214,20 +214,20 @@
                                 <div class="card equal-height-card">
                                     <img src="{{ $vehicle->getMainPhotoUrlAttribute() ?: URL::asset('assets/place-holder.webp') }}" class="card-img-top car-image-fixed" alt="car">
                                     <div class="card-body">
-                                        <h6>{{ $vehicle->brand->name ?? 'Unknown' }} {{ $vehicle->model->name ?? '' }}</h6>
+                                        <h6>{{ $vehicle->brand->name ?? 'Inconnu' }} {{ $vehicle->model->name ?? '' }}</h6>
                                         <p class="text-muted mb-2 small">{{ $vehicle->registration_number }}</p>
-                                        <h5 class="text-primary mb-3">${{ number_format($vehicle->daily_rate ?? 0, 0) }}/day</h5>
+                                        <h5 class="text-primary mb-3">{{ number_format($vehicle->daily_rate ?? 0, 0, ',', ' ') }} MAD/jour</h5>
                                         <div class="d-flex justify-content-between mt-auto small">
-                                            <span><i class="ti ti-gas-station me-1"></i> {{ $vehicle->fuel_type ?? 'Petrol' }}</span>
+                                            <span><i class="ti ti-gas-station me-1"></i> {{ $vehicle->fuel_type ?? 'Essence' }}</span>
                                             <span><i class="ti ti-users me-1"></i> {{ str_pad($vehicle->seats ?? 4, 2, '0', STR_PAD_LEFT) }}</span>
-                                            <span><i class="ti ti-steering-wheel me-1"></i> {{ $vehicle->transmission ?? 'Manual' }}</span>
+                                            <span><i class="ti ti-steering-wheel me-1"></i> {{ $vehicle->transmission ?? 'Manuelle' }}</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             @empty
                             <div class="col-12 text-center py-4 text-muted">
-                                <p>No newly added cars</p>
+                                <p>Aucune voiture récemment ajoutée</p>
                             </div>
                             @endforelse
                         </div>
@@ -241,8 +241,8 @@
             <div class="col-xl-8">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5>Recent Reservations</h5>
-                        <a href="{{ route('backoffice.bookings.index') }}" class="btn btn-sm btn-primary">View All</a>
+                        <h5>Réservations récentes</h5>
+                        <a href="{{ route('backoffice.bookings.index') }}" class="btn btn-sm btn-primary">Voir tout</a>
                     </div>
                     <div class="card-body">
                         @forelse($recentBookings as $booking)
@@ -251,7 +251,7 @@
                                 <!-- Use placeholder for reservation car images too -->
                                 <img src="{{ URL::asset('assets/place-holder.webp') }}" class="rounded me-3" width="60" height="40" style="object-fit: cover;" alt="car">
                                 <div>
-                                    <h6 class="mb-1">{{ $booking->vehicle?->brand?->name ?? 'Car' }} {{ $booking->vehicle?->model?->name ?? '' }}</h6>
+                                    <h6 class="mb-1">{{ $booking->vehicle?->brand?->name ?? 'Voiture' }} {{ $booking->vehicle?->model?->name ?? '' }}</h6>
                                     <p class="text-muted mb-0 small">
                                         <i class="ti ti-map-pin me-1"></i> {{ $booking->pickup_location ?? 'N/A' }} 
                                         <i class="ti ti-arrow-right mx-2"></i> 
@@ -266,13 +266,13 @@
                                 <span class="badge bg-{{ $booking->status == 'confirmed' ? 'success' : ($booking->status == 'pending' ? 'warning' : 'secondary') }} mb-2">
                                     {{ $booking->duration }}
                                 </span>
-                                <h6 class="mb-0">${{ number_format($booking->total_amount ?? 0, 0) }}/day</h6>
-                                <small class="text-muted">{{ $booking->driver_type ?? 'Self' }}</small>
+                                <h6 class="mb-0">{{ number_format($booking->total_amount ?? 0, 0, ',', ' ') }} MAD/jour</h6>
+                                <small class="text-muted">{{ $booking->driver_type ?? 'Autonome' }}</small>
                             </div>
                         </div>
                         @empty
                         <div class="text-center py-4 text-muted">
-                            <p>No recent reservations</p>
+                            <p>Aucune réservation récente</p>
                         </div>
                         @endforelse
                     </div>
@@ -283,8 +283,8 @@
                 <!-- Customers - Use placeholder for avatars -->
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5>Customers</h5>
-                        <a href="{{ route('backoffice.clients.index') }}" class="btn btn-sm btn-primary">View All</a>
+                        <h5>Clients</h5>
+                        <a href="{{ route('backoffice.clients.index') }}" class="btn btn-sm btn-primary">Voir tout</a>
                     </div>
                     <div class="card-body">
                         @forelse($topCustomers as $customer)
@@ -298,13 +298,13 @@
                                 </div>
                             </div>
                             <div class="text-end">
-                                <span class="badge bg-primary">Bookings</span>
+                                <span class="badge bg-primary">Réservations</span>
                                 <h6 class="mb-0 mt-1">{{ $customer->bookings_count ?? 0 }}</h6>
                             </div>
                         </div>
                         @empty
                         <div class="text-center py-4 text-muted">
-                            <p>No customers data</p>
+                            <p>Aucune donnée client</p>
                         </div>
                         @endforelse
                     </div>
@@ -313,15 +313,15 @@
                 <!-- Income & Expenses -->
                 <div class="card mt-4">
                     <div class="card-header">
-                        <h5>Income & Expenses</h5>
+                        <h5>Revenus et dépenses</h5>
                     </div>
                     <div class="card-body">
                         @if($monthRevenue > 0 || $monthExpenses > 0)
                             <div class="d-flex justify-content-between mb-3">
                                 @if($monthRevenue > 0)
                                 <div>
-                                    <span class="badge bg-success mb-2">Income</span>
-                                    <h4>${{ number_format($monthRevenue, 0) }}</h4>
+                                    <span class="badge bg-success mb-2">Revenus</span>
+                                    <h4>{{ number_format($monthRevenue, 0, ',', ' ') }} MAD</h4>
                                     @if($revenueGrowth > 0)
                                     <small class="text-success">+{{ $revenueGrowth }}%</small>
                                     @elseif($revenueGrowth < 0)
@@ -331,8 +331,8 @@
                                 @endif
                                 @if($monthExpenses > 0)
                                 <div>
-                                    <span class="badge bg-danger mb-2">Expense</span>
-                                    <h4>${{ number_format($monthExpenses, 0) }}</h4>
+                                    <span class="badge bg-danger mb-2">Dépenses</span>
+                                    <h4>{{ number_format($monthExpenses, 0, ',', ' ') }} MAD</h4>
                                     @if($expenseGrowth > 0)
                                     <small class="text-danger">+{{ $expenseGrowth }}%</small>
                                     @elseif($expenseGrowth < 0)
@@ -349,7 +349,7 @@
                             @endif
                         @else
                             <div class="text-center py-4 text-muted">
-                                <p>No income or expenses data</p>
+                                <p>Aucune donnée de revenus ou dépenses</p>
                             </div>
                         @endif
                     </div>
@@ -444,7 +444,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const period = quickPeriodSelect.value;
         
         if (!startDate || !endDate) {
-            alert('Please select both start and end dates');
+            alert('Veuillez sélectionner les dates de début et de fin');
             return;
         }
         

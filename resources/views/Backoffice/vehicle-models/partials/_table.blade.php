@@ -101,9 +101,13 @@
                         <h6 class="fw-medium mb-0">
                             {{-- Lien vers marque - contrôlé par permission VIEW sur marques --}}
                             @can('vehicle-brands.general.view')
-                                <a href="{{ route('backoffice.vehicle-brands.show', $model->brand_id) }}">
-                                    {{ $brandName }}
-                                </a>
+                                @if($model->brand_id)
+                                    <a href="{{ route('backoffice.vehicle-brands.show', $model->brand_id) }}">
+                                        {{ $brandName }}
+                                    </a>
+                                @else
+                                    <span>{{ $brandName }}</span>
+                                @endif
                             @else
                                 <span>{{ $brandName }}</span>
                             @endcan
@@ -133,11 +137,13 @@
             @endcanany
         </tr>
         @empty
+        @php
+            $emptyColspan = 3
+                + (auth()->user()->can('vehicle-models.general.delete') ? 1 : 0)
+                + (auth()->user()->canAny(['vehicle-models.general.view', 'vehicle-models.general.edit', 'vehicle-models.general.delete']) ? 1 : 0);
+        @endphp
         <tr>
-            @can('vehicle-models.general.delete')
-            <td></td>
-            @endcan
-            <td colspan="{{ (auth()->user()->can('vehicle-models.general.delete') ? 4 : 3) }}" class="text-center py-4">
+            <td colspan="{{ $emptyColspan }}" class="text-center py-4">
                 <div class="text-muted">
                     <i class="ti ti-car-off fs-4 mb-2"></i>
                     <p class="mb-0">Aucun modèle trouvé.</p>
@@ -148,9 +154,6 @@
                     @endcan
                 </div>
             </td>
-            @canany(['vehicle-models.general.view', 'vehicle-models.general.edit', 'vehicle-models.general.delete'])
-            <td></td>
-            @endcanany
         </tr>
         @endforelse
     </tbody>

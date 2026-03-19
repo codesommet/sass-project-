@@ -250,24 +250,24 @@ class RolesAndSuperAdminSeeder extends Seeder
         | Output Information
         |--------------------------------------------------------------------------
         */
-        $this->command?->info('✅ Roles & permissions seeded successfully');
-        $this->command?->info("✅ Created " . count($allPermissions) . " permissions");
+        $this->command?->info('✅ Rôles & permissions créés avec succès');
+        $this->command?->info("✅ " . count($allPermissions) . " permissions créées");
         $this->command?->info('');
-        $this->command?->info('📋 Modules with permissions:');
+        $this->command?->info('📋 Modules avec permissions :');
         $modules = array_keys($modulesConfig);
         foreach ($modules as $module) {
             $this->command?->info("  • {$module}");
         }
-        
+
         $this->command?->info('');
-        $this->command?->info('📋 Roles created:');
-        $this->command?->info('  • super-admin - FULL ACCESS to everything');
-        $this->command?->info('  • agency-admin - Full access within agency');
-        $this->command?->info('  • agency-manager - View/Create/Edit (no delete)');
-        $this->command?->info('  • agency-staff - View only');
-        
+        $this->command?->info('📋 Rôles créés :');
+        $this->command?->info('  • super-admin - ACCÈS TOTAL à tout le système');
+        $this->command?->info('  • agency-admin - Accès complet dans l\'agence');
+        $this->command?->info('  • agency-manager - Voir/Créer/Modifier (pas de suppression)');
+        $this->command?->info('  • agency-staff - Consultation uniquement');
+
         $this->command?->info('');
-        $this->command?->info('📋 Permission counts per role:');
+        $this->command?->info('📋 Nombre de permissions par rôle :');
         $this->command?->info('  • super-admin: ' . count($allPermissions) . ' permissions');
         $this->command?->info('  • agency-admin: ' . count($agencyAdminPerms) . ' permissions');
         $this->command?->info('  • agency-manager: ' . count($agencyManagerPerms) . ' permissions');

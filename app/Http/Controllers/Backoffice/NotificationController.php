@@ -59,7 +59,7 @@ class NotificationController extends Controller
         $userId = Auth::guard('backoffice')->id();
 
         if ($notification->user_id !== $userId) {
-            return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
+            return response()->json(['success' => false, 'message' => 'Non autorisé'], 403);
         }
 
         $notification->update(['is_read' => true]);
@@ -78,7 +78,7 @@ class NotificationController extends Controller
             ->unread()
             ->update(['is_read' => true]);
 
-        return response()->json(['success' => true, 'message' => 'All notifications marked as read']);
+        return response()->json(['success' => true, 'message' => 'Toutes les notifications marquées comme lues']);
     }
 
     /**
@@ -108,7 +108,7 @@ class NotificationController extends Controller
             ->read()
             ->update(['is_archived' => true]);
 
-        return response()->json(['success' => true, 'message' => 'All read notifications archived']);
+        return response()->json(['success' => true, 'message' => 'Toutes les notifications lues ont été archivées']);
     }
 
     /**
@@ -122,7 +122,7 @@ class NotificationController extends Controller
             ->active()
             ->update(['is_archived' => true]);
 
-        return response()->json(['success' => true, 'message' => 'All notifications cleared']);
+        return response()->json(['success' => true, 'message' => 'Toutes les notifications ont été supprimées']);
     }
 
     /**
@@ -134,7 +134,7 @@ class NotificationController extends Controller
 
         if ($notification->user_id !== $userId) {
             if (request()->ajax() || request()->wantsJson()) {
-                return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
+                return response()->json(['success' => false, 'message' => 'Non autorisé'], 403);
             }
             return redirect()->back()->with('toast', [
                 'title' => 'Erreur',

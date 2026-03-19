@@ -7,7 +7,7 @@
                 <li class="breadcrumb-item">
                     <a href="{{ route('backoffice.dashboard') }}">Accueil</a>
                 </li>
-                <li class="breadcrumb-item active">Dashboard</li>
+                <li class="breadcrumb-item active">Tableau de bord</li>
             </ol>
         </nav>
     </div>

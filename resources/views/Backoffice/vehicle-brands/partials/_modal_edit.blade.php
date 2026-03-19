@@ -12,7 +12,7 @@
                 @method('PUT')
 
                 <div class="modal-header">
-                    <h4 class="mb-0">Edit Brand</h4>
+                    <h4 class="mb-0">Modifier la marque</h4>
                     <button type="button"
                             class="btn-close custom-btn-close"
                             data-bs-dismiss="modal"
@@ -26,7 +26,7 @@
                     {{-- BRAND IMAGE (optional in edit) --}}
                     <div class="mb-3">
                         <label class="form-label">
-                            Brand Image
+                            Image de la marque
                         </label>
 
                         <div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
@@ -41,7 +41,7 @@
                                 <div class="profile-uploader d-flex align-items-center">
                                     <div class="drag-upload-btn btn btn-md btn-dark">
                                         <i class="ti ti-photo-up fs-14"></i>
-                                        Upload
+                                        Télécharger
                                         <input type="file"
                                                name="logo"
                                                class="form-control image-sign @error('logo') is-invalid @enderror">
@@ -57,7 +57,7 @@
 
                                 <div class="mt-2">
                                     <p class="fs-14 mb-0">
-                                        Upload Image size 180*180, within 5MB
+                                        Télécharger Image size 180*180, within 5MB
                                     </p>
                                 </div>
                             </div>
@@ -67,7 +67,7 @@
                     {{-- BRAND NAME (required) --}}
                     <div class="mb-3">
                         <label class="form-label">
-                            Brand Name <span class="text-danger">*</span>
+                            Nom de la marque <span class="text-danger">*</span>
                         </label>
                         <input type="text"
                                name="name"
@@ -78,7 +78,7 @@
 
                         {{-- CLIENT validation message --}}
                         <div class="invalid-feedback">
-                            Please enter a brand name.
+                            Veuillez saisir un nom de marque.
                         </div>
 
                         {{-- SERVER validation message --}}
@@ -96,10 +96,10 @@
                         <a href="javascript:void(0);"
                            class="btn btn-light me-3"
                            data-bs-dismiss="modal">
-                            Cancel
+                            Annuler
                         </a>
                         <button type="submit" class="btn btn-primary">
-                            Save Changes
+                            Enregistrer
                         </button>
                     </div>
                 </div>
