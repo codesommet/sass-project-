@@ -101,7 +101,7 @@ class VignetteController extends Controller
                 'can_delete' => auth()->user()->can('vehicle-vignettes.general.delete'),
             ];
 
-            return view('Backoffice.vignettes.index', [
+            return view('backoffice.vignettes.index', [
                 'vehicle' => null,
                 'vignettes' => $vignettes,
                 'availableYears' => $availableYears,
@@ -114,12 +114,17 @@ class VignetteController extends Controller
         $vehicle = Vehicle::find($vehicleId);
         
         if (!$vehicle) {
-            return view('Backoffice.vignettes.index', [
+            return view('backoffice.vignettes.index', [
                 'vehicle' => null,
                 'vignettes' => new LengthAwarePaginator([], 0, 15),
                 'availableYears' => collect([]),
                 'isGlobalView' => false,
-                'permissions' => []
+                'permissions' => [
+                    'can_view' => auth()->user()->can('vehicle-vignettes.general.view'),
+                    'can_create' => auth()->user()->can('vehicle-vignettes.general.create'),
+                    'can_edit' => auth()->user()->can('vehicle-vignettes.general.edit'),
+                    'can_delete' => auth()->user()->can('vehicle-vignettes.general.delete'),
+                ],
             ]);
         }
         
@@ -198,7 +203,7 @@ class VignetteController extends Controller
             'can_delete' => auth()->user()->can('vehicle-vignettes.general.delete'),
         ];
 
-        return view('Backoffice.vignettes.index', compact('vehicle', 'vignettes', 'availableYears', 'permissions'));
+        return view('backoffice.vignettes.index', compact('vehicle', 'vignettes', 'availableYears', 'permissions'));
     }
 
     /**
@@ -212,7 +217,7 @@ class VignetteController extends Controller
         }
 
         $vehicles = Vehicle::orderBy('registration_number')->get();
-        return view('Backoffice.vignettes.partials._modal_create', compact('vehicle', 'vehicles'));
+        return view('backoffice.vignettes.partials._modal_create', compact('vehicle', 'vehicles'));
     }
 
     /**
@@ -289,7 +294,7 @@ class VignetteController extends Controller
             'can_delete' => auth()->user()->can('vehicle-vignettes.general.delete'),
         ];
 
-        return view('Backoffice.vignettes.show', compact('vehicle', 'vignette', 'permissions'));
+        return view('backoffice.vignettes.show', compact('vehicle', 'vignette', 'permissions'));
     }
 
     /**
@@ -305,7 +310,7 @@ class VignetteController extends Controller
         $this->authorize('update', $vehicle);
         $this->verifyResource($vehicle, $vignette);
         $vehicles = Vehicle::orderBy('registration_number')->get();
-        return view('Backoffice.vignettes.partials._modal_edit', compact('vehicle', 'vignette', 'vehicles'));
+        return view('backoffice.vignettes.partials._modal_edit', compact('vehicle', 'vignette', 'vehicles'));
     }
 
     /**

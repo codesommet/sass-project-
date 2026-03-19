@@ -12,6 +12,42 @@ use Spatie\Permission\PermissionRegistrar;
 
 class RoleController extends Controller
 {
+    /**
+     * Super-admin-only permission modules — hidden from non-super-admins
+     */
+    private const SUPER_ADMIN_MODULES = [
+        'agencies',
+        'agency-subscriptions',
+        'users',
+        'roles-permissions',
+        'trash',
+    ];
+
+    private function isSuperAdmin(): bool
+    {
+        return auth()->guard('backoffice')->user()->hasRole('super-admin');
+    }
+
+    /**
+     * Filter permissions query to exclude super-admin-only modules for non-super-admins
+     */
+    private function filterPermissionIds(array $permissionIds): array
+    {
+        if ($this->isSuperAdmin()) {
+            return $permissionIds;
+        }
+
+        return Permission::where('guard_name', 'backoffice')
+            ->whereIn('id', $permissionIds)
+            ->where(function ($q) {
+                foreach (self::SUPER_ADMIN_MODULES as $module) {
+                    $q->where('name', 'not like', $module . '.%');
+                }
+            })
+            ->pluck('id')
+            ->toArray();
+    }
+
     public function index(Request $request)
     {
         $search = trim((string) $request->get('search'));
@@ -53,7 +89,7 @@ class RoleController extends Controller
             ->orderBy('name')
             ->get();
 
-        return view('backoffice.roles.create', compact('permissions'));
+        return redirect()->route('backoffice.roles-permissions.roles');
     }
 
     public function store(RoleStoreRequest $request)
@@ -67,7 +103,7 @@ class RoleController extends Controller
             'guard_name' => 'backoffice',
         ]);
 
-        $permissionIds = $data['permissions'] ?? [];
+        $permissionIds = $this->filterPermissionIds($data['permissions'] ?? []);
         if (!empty($permissionIds)) {
             $permissions = Permission::where('guard_name', 'backoffice')
                 ->whereIn('id', $permissionIds)
@@ -75,7 +111,7 @@ class RoleController extends Controller
 
             $role->syncPermissions($permissions);
         }
-        
+
         // ADDED: Create notification for store
         $this->createNotification('store', 'role', $role);
 
@@ -96,7 +132,7 @@ class RoleController extends Controller
 
         $role->load('permissions');
 
-        return view('backoffice.roles.show', compact('role'));
+        return redirect()->route('backoffice.roles-permissions.roles');
     }
 
     public function edit(Role $role)
@@ -111,7 +147,7 @@ class RoleController extends Controller
         $role->load('permissions');
         $assigned = $role->permissions->pluck('id')->all();
 
-        return view('backoffice.roles.edit', compact('role', 'permissions', 'assigned'));
+        return redirect()->route('backoffice.roles-permissions.roles');
     }
 
     public function update(RoleUpdateRequest $request, Role $role)
@@ -120,19 +156,24 @@ class RoleController extends Controller
 
         abort_unless($role->guard_name === 'backoffice', 404);
 
+        // Non-super-admins cannot edit super-admin or agency-admin roles
+        if (in_array($role->name, ['super-admin', 'agency-admin']) && !$this->isSuperAdmin()) {
+            abort(403, 'Vous n\'avez pas la permission de modifier ce rôle.');
+        }
+
         $data = $request->validated();
 
         $role->update([
             'name' => $data['name'],
         ]);
 
-        $permissionIds = $data['permissions'] ?? [];
+        $permissionIds = $this->filterPermissionIds($data['permissions'] ?? []);
         $permissions = Permission::where('guard_name', 'backoffice')
             ->whereIn('id', $permissionIds)
             ->get();
 
         $role->syncPermissions($permissions);
-        
+
         // ADDED: Create notification for update
         $this->createNotification('update', 'role', $role);
 
@@ -153,6 +194,11 @@ class RoleController extends Controller
 
         abort_unless($role->guard_name === 'backoffice', 404);
 
+        // Non-super-admins cannot delete super-admin or agency-admin roles
+        if (in_array($role->name, ['super-admin', 'agency-admin']) && !$this->isSuperAdmin()) {
+            abort(403, 'Vous n\'avez pas la permission de supprimer ce rôle.');
+        }
+
         if (in_array($role->name, ['super-admin', 'super_admin', 'Super Admin'], true)) {
             return back()->with('toast', [
                 'title'   => 'Action refusée',
@@ -164,7 +210,6 @@ class RoleController extends Controller
         }
 
         $name = $role->name;
-         $item->delete();
         // Store role data for notification before delete
         $roleData = clone $role;
         $role->delete();

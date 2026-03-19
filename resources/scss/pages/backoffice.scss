@@ -1,0 +1,204 @@
+// ============================================
+// Backoffice Shared Styles
+// Centralized CSS for all backoffice modules
+// ============================================
+
+// --- Pagination ---
+.pagination {
+    margin: 0;
+
+    .page-item.active .page-link {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+        color: white;
+    }
+
+    .page-link {
+        color: #0d6efd;
+        border-radius: 8px;
+        margin: 0 3px;
+        padding: 8px 12px;
+        transition: all 0.15s ease;
+
+        &:hover {
+            background-color: #e9ecef;
+        }
+    }
+}
+
+.pagination-info {
+    color: #6c757d;
+    font-size: 14px;
+}
+
+// --- Tables ---
+.table-responsive,
+.custom-datatable-filter,
+.dataTables_wrapper {
+    overflow: visible !important;
+}
+
+.dataTables_wrapper .dropdown-menu {
+    z-index: 1055;
+}
+
+// --- Action Buttons ---
+.btn-icon {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    color: #6c757d;
+    background: transparent;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+
+    &:hover {
+        background: #f8f9fa;
+        border-color: #dee2e6;
+        color: #0d6efd;
+    }
+}
+
+// --- Avatars ---
+.avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    text-decoration: none;
+    background: #f8f9fa;
+}
+
+.avatar-sm { width: 32px; height: 32px; }
+.avatar-md { width: 42px; height: 42px; }
+.avatar-lg { width: 56px; height: 56px; }
+.avatar-xl { width: 72px; height: 72px; }
+
+.avatar-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    font-size: 16px;
+    font-weight: 600;
+    color: #495057;
+    background: #f8f9fa;
+    border-radius: inherit;
+}
+
+.avatar-table {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    object-fit: cover;
+}
+
+// --- Status Badges (transparent variants) ---
+$badge-colors: (
+    success: (#d4edda, #155724),
+    danger: (#f8d7da, #721c24),
+    warning: (#fff3cd, #856404),
+    info: (#cce5ff, #004085),
+    primary: (#cfe2ff, #084298),
+    secondary: (#e2e3e5, #41464b),
+    dark: (#d3d3d4, #1a1e21),
+);
+
+@each $color, $values in $badge-colors {
+    .bg-#{$color}-transparent {
+        background-color: nth($values, 1) !important;
+        color: nth($values, 2) !important;
+    }
+}
+
+// --- Filter Bar ---
+.filter-bar {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+// --- Empty State ---
+.empty-state {
+    padding: 3rem 1rem;
+
+    .empty-state-icon {
+        font-size: 48px;
+        color: #adb5bd;
+        margin-bottom: 1rem;
+    }
+}
+
+// --- Card Hover ---
+.card-hover {
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+}
+
+// --- Form Styles ---
+.form-section {
+    margin-bottom: 1.5rem;
+
+    .form-section-title {
+        font-weight: 600;
+        font-size: 15px;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #e9ecef;
+        color: #495057;
+    }
+}
+
+.required-star {
+    color: #dc3545;
+    margin-left: 2px;
+}
+
+// --- Modal Improvements ---
+.modal-content {
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+}
+
+// --- Animations ---
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+// --- Responsive ---
+@media (max-width: 768px) {
+    .pagination-container {
+        justify-content: center;
+        margin-top: 15px;
+    }
+}

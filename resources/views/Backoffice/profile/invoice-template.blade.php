@@ -3,377 +3,180 @@
 
 @section('content')
 <style>
-    .invoice-template-card {
+    .template-card {
         cursor: pointer;
         transition: all 0.3s ease;
-        border: 2px solid transparent;
+        border: 2px solid #e2e8f0;
         border-radius: 12px;
         overflow: hidden;
         height: 100%;
         display: flex;
         flex-direction: column;
         position: relative;
-    }
-    
-    .invoice-template-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    }
-    
-    .invoice-template-card.selected {
-        border-color: #0d6efd;
-        box-shadow: 0 5px 15px rgba(13,110,253,0.2);
-    }
-    
-    .invoice-template-card .card-header {
-        color: white;
-        font-weight: 600;
-        text-align: center;
-        padding: 12px;
-        font-size: 1.1rem;
-        position: relative;
-    }
-    
-    /* Free Badge */
-    .free-badge {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background: #28a745;
-        color: white;
-        padding: 2px 10px;
-        border-radius: 20px;
-        font-size: 0.7rem;
-        font-weight: 600;
-        z-index: 10;
-    }
-    
-    /* Premium Badge */
-    .premium-badge {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background: #ffc107;
-        color: #333;
-        padding: 2px 10px;
-        border-radius: 20px;
-        font-size: 0.7rem;
-        font-weight: 600;
-        z-index: 10;
-    }
-    
-    /* Preview Button */
-    .preview-btn {
-        position: absolute;
-        bottom: 10px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: rgba(255,255,255,0.9);
-        border: 1px solid #0d6efd;
-        color: #0d6efd;
-        padding: 5px 15px;
-        border-radius: 20px;
-        font-size: 0.8rem;
-        font-weight: 600;
-        cursor: pointer;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        z-index: 30;
-        text-decoration: none;
-    }
-    
-    .invoice-template-card:hover .preview-btn {
-        opacity: 1;
-    }
-    
-    .preview-btn:hover {
-        background: #0d6efd;
-        color: white;
-    }
-    
-    .invoice-preview {
-        background: white;
-        padding: 20px;
-        min-height: 320px;
-        position: relative;
-        flex: 1;
-    }
-    
-    /* Premium Blur Effect */
-    .premium-blur {
-        filter: blur(4px);
-        pointer-events: none;
-        user-select: none;
-    }
-    
-    .premium-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0,0,0,0.5);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-        z-index: 25;
-        border-radius: 8px;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-    }
-    
-    .invoice-template-card:hover .premium-overlay {
-        opacity: 1;
-    }
-    
-    .premium-message {
-        background: white;
-        padding: 20px;
-        border-radius: 12px;
-        text-align: center;
-        max-width: 200px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-    }
-    
-    .premium-message i {
-        font-size: 40px;
-        color: #ffc107;
-        margin-bottom: 10px;
-    }
-    
-    .premium-message h6 {
-        font-weight: 700;
-        margin-bottom: 5px;
-    }
-    
-    .premium-message p {
-        font-size: 0.8rem;
-        color: #666;
-        margin-bottom: 15px;
-    }
-    
-    .premium-message .btn-contact {
-        background: #ffc107;
-        color: #333;
-        border: none;
-        padding: 8px 20px;
-        border-radius: 25px;
-        font-weight: 600;
-        font-size: 0.8rem;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-    
-    .premium-message .btn-contact:hover {
-        background: #e0a800;
-        transform: scale(1.05);
-    }
-    
-    /* Template 1 - Simple Blue (Free) */
-    .template-1 .card-header {
-        background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
-    }
-    .template-1 .invoice-preview {
-        border-left: 4px solid #4e73df;
-    }
-    
-    /* Template 2 - Clean Green (Free) */
-    .template-2 .card-header {
-        background: linear-gradient(135deg, #1cc88a 0%, #13855c 100%);
-    }
-    .template-2 .invoice-preview {
-        background: #f8f9fc;
-        border-radius: 8px;
-    }
-    
-    /* Template 3 - Premium Gold */
-    .template-3 .card-header {
-        background: linear-gradient(135deg, #f6c23e 0%, #dda20a 100%);
-    }
-    .template-3 .invoice-preview {
-        background: linear-gradient(135deg, #fff9e6 0%, #fff 100%);
-        border: 2px solid #f6c23e;
-        box-shadow: 0 5px 15px rgba(246,194,62,0.2);
-        position: relative;
-    }
-    
-    .preview-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 15px;
-        padding-bottom: 10px;
-        border-bottom: 1px solid #e3e6f0;
-    }
-    
-    .preview-company {
-        font-weight: bold;
-        font-size: 1rem;
-    }
-    
-    .preview-invoice-no {
-        font-size: 0.8rem;
-        color: #858796;
-    }
-    
-    .preview-title {
-        text-align: center;
-        font-weight: bold;
-        margin: 10px 0;
-        font-size: 1.1rem;
-    }
-    
-    .client-info {
-        background: #f8f9fc;
-        padding: 10px;
-        border-radius: 6px;
-        margin: 15px 0;
-        font-size: 0.9rem;
-    }
-    
-    .client-info.premium {
-        background: linear-gradient(135deg, #fff9e6 0%, #fff2cc 100%);
-        border: 1px solid #f6c23e;
-    }
-    
-    .items-table {
-        margin: 15px 0;
-    }
-    
-    .item-row {
-        display: flex;
-        justify-content: space-between;
-        padding: 5px 0;
-        border-bottom: 1px dashed #e3e6f0;
-        font-size: 0.85rem;
-    }
-    
-    .total-row {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 15px;
-        padding-top: 10px;
-        border-top: 2px solid #4e73df;
-        font-weight: bold;
-    }
-    
-    .total-row.premium {
-        border-top-color: #f6c23e;
-    }
-    
-    .footer-note {
-        margin-top: 15px;
-        font-size: 0.7rem;
-        color: #858796;
-        text-align: center;
-        font-style: italic;
-    }
-    
-    .check-icon {
-        position: absolute;
-        top: 10px;
-        left: 10px;
-        color: #0d6efd;
-        font-size: 24px;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        background: white;
-        border-radius: 50%;
-        z-index: 20;
-    }
-    
-    .invoice-template-card.selected .check-icon {
-        opacity: 1;
-    }
-    
-    .template-badge-main {
-        position: absolute;
-        top: -10px;
-        left: 50%;
-        transform: translateX(-50%);
         background: #fff;
-        color: #333;
-        padding: 4px 15px;
-        border-radius: 20px;
-        font-size: 0.8rem;
-        font-weight: 600;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        z-index: 15;
-        border: 1px solid #e3e6f0;
     }
-    
-    .template-1 .template-badge-main { border-top: 3px solid #4e73df; }
-    .template-2 .template-badge-main { border-top: 3px solid #1cc88a; }
-    .template-3 .template-badge-main { border-top: 3px solid #f6c23e; }
+    .template-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+    }
+    .template-card.selected {
+        border-color: #0d6efd;
+        box-shadow: 0 8px 25px rgba(13,110,253,0.2);
+    }
 
-    /* Modal Styles */
-    .preview-modal {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0,0,0,0.8);
-        z-index: 9999;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    .preview-modal.active {
-        display: flex;
-    }
-    
-    .preview-modal-content {
-        background: white;
-        padding: 30px;
-        border-radius: 12px;
-        max-width: 600px;
-        width: 90%;
-        max-height: 90vh;
-        overflow-y: auto;
-        position: relative;
-    }
-    
-    .preview-modal-close {
+    /* Check icon */
+    .template-check {
         position: absolute;
-        top: 15px;
-        right: 15px;
-        background: #f8f9fa;
-        border: none;
-        width: 35px;
-        height: 35px;
+        top: 12px;
+        left: 12px;
+        width: 28px;
+        height: 28px;
+        background: #0d6efd;
+        color: #fff;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        cursor: pointer;
-        font-size: 20px;
-        color: #666;
+        font-size: 14px;
+        z-index: 10;
+        opacity: 0;
+        transform: scale(0.5);
         transition: all 0.3s ease;
     }
-    
-    .preview-modal-close:hover {
-        background: #e9ecef;
-        color: #dc3545;
+    .template-card.selected .template-check {
+        opacity: 1;
+        transform: scale(1);
     }
-    
-    .preview-modal .invoice-preview {
-        min-height: auto;
-        padding: 0;
+
+    /* Default badge */
+    .default-badge {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: #0d6efd;
+        color: #fff;
+        padding: 3px 12px;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        z-index: 10;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    .template-card.selected .default-badge {
+        opacity: 1;
+    }
+
+    /* Template header */
+    .template-header {
+        padding: 16px 20px;
+        color: #fff;
+        font-weight: 700;
+        font-size: 15px;
+        text-align: center;
+        letter-spacing: 0.5px;
+    }
+    .t1 .template-header { background: linear-gradient(135deg, #1a56db 0%, #1e40af 100%); }
+    .t2 .template-header { background: linear-gradient(135deg, #0f766e 0%, #0d9488 100%); }
+    .t3 .template-header { background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%); }
+
+    /* Mini preview */
+    .template-preview {
+        padding: 18px;
+        flex: 1;
+        font-size: 10px;
+        color: #475569;
+        background: #fafbfc;
+    }
+    .prev-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+    .prev-logo { width: 32px; height: 32px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: 800; color: #fff; font-size: 11px; }
+    .t1 .prev-logo { background: #1a56db; }
+    .t2 .prev-logo { background: #0f766e; }
+    .t3 .prev-logo { background: #2c3e50; }
+    .prev-inv-label { font-size: 14px; font-weight: 700; letter-spacing: 1px; }
+    .t1 .prev-inv-label { color: #1a56db; }
+    .t2 .prev-inv-label { color: #0f766e; }
+    .t3 .prev-inv-label { color: #2c3e50; }
+    .prev-inv-no { font-size: 9px; color: #94a3b8; }
+
+    .prev-boxes { display: flex; gap: 8px; margin-bottom: 12px; }
+    .prev-box {
+        flex: 1;
+        border: 1px solid #e2e8f0;
+        border-radius: 5px;
+        padding: 6px 8px;
+        background: #fff;
+    }
+    .prev-box-title { font-size: 7px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 2px; }
+    .t1 .prev-box-title { color: #1a56db; }
+    .t2 .prev-box-title { color: #0f766e; }
+    .t3 .prev-box-title { color: #2c3e50; }
+    .prev-box-text { font-size: 9px; color: #1e293b; font-weight: 600; }
+
+    /* Mini table */
+    .prev-table { width: 100%; margin-bottom: 10px; }
+    .prev-table-head {
+        padding: 5px 8px;
+        color: #fff;
+        font-size: 7px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 700;
+    }
+    .t1 .prev-table-head { background: #1a56db; }
+    .t2 .prev-table-head { background: #0f766e; }
+    .t3 .prev-table-head { background: #2c3e50; }
+    .prev-table-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 4px 8px;
+        border-bottom: 1px solid #f1f5f9;
+        font-size: 9px;
+    }
+    .prev-table-row:nth-child(even) { background: #f8fafc; }
+
+    .prev-total {
+        display: flex;
+        justify-content: space-between;
+        padding: 6px 8px;
+        font-weight: 700;
+        font-size: 11px;
+        color: #fff;
+        border-radius: 4px;
+        margin-top: 6px;
+    }
+    .t1 .prev-total { background: #1a56db; }
+    .t2 .prev-total { background: #0f766e; }
+    .t3 .prev-total { background: #2c3e50; }
+
+    .prev-footer {
+        margin-top: 10px;
+        padding-top: 6px;
+        border-top: 1px solid #e2e8f0;
+        text-align: center;
+        font-size: 8px;
+        color: #94a3b8;
+    }
+
+    /* Template name label */
+    .template-label {
+        padding: 12px 20px;
+        background: #fff;
+        border-top: 1px solid #f1f5f9;
+        text-align: center;
+    }
+    .template-name { font-weight: 700; font-size: 13px; color: #1e293b; }
+    .template-desc { font-size: 11px; color: #64748b; margin-top: 2px; }
+
+    /* Section divider */
+    .section-divider {
+        border: none;
+        border-top: 2px solid #e2e8f0;
+        margin: 30px 0 20px;
     }
 </style>
-
-<!-- Preview Modal -->
-<div class="preview-modal" id="previewModal">
-    <div class="preview-modal-content">
-        <button class="preview-modal-close" onclick="closePreview()">
-            <i class="ti ti-x"></i>
-        </button>
-        <div id="previewContent"></div>
-    </div>
-</div>
 
 <!-- Page Wrapper -->
 <div class="page-wrapper">
@@ -382,218 +185,132 @@
         <!-- Breadcrumb -->
         <div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
             <div class="my-auto mb-2">
-                <h2 class="mb-1">Agency Settings</h2>
+                <h2 class="mb-1">Modèles de Documents</h2>
                 <nav>
                     <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item">
-                            <a href="{{ route('backoffice.dashboard') }}">Home</a>
-                        </li>
-                        <li class="breadcrumb-item">
-                            <a href="{{ route('backoffice.agencies.index') }}">Agencies</a>
-                        </li>
-                        <li class="breadcrumb-item active" aria-current="page">Invoice Template</li>
+                        <li class="breadcrumb-item"><a href="{{ route('backoffice.dashboard') }}">Accueil</a></li>
+                        <li class="breadcrumb-item">Paramètres</li>
+                        <li class="breadcrumb-item active" aria-current="page">Modèles de Documents</li>
                     </ol>
                 </nav>
             </div>
         </div>
-        <!-- /Breadcrumb -->
 
-        <!-- Settings Prefix -->
         <div class="row">
             <div class="col-lg-3">
-                <!-- inner sidebar -->
                 @include('Backoffice.profile.partials._agency_settings_sidebar', [
                     'agency' => $agency,
                     'active' => 'invoice-template',
                 ])
-                <!-- /inner sidebar -->
             </div>
             <div class="col-lg-9">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="fw-bold">Invoice Template Selection</h5>
-                        <p class="text-muted mb-0">Choose a template for your agency's invoices</p>
-                    </div>
-                    <form action="{{ route('backoffice.agencies.settings.update', $agency) }}" method="POST">
-                        @csrf
-                        @method('PATCH')
-                        
-                        <!-- Hidden input for selected template -->
-                        <input type="hidden" name="app[invoice_template]" id="selected_template" value="{{ $agency->settings['invoice_template'] ?? 'template1' }}">
-                        
+                <form action="{{ route('backoffice.agencies.settings.update', $agency) }}" method="POST">
+                    @csrf
+                    @method('PATCH')
+                    <input type="hidden" name="app[invoice_template]" id="selected_invoice_template" value="{{ $agency->settings['app']['invoice_template'] ?? 'template1' }}">
+                    <input type="hidden" name="app[contract_template]" id="selected_contract_template" value="{{ $agency->settings['app']['contract_template'] ?? 'template1' }}">
+
+                    @if(session('toast'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ session('toast')['message'] ?? 'Modèles mis à jour avec succès.' }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    @endif
+
+                    {{-- ══════════════════════════════════════════════════════ --}}
+                    {{-- ── INVOICE TEMPLATES ── --}}
+                    {{-- ══════════════════════════════════════════════════════ --}}
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="fw-bold mb-1"><i class="ti ti-file-invoice me-2"></i>Modèle de Facture</h5>
+                            <p class="text-muted mb-0">Choisissez le modèle utilisé automatiquement lors de l'export PDF de vos factures</p>
+                        </div>
                         <div class="card-body">
-                            @if(session('success'))
-                                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                    {{ session('success') }}
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                </div>
-                            @endif
-                            
                             <div class="row g-4">
-                                <!-- Template 1 - Simple Blue (FREE) -->
-                                <div class="col-md-4">
-                                    <div class="invoice-template-card template-1 {{ ($agency->settings['invoice_template'] ?? 'template1') === 'template1' ? 'selected' : '' }}" data-template="template1">
-                                        <span class="free-badge">FREE</span>
-                                        <div class="card-header">Simple Blue</div>
-                                        <div class="invoice-preview">
-                                            <i class="ti ti-check check-icon"></i>
-                                            <div class="template-badge-main">General Invoice</div>
-                                            
-                                            <div class="preview-header">
-                                                <span class="preview-company">{{ $agency->name }}</span>
-                                                <span class="preview-invoice-no">INV-001</span>
-                                            </div>
-                                            
-                                            <div class="client-info">
-                                                <strong>Client:</strong> Jean Dupont<br>
-                                                <small>Vignette client 1</small>
-                                            </div>
-                                            
-                                            <div class="items-table">
-                                                <div class="item-row">
-                                                    <span>Renault Clio (7 jours)</span>
-                                                    <span>350,00 €</span>
-                                                </div>
-                                                <div class="item-row">
-                                                    <span>Assurance complète</span>
-                                                    <span>120,00 €</span>
-                                                </div>
-                                                <div class="item-row">
-                                                    <span>GPS</span>
-                                                    <span>35,00 €</span>
-                                                </div>
-                                                <div class="item-row">
-                                                    <span>Siège bébé</span>
-                                                    <span>25,00 €</span>
+                                {{-- Template 1: Classic Blue --}}
+                                <div class="col-md-6">
+                                    <div class="template-card t1 {{ ($agency->settings['app']['invoice_template'] ?? 'template1') === 'template1' ? 'selected' : '' }}" data-template="template1" data-group="invoice">
+                                        <div class="template-check"><i class="ti ti-check"></i></div>
+                                        <div class="default-badge">Par défaut</div>
+                                        <div class="template-header">Classic Blue</div>
+                                        <div class="template-preview">
+                                            <div class="prev-top">
+                                                <div class="prev-logo">AG</div>
+                                                <div style="text-align:right;">
+                                                    <div class="prev-inv-label">FACTURE</div>
+                                                    <div class="prev-inv-no">N° INV-202503-0001</div>
                                                 </div>
                                             </div>
-                                            
-                                            <div class="total-row">
-                                                <span>TOTAL</span>
-                                                <span>530,00 €</span>
+                                            <div class="prev-boxes">
+                                                <div class="prev-box">
+                                                    <div class="prev-box-title">De</div>
+                                                    <div class="prev-box-text">{{ Str::limit($agency->name, 18) }}</div>
+                                                </div>
+                                                <div class="prev-box">
+                                                    <div class="prev-box-title">Facturer à</div>
+                                                    <div class="prev-box-text">Client exemple</div>
+                                                </div>
                                             </div>
-                                            
-                                            <div class="footer-note">
-                                                Paiement dû sous 15 jours
+                                            <div class="prev-table">
+                                                <div class="prev-table-head" style="display:flex; justify-content:space-between;">
+                                                    <span>Description</span><span>Total</span>
+                                                </div>
+                                                <div class="prev-table-row"><span>Location véhicule (5j)</span><span>1 500,00</span></div>
+                                                <div class="prev-table-row"><span>Assurance complète</span><span>350,00</span></div>
+                                                <div class="prev-table-row"><span>GPS</span><span>150,00</span></div>
                                             </div>
+                                            <div class="prev-total"><span>TOTAL TTC</span><span>2 000,00 MAD</span></div>
+                                            <div class="prev-footer">Document généré automatiquement</div>
                                         </div>
-                                        <button class="preview-btn" onclick="previewTemplate('template1', event)">
-                                            <i class="ti ti-eye me-1"></i>Aperçu
-                                        </button>
+                                        <div class="template-label">
+                                            <div class="template-name">Classic Blue</div>
+                                            <div class="template-desc">En-tête bleu professionnel avec mise en page structurée</div>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <!-- Template 2 - Clean Green (FREE) -->
-                                <div class="col-md-4">
-                                    <div class="invoice-template-card template-2 {{ ($agency->settings['invoice_template'] ?? 'template1') === 'template2' ? 'selected' : '' }}" data-template="template2">
-                                        <span class="free-badge">FREE</span>
-                                        <div class="card-header">Clean Green</div>
-                                        <div class="invoice-preview">
-                                            <i class="ti ti-check check-icon"></i>
-                                            <div class="template-badge-main">General Invoice</div>
-                                            
-                                            <div class="preview-header">
-                                                <span class="preview-company">{{ $agency->name }}</span>
-                                                <span class="preview-invoice-no">INV-001</span>
-                                            </div>
-                                            
-                                            <div class="client-info">
-                                                <strong>Client:</strong> Jean Dupont<br>
-                                                <small>Vignette client 1</small>
-                                            </div>
-                                            
-                                            <div class="items-table">
-                                                <div class="item-row">
-                                                    <span>Peugeot 308 (5 jours)</span>
-                                                    <span>275,00 €</span>
-                                                </div>
-                                                <div class="item-row">
-                                                    <span>Assurance de base</span>
-                                                    <span>75,00 €</span>
-                                                </div>
-                                                <div class="item-row">
-                                                    <span>Kilométrage illimité</span>
-                                                    <span>50,00 €</span>
+                                {{-- Template 2: Modern Teal --}}
+                                <div class="col-md-6">
+                                    <div class="template-card t2 {{ ($agency->settings['app']['invoice_template'] ?? 'template1') === 'template2' ? 'selected' : '' }}" data-template="template2" data-group="invoice">
+                                        <div class="template-check"><i class="ti ti-check"></i></div>
+                                        <div class="default-badge">Par défaut</div>
+                                        <div class="template-header">Modern Teal</div>
+                                        <div class="template-preview">
+                                            <div class="prev-top">
+                                                <div class="prev-logo">AG</div>
+                                                <div style="text-align:right;">
+                                                    <div class="prev-inv-label">FACTURE</div>
+                                                    <div class="prev-inv-no">INV-202503-0001</div>
                                                 </div>
                                             </div>
-                                            
-                                            <div class="total-row">
-                                                <span>TOTAL</span>
-                                                <span>400,00 €</span>
+                                            <div style="height:1px; background:#e2e8f0; margin-bottom:10px;"></div>
+                                            <div class="prev-boxes">
+                                                <div class="prev-box" style="background:#f0fdfa;">
+                                                    <div class="prev-box-title">Émetteur</div>
+                                                    <div class="prev-box-text">{{ Str::limit($agency->name, 18) }}</div>
+                                                </div>
+                                                <div class="prev-box" style="background:#f0fdfa;">
+                                                    <div class="prev-box-title">Client</div>
+                                                    <div class="prev-box-text">Client exemple</div>
+                                                </div>
                                             </div>
-                                            
-                                            <div class="footer-note">
-                                                Merci de votre confiance
+                                            <div class="prev-table">
+                                                <div class="prev-table-head" style="display:flex; justify-content:space-between;">
+                                                    <span>Description</span><span>Total</span>
+                                                </div>
+                                                <div class="prev-table-row"><span>Location véhicule (5j)</span><span>1 500,00</span></div>
+                                                <div class="prev-table-row"><span>Assurance complète</span><span>350,00</span></div>
+                                                <div class="prev-table-row"><span>GPS</span><span>150,00</span></div>
+                                            </div>
+                                            <div class="prev-total"><span>TOTAL TTC</span><span>2 000,00 MAD</span></div>
+                                            <div class="prev-footer">
+                                                <div style="width:30px; height:3px; background:#0f766e; border-radius:2px; margin:0 auto 4px;"></div>
+                                                Document généré automatiquement
                                             </div>
                                         </div>
-                                        <button class="preview-btn" onclick="previewTemplate('template2', event)">
-                                            <i class="ti ti-eye me-1"></i>Aperçu
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <!-- Template 3 - Premium Gold -->
-                                <div class="col-md-4">
-                                    <div class="invoice-template-card template-3 {{ ($agency->settings['invoice_template'] ?? 'template1') === 'template3' ? 'selected' : '' }}" data-template="template3">
-                                        <span class="premium-badge">PREMIUM</span>
-                                        <div class="card-header">Premium Gold</div>
-                                        <div class="invoice-preview">
-                                            <i class="ti ti-check check-icon"></i>
-                                            <div class="template-badge-main">General Invoice</div>
-                                            
-                                            <div class="preview-header">
-                                                <span class="preview-company">{{ $agency->name }}</span>
-                                                <span class="preview-invoice-no">INV-001</span>
-                                            </div>
-                                            
-                                            <div class="client-info premium">
-                                                <strong>Client:</strong> Jean Dupont<br>
-                                                <small>Vignette client 1 • VIP</small>
-                                            </div>
-                                            
-                                            <div class="items-table">
-                                                <div class="item-row">
-                                                    <span>Mercedes Classe C (7 jours)</span>
-                                                    <span>840,00 €</span>
-                                                </div>
-                                                <div class="item-row">
-                                                    <span>Assurance premium</span>
-                                                    <span>210,00 €</span>
-                                                </div>
-                                                <div class="item-row">
-                                                    <span>GPS + Conciergerie</span>
-                                                    <span>95,00 €</span>
-                                                </div>
-                                                <div class="item-row">
-                                                    <span>Livraison aéroport</span>
-                                                    <span>45,00 €</span>
-                                                </div>
-                                                <div class="item-row">
-                                                    <span>Réduction fidélité</span>
-                                                    <span>-50,00 €</span>
-                                                </div>
-                                            </div>
-                                            
-                                            <div class="total-row premium">
-                                                <span>TOTAL</span>
-                                                <span>1.140,00 €</span>
-                                            </div>
-                                            
-                                            <div class="footer-note">
-                                                Paiement en ligne • Facture détaillée envoyée par email
-                                            </div>
-                                            
-                                            <!-- Premium Overlay -->
-                                            <div class="premium-overlay">
-                                                <div class="premium-message">
-                                                    <i class="ti ti-crown"></i>
-                                                    <h6>Template Premium</h6>
-                                                    <p>Ce template est disponible uniquement pour les abonnements Premium</p>
-                                                    <button class="btn-contact" onclick="contactOwner(event)">
-                                                        <i class="ti ti-mail me-1"></i>Contacter
-                                                    </button>
-                                                </div>
-                                            </div>
+                                        <div class="template-label">
+                                            <div class="template-name">Modern Teal</div>
+                                            <div class="template-desc">Design moderne avec barre d'accent et détails élégants</div>
                                         </div>
                                     </div>
                                 </div>
@@ -603,127 +320,183 @@
                                 <small class="text-danger d-block mt-3">{{ $message }}</small>
                             @enderror
                         </div>
-                        
-                        <div class="card-footer">
+                    </div>
+
+                    {{-- ══════════════════════════════════════════════════════ --}}
+                    {{-- ── CONTRACT TEMPLATES ── --}}
+                    {{-- ══════════════════════════════════════════════════════ --}}
+                    <div class="card mt-4">
+                        <div class="card-header">
+                            <h5 class="fw-bold mb-1"><i class="ti ti-file-text me-2"></i>Modèle de Contrat</h5>
+                            <p class="text-muted mb-0">Choisissez le modèle utilisé automatiquement lors de l'export PDF de vos contrats de location</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-4">
+                                {{-- Contract Template 1: Classic Blue --}}
+                                <div class="col-md-4">
+                                    <div class="template-card t1 {{ ($agency->settings['app']['contract_template'] ?? 'template1') === 'template1' ? 'selected' : '' }}" data-template="template1" data-group="contract">
+                                        <div class="template-check"><i class="ti ti-check"></i></div>
+                                        <div class="default-badge">Par défaut</div>
+                                        <div class="template-header">Classic Blue</div>
+                                        <div class="template-preview">
+                                            <div class="prev-top">
+                                                <div class="prev-logo">AG</div>
+                                                <div style="text-align:right;">
+                                                    <div class="prev-inv-label">CONTRAT</div>
+                                                    <div class="prev-inv-no">N° CTR-202503-0001</div>
+                                                </div>
+                                            </div>
+                                            <div class="prev-boxes">
+                                                <div class="prev-box">
+                                                    <div class="prev-box-title">Agence</div>
+                                                    <div class="prev-box-text">{{ Str::limit($agency->name, 18) }}</div>
+                                                </div>
+                                                <div class="prev-box">
+                                                    <div class="prev-box-title">Client</div>
+                                                    <div class="prev-box-text">Client exemple</div>
+                                                </div>
+                                            </div>
+                                            <div class="prev-boxes">
+                                                <div class="prev-box">
+                                                    <div class="prev-box-title">Véhicule</div>
+                                                    <div class="prev-box-text">Dacia Logan</div>
+                                                </div>
+                                                <div class="prev-box">
+                                                    <div class="prev-box-title">Durée</div>
+                                                    <div class="prev-box-text">5 jours</div>
+                                                </div>
+                                            </div>
+                                            <div class="prev-total"><span>TOTAL TTC</span><span>2 000,00 MAD</span></div>
+                                            <div class="prev-footer">Document généré automatiquement</div>
+                                        </div>
+                                        <div class="template-label">
+                                            <div class="template-name">Classic Blue</div>
+                                            <div class="template-desc">En-tête bleu avec sections structurées pour contrat</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{-- Contract Template 2: Modern Teal --}}
+                                <div class="col-md-4">
+                                    <div class="template-card t2 {{ ($agency->settings['app']['contract_template'] ?? 'template1') === 'template2' ? 'selected' : '' }}" data-template="template2" data-group="contract">
+                                        <div class="template-check"><i class="ti ti-check"></i></div>
+                                        <div class="default-badge">Par défaut</div>
+                                        <div class="template-header">Modern Teal</div>
+                                        <div class="template-preview">
+                                            <div class="prev-top">
+                                                <div class="prev-logo">AG</div>
+                                                <div style="text-align:right;">
+                                                    <div class="prev-inv-label">CONTRAT</div>
+                                                    <div class="prev-inv-no">CTR-202503-0001</div>
+                                                </div>
+                                            </div>
+                                            <div style="height:1px; background:#e2e8f0; margin-bottom:10px;"></div>
+                                            <div class="prev-boxes">
+                                                <div class="prev-box" style="background:#f0fdfa;">
+                                                    <div class="prev-box-title">Agence</div>
+                                                    <div class="prev-box-text">{{ Str::limit($agency->name, 18) }}</div>
+                                                </div>
+                                                <div class="prev-box" style="background:#f0fdfa;">
+                                                    <div class="prev-box-title">Client</div>
+                                                    <div class="prev-box-text">Client exemple</div>
+                                                </div>
+                                            </div>
+                                            <div class="prev-boxes">
+                                                <div class="prev-box" style="background:#f0fdfa;">
+                                                    <div class="prev-box-title">Véhicule</div>
+                                                    <div class="prev-box-text">Dacia Logan</div>
+                                                </div>
+                                                <div class="prev-box" style="background:#f0fdfa;">
+                                                    <div class="prev-box-title">Durée</div>
+                                                    <div class="prev-box-text">5 jours</div>
+                                                </div>
+                                            </div>
+                                            <div class="prev-total"><span>TOTAL TTC</span><span>2 000,00 MAD</span></div>
+                                            <div class="prev-footer">
+                                                <div style="width:30px; height:3px; background:#0f766e; border-radius:2px; margin:0 auto 4px;"></div>
+                                                Document généré automatiquement
+                                            </div>
+                                        </div>
+                                        <div class="template-label">
+                                            <div class="template-name">Modern Teal</div>
+                                            <div class="template-desc">Design moderne avec barre d'accent pour contrat</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{-- Contract Template 3: Formulaire Classique --}}
+                                <div class="col-md-4">
+                                    <div class="template-card t3 {{ ($agency->settings['app']['contract_template'] ?? 'template1') === 'template3' ? 'selected' : '' }}" data-template="template3" data-group="contract">
+                                        <div class="template-check"><i class="ti ti-check"></i></div>
+                                        <div class="default-badge">Par défaut</div>
+                                        <div class="template-header">Formulaire Classique</div>
+                                        <div class="template-preview">
+                                            <div style="text-align:center; font-weight:700; font-size:9px; padding:6px 0; border-bottom:1px solid #ccc; margin-bottom:8px; letter-spacing:0.5px;">
+                                                CONTRAT DE LOCATION DE VEHICULE
+                                            </div>
+                                            <div style="display:flex; gap:6px; margin-bottom:8px; align-items:center;">
+                                                <div class="prev-logo" style="width:24px; height:24px; font-size:8px; border-radius:4px;">AG</div>
+                                                <div style="font-size:8px; color:#555; text-align:center; flex:1;">{{ Str::limit($agency->name, 20) }}</div>
+                                            </div>
+                                            <div style="background:#ecf0f1; padding:3px 6px; font-size:7px; font-weight:700; margin-bottom:4px;">VEHICULE</div>
+                                            <div style="font-size:8px; color:#555; padding:2px 6px; border-bottom:1px solid #eee;">Marque: Dacia - Logan</div>
+                                            <div style="font-size:8px; color:#555; padding:2px 6px; border-bottom:1px solid #eee;">Durée: 5 jours</div>
+                                            <div style="background:#ecf0f1; padding:3px 6px; font-size:7px; font-weight:700; margin: 4px 0;">LOCATAIRE</div>
+                                            <div style="font-size:8px; color:#555; padding:2px 6px; border-bottom:1px solid #eee;">Nom: Client | CIN: XX123</div>
+                                            <div style="background:#ecf0f1; padding:3px 6px; font-size:7px; font-weight:700; margin: 4px 0;">2ème CONDUCTEUR</div>
+                                            <div style="font-size:8px; color:#aaa; padding:2px 6px;">---</div>
+                                            <div class="prev-total" style="margin-top:6px;"><span>TOTAL</span><span>2 000 Dhs</span></div>
+                                        </div>
+                                        <div class="template-label">
+                                            <div class="template-name">Formulaire Classique</div>
+                                            <div class="template-desc">Style formulaire officiel avec bordures et sections détaillées</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @error('app.contract_template')
+                                <small class="text-danger d-block mt-3">{{ $message }}</small>
+                            @enderror
+                        </div>
+                    </div>
+
+                    {{-- ── Save Button ── --}}
+                    <div class="card mt-4">
+                        <div class="card-body">
                             <div class="d-flex align-items-center justify-content-end">
-                                <a href="{{ route('backoffice.agencies.index') }}" class="btn btn-light me-2">Cancel</a>
-                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="ti ti-check me-1"></i>Enregistrer les modèles
+                                </button>
                             </div>
                         </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
-        <!-- /Settings Prefix -->
     </div>
-    
-    <!-- Footer-->
-    <div class="footer d-sm-flex align-items-center justify-content-between bg-white p-3">
-        <p class="mb-0">
-            <a href="javascript:void(0);">Privacy Policy</a>
-            <a href="javascript:void(0);" class="ms-4">Terms of Use</a>
-        </p>
-        <p>&copy; 2025 Dreamsrent, Made with <span class="text-danger">❤</span> by <a href="javascript:void(0);"
-                class="text-secondary">Dreams</a></p>
-    </div>
-    <!-- /Footer-->
 </div>
 <!-- /Page Wrapper -->
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const templateCards = document.querySelectorAll('.invoice-template-card');
-    const hiddenInput = document.getElementById('selected_template');
-    
-    templateCards.forEach(card => {
-        card.addEventListener('click', function(e) {
-            // Don't select if clicking on preview button or contact button
-            if (e.target.closest('.preview-btn') || e.target.closest('.btn-contact')) {
-                return;
-            }
-            templateCards.forEach(c => c.classList.remove('selected'));
+    const invoiceInput = document.getElementById('selected_invoice_template');
+    const contractInput = document.getElementById('selected_contract_template');
+
+    document.querySelectorAll('.template-card').forEach(card => {
+        card.addEventListener('click', function() {
+            const group = this.dataset.group;
+            // Deselect only cards in the same group
+            document.querySelectorAll(`.template-card[data-group="${group}"]`).forEach(c => c.classList.remove('selected'));
             this.classList.add('selected');
-            const template = this.dataset.template;
-            hiddenInput.value = template;
+
+            if (group === 'invoice') {
+                invoiceInput.value = this.dataset.template;
+            } else if (group === 'contract') {
+                contractInput.value = this.dataset.template;
+            }
         });
     });
-});
-
-function previewTemplate(template, event) {
-    event.stopPropagation();
-    
-    let previewHtml = '';
-    
-    if (template === 'template1') {
-        previewHtml = `
-            <div class="invoice-preview template-1" style="min-height: auto; padding: 20px;">
-                <div class="template-badge-main">General Invoice</div>
-                <div class="preview-header">
-                    <span class="preview-company">{{ $agency->name }}</span>
-                    <span class="preview-invoice-no">INV-001</span>
-                </div>
-                <div class="client-info">
-                    <strong>Client:</strong> Jean Dupont<br>
-                    <small>Vignette client 1</small>
-                </div>
-                <div class="items-table">
-                    <div class="item-row"><span>Renault Clio (7 jours)</span><span>350,00 €</span></div>
-                    <div class="item-row"><span>Assurance complète</span><span>120,00 €</span></div>
-                    <div class="item-row"><span>GPS</span><span>35,00 €</span></div>
-                    <div class="item-row"><span>Siège bébé</span><span>25,00 €</span></div>
-                </div>
-                <div class="total-row"><span>TOTAL</span><span>530,00 €</span></div>
-                <div class="footer-note">Paiement dû sous 15 jours</div>
-            </div>
-        `;
-    } else if (template === 'template2') {
-        previewHtml = `
-            <div class="invoice-preview template-2" style="min-height: auto; padding: 20px;">
-                <div class="template-badge-main">General Invoice</div>
-                <div class="preview-header">
-                    <span class="preview-company">{{ $agency->name }}</span>
-                    <span class="preview-invoice-no">INV-001</span>
-                </div>
-                <div class="client-info">
-                    <strong>Client:</strong> Jean Dupont<br>
-                    <small>Vignette client 1</small>
-                </div>
-                <div class="items-table">
-                    <div class="item-row"><span>Peugeot 308 (5 jours)</span><span>275,00 €</span></div>
-                    <div class="item-row"><span>Assurance de base</span><span>75,00 €</span></div>
-                    <div class="item-row"><span>Kilométrage illimité</span><span>50,00 €</span></div>
-                </div>
-                <div class="total-row"><span>TOTAL</span><span>400,00 €</span></div>
-                <div class="footer-note">Merci de votre confiance</div>
-            </div>
-        `;
-    }
-    
-    document.getElementById('previewContent').innerHTML = previewHtml;
-    document.getElementById('previewModal').classList.add('active');
-}
-
-function closePreview() {
-    document.getElementById('previewModal').classList.remove('active');
-}
-
-function contactOwner(event) {
-    event.stopPropagation();
-    
-    // You can replace this with actual contact logic
-    const email = '{{ $agency->email ?? "contact@dreamsrent.com" }}';
-    const subject = encodeURIComponent('Demande d\'accès au template Premium');
-    const body = encodeURIComponent('Bonjour,\n\nJe souhaiterais obtenir plus d\'informations sur le template Premium pour mes factures.\n\nCordialement');
-    
-    window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
-}
-
-// Close modal when clicking outside
-document.addEventListener('click', function(e) {
-    const modal = document.getElementById('previewModal');
-    if (e.target === modal) {
-        closePreview();
-    }
 });
 </script>
 @endsection

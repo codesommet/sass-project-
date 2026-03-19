@@ -121,7 +121,7 @@ class AgencySubscriptionController extends Controller
             ->orderBy('name')
             ->get(['id', 'name']);
 
-        return view('backoffice.agency-subscriptions.create', compact('agencies'));
+        return redirect()->route('backoffice.agency-subscriptions.index');
     }
 
     /**
@@ -170,7 +170,7 @@ class AgencySubscriptionController extends Controller
             ->latest()
             ->first();
         
-        return view('Backoffice.profile.my-subscription', [
+        return view('backoffice.profile.my-subscription', [
             'subscription' => $subscription,
             'agency' => $agency
         ]);
@@ -193,10 +193,7 @@ class AgencySubscriptionController extends Controller
             'can_delete' => auth()->user()->can('agency-subscriptions.general.delete'),
         ];
 
-        return view('backoffice.agency-subscriptions.show', [
-            'subscription' => $agencySubscription,
-            'permissions' => $permissions
-        ]);
+        return redirect()->route('backoffice.agency-subscriptions.index');
     }
 
     /**
@@ -215,10 +212,7 @@ class AgencySubscriptionController extends Controller
             ->orderBy('name')
             ->get(['id', 'name']);
 
-        return view('backoffice.agency-subscriptions.edit', [
-            'subscription' => $agencySubscription,
-            'agencies'     => $agencies,
-        ]);
+        return redirect()->route('backoffice.agency-subscriptions.index');
     }
 
     /**

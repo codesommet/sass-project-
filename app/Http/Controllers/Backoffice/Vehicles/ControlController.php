@@ -110,7 +110,7 @@ class ControlController extends Controller
             'can_delete' => auth()->user()->can('vehicle-controls.general.delete'),
         ];
 
-        return view('Backoffice.controls.index', compact('controls', 'vehicles', 'rentalContracts', 'permissions'));
+        return view('backoffice.controls.index', compact('controls', 'vehicles', 'rentalContracts', 'permissions'));
     }
 
     /**
@@ -134,7 +134,7 @@ class ControlController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('Backoffice.controls.partials._modal_create', compact('vehicles', 'rentalContracts'));
+        return view('backoffice.controls.partials._modal_create', compact('vehicles', 'rentalContracts'));
     }
 
     /**
@@ -210,7 +210,7 @@ class ControlController extends Controller
             'can_delete' => auth()->user()->can('vehicle-controls.general.delete'),
         ];
 
-        return view('Backoffice.controls.show', compact('control', 'permissions'));
+        return view('backoffice.controls.show', compact('control', 'permissions'));
     }
 
     /**
@@ -238,7 +238,7 @@ class ControlController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('Backoffice.controls.partials._modal_edit', compact('control', 'vehicles', 'rentalContracts'));
+        return view('backoffice.controls.partials._modal_edit', compact('control', 'vehicles', 'rentalContracts'));
     }
 
     /**

@@ -172,7 +172,7 @@ class RentalContractController extends Controller
         // Generate unique contract number
         $contractNumber = $this->generateContractNumber();
 
-        return view('backoffice.rental-contracts.create', compact('vehicles', 'clients', 'contractNumber'));
+        return view('backoffice.rental-contracts.partials._modal_create', compact('vehicles', 'clients', 'contractNumber'));
     }
 
     /**
@@ -411,7 +411,7 @@ class RentalContractController extends Controller
         // Load clients with pivot data
         $rentalContract->load('clients');
 
-        return view('backoffice.rental-contracts.edit', compact('rentalContract', 'vehicles', 'clients'));
+        return view('backoffice.rental-contracts.partials._modal_edit', compact('rentalContract', 'vehicles', 'clients'));
     }
 
     /**

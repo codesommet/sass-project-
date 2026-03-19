@@ -33,7 +33,7 @@ class AgencySettingsController extends Controller
         }
         
         // Check if user has edit permission
-        if (!$user->can('agencies.general.edit')) {
+        if (!$user->can('agency-settings.general.edit')) {
             abort(403, 'Vous n\'avez pas la permission de modifier les paramètres de l\'agence.');
         }
     }
@@ -45,7 +45,7 @@ class AgencySettingsController extends Controller
     {
         $this->checkAgencyPermission($agency);
 
-        return view('backoffice.agencies.settings.edit', compact('agency'));
+        return view('backoffice.profile.profile-setting', compact('agency'));
     }
 
     /**
@@ -55,7 +55,7 @@ class AgencySettingsController extends Controller
     {
         $this->checkAgencyPermission($agency);
 
-        return view('Backoffice.profile.notifications-setting', compact('agency'));
+        return view('backoffice.profile.notifications-setting', compact('agency'));
     }
 
     /**
@@ -65,7 +65,7 @@ class AgencySettingsController extends Controller
     {
         //$this->checkAgencyPermission($agency);
 
-        return view('Backoffice.profile.invoice-template', compact('agency'));
+        return view('backoffice.profile.invoice-template', compact('agency'));
     }
 
     /**
@@ -75,7 +75,7 @@ class AgencySettingsController extends Controller
     {
         $this->checkAgencyPermission($agency);
 
-        return view('Backoffice.profile.company-setting', compact('agency'));
+        return view('backoffice.profile.company-setting', compact('agency'));
     }
 
     /**
@@ -85,7 +85,7 @@ class AgencySettingsController extends Controller
     {
         $this->checkAgencyPermission($agency);
 
-        return view('Backoffice.profile.signatures-setting', compact('agency'));
+        return view('backoffice.profile.signatures-setting', compact('agency'));
     }
 
     /**
@@ -95,7 +95,7 @@ class AgencySettingsController extends Controller
     {
         $this->checkAgencyPermission($agency);
         
-        return view('Backoffice.profile.website-setting', compact('agency'));
+        return view('backoffice.profile.website-setting', compact('agency'));
     }
 
     /**
@@ -145,7 +145,7 @@ public function updateWebsite(Request $request, Agency $agency): RedirectRespons
     {
         $this->checkAgencyPermission($agency);
         
-        return view('Backoffice.profile.invoice-settings', compact('agency'));
+        return view('backoffice.profile.invoice-settings', compact('agency'));
     }
 
     /**

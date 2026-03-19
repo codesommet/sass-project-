@@ -110,7 +110,7 @@ class OilChangeController extends Controller
                 'can_delete' => auth()->user()->can('vehicle-oil-changes.general.delete'),
             ];
 
-            return view('Backoffice.oil-changes.index', [
+            return view('backoffice.oil-changes.index', [
                 'vehicle' => null,
                 'oilChanges' => $oilChanges,
                 'availableMechanics' => $availableMechanics,
@@ -123,11 +123,17 @@ class OilChangeController extends Controller
         $vehicle = Vehicle::find($vehicleId);
         
         if (!$vehicle) {
-            return view('Backoffice.oil-changes.index', [
+            return view('backoffice.oil-changes.index', [
                 'vehicle' => null,
                 'oilChanges' => new LengthAwarePaginator([], 0, 15),
                 'availableMechanics' => collect([]),
-                'isGlobalView' => false
+                'isGlobalView' => false,
+                'permissions' => [
+                    'can_view' => auth()->user()->can('vehicle-oil-changes.general.view'),
+                    'can_create' => auth()->user()->can('vehicle-oil-changes.general.create'),
+                    'can_edit' => auth()->user()->can('vehicle-oil-changes.general.edit'),
+                    'can_delete' => auth()->user()->can('vehicle-oil-changes.general.delete'),
+                ],
             ]);
         }
         
@@ -211,7 +217,7 @@ class OilChangeController extends Controller
             'can_delete' => auth()->user()->can('vehicle-oil-changes.general.delete'),
         ];
 
-        return view('Backoffice.oil-changes.index', compact('vehicle', 'oilChanges', 'availableMechanics', 'permissions'));
+        return view('backoffice.oil-changes.index', compact('vehicle', 'oilChanges', 'availableMechanics', 'permissions'));
     }
 
     public function create(Vehicle $vehicle = null)
@@ -222,7 +228,7 @@ class OilChangeController extends Controller
         }
 
         $vehicles = Vehicle::orderBy('registration_number')->get();
-        return view('Backoffice.oil-changes.partials._modal_create', compact('vehicle', 'vehicles'));
+        return view('backoffice.oil-changes.partials._modal_create', compact('vehicle', 'vehicles'));
     }
 
     public function store(VehicleOilChangeStoreRequest $request)
@@ -293,7 +299,7 @@ class OilChangeController extends Controller
             'can_delete' => auth()->user()->can('vehicle-oil-changes.general.delete'),
         ];
 
-        return view('Backoffice.oil-changes.show', compact('vehicle', 'oilChange', 'permissions'));
+        return view('backoffice.oil-changes.show', compact('vehicle', 'oilChange', 'permissions'));
     }
 
     public function edit(Vehicle $vehicle, VehicleOilChange $oilChange)
@@ -306,7 +312,7 @@ class OilChangeController extends Controller
         $this->authorize('update', $vehicle);
         $this->verifyResource($vehicle, $oilChange);
         $vehicles = Vehicle::orderBy('registration_number')->get();
-        return view('Backoffice.oil-changes.partials._modal_edit', compact('vehicle', 'oilChange', 'vehicles'));
+        return view('backoffice.oil-changes.partials._modal_edit', compact('vehicle', 'oilChange', 'vehicles'));
     }
 
     public function update(VehicleOilChangeUpdateRequest $request, Vehicle $vehicle, VehicleOilChange $oilChange)

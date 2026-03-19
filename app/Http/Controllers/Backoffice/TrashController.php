@@ -85,7 +85,7 @@ class TrashController extends Controller
             }
         }
 
-        return view('Backoffice.trash.index', [
+        return view('backoffice.trash.index', [
             'data' => $data,
             'total' => $total
         ]);

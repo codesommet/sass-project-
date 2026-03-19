@@ -99,11 +99,15 @@ class ContractPDFController extends Controller
             'generated_by' => auth()->user()->name ?? 'System'
         ];
         
-        $pdf = Pdf::loadView('backoffice.rental-contracts.pdf.single', $data);
+        // Use the selected template from agency settings
+        $template = $agency?->settings['app']['contract_template'] ?? 'template1';
+        $viewName = in_array($template, ['template1', 'template2', 'template3']) ? $template : 'template1';
+
+        $pdf = Pdf::loadView('backoffice.rental-contracts.pdf.' . $viewName, $data);
         $pdf->setPaper('A4', 'portrait');
-        
+
         $filename = 'contrat_' . $contract->contract_number . '_' . date('Y-m-d');
-        
+
         return $pdf->download($filename . '.pdf');
     }
 
@@ -229,9 +233,13 @@ class ContractPDFController extends Controller
             'generated_by' => auth()->user()->name ?? 'System'
         ];
         
-        $pdf = Pdf::loadView('backoffice.rental-contracts.pdf.single', $data);
+        // Use the selected template from agency settings
+        $template = $agency?->settings['app']['contract_template'] ?? 'template1';
+        $viewName = in_array($template, ['template1', 'template2', 'template3']) ? $template : 'template1';
+
+        $pdf = Pdf::loadView('backoffice.rental-contracts.pdf.' . $viewName, $data);
         $pdf->setPaper('A4', 'portrait');
-        
+
         return $pdf->stream('contrat_' . $contract->contract_number . '.pdf');
     }
 }

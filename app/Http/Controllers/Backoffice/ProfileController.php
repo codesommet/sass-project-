@@ -19,7 +19,7 @@ class ProfileController extends Controller
         $user = auth('backoffice')->user();
         $agency = $user->agency;
 
-        return view('Backoffice.profile.profile-setting', [
+        return view('backoffice.profile.profile-setting', [
             'agency' => $agency,
             'user' => $user,
         ]);
@@ -160,7 +160,7 @@ public function updateWebsite(Request $request, Agency $agency): RedirectRespons
         $user = auth('backoffice')->user();
         $agency = $user->agency;
 
-        return view('Backoffice.profile.change-password', [
+        return view('backoffice.profile.change-password', [
             'agency' => $agency,
             'user' => $user,
         ]);

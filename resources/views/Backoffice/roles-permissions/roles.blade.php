@@ -106,6 +106,10 @@
                                                     <i class="ti ti-dots-vertical"></i>
                                                 </button>
 
+                                                @php
+                                                    // agency-admin role is protected — only super-admin can edit/delete it
+                                                    $isProtectedRole = in_array($role->name, ['super-admin', 'agency-admin']) && !($isSuperAdmin ?? false);
+                                                @endphp
                                                 <ul class="dropdown-menu dropdown-menu-end p-2">
                                                     {{-- Gérer les permissions - contrôlé par permission VIEW --}}
                                                     @can('roles-permissions.general.view')
@@ -117,6 +121,7 @@
                                                     </li>
                                                     @endcan
 
+                                                    @unless($isProtectedRole)
                                                     {{-- Modifier - contrôlé par permission EDIT --}}
                                                     @can('roles-permissions.general.edit')
                                                     <li>
@@ -137,7 +142,7 @@
                                                             <hr class="dropdown-divider">
                                                         </li>
                                                         <li>
-                                                            <a class="dropdown-item rounded-1 text-danger" 
+                                                            <a class="dropdown-item rounded-1 text-danger"
                                                                href="#"
                                                                onclick="event.preventDefault(); event.stopPropagation(); document.getElementById('deleteRoleForm').action = '{{ route('backoffice.roles.destroy', $role->id) }}'; document.getElementById('deleteRoleName').innerText = '{{ $role->name }}'; new bootstrap.Modal(document.getElementById('delete_role')).show(); return false;">
                                                                 <i class="ti ti-trash me-1"></i>Supprimer
@@ -145,6 +150,7 @@
                                                         </li>
                                                         @endif
                                                     @endcan
+                                                    @endunless
                                                 </ul>
                                             </div>
                                         </td>

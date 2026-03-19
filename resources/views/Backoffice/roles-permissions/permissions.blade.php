@@ -24,6 +24,9 @@
                     <p class="mb-0">Rôle</p>
                     <h6 class="fw-medium">{{ $role->name ?? '—' }}</h6>
                 </div>
+                @if($readOnly ?? false)
+                    <span class="badge bg-secondary ms-3">Lecture seule</span>
+                @endif
             </div>
 
             <form method="POST" action="{{ route('backoffice.roles-permissions.permissions.update', $role->id) }}"
@@ -51,7 +54,8 @@
                                 <div class="no-sort">
                                     <div class="form-check form-check-md">
                                         <input class="form-check-input js-group-allow-all" type="checkbox"
-                                            id="{{ $groupId }}" data-group="{{ $groupId }}">
+                                            id="{{ $groupId }}" data-group="{{ $groupId }}"
+                                            @disabled($readOnly ?? false)>
                                         <label class="form-check-label" for="{{ $groupId }}">Allow All</label>
                                     </div>
                                 </div>
@@ -96,8 +100,8 @@
                                                     <td class="text-center">
                                                         <div class="form-check form-check-md d-flex justify-content-center">
                                                             <input class="form-check-input js-perm" type="checkbox"
-                                                                @if ($name) name="{{ $name }}" value="1" @endif
-                                                                @checked($checked) @disabled(empty($permId))
+                                                                @if ($name && !($readOnly ?? false)) name="{{ $name }}" value="1" @endif
+                                                                @checked($checked) @disabled(empty($permId) || ($readOnly ?? false))
                                                                 data-group="{{ $groupId }}"
                                                                 data-row="{{ $rowKey }}">
                                                         </div>
@@ -108,7 +112,8 @@
                                                     <div class="form-check form-check-md d-flex justify-content-center">
                                                         <input class="form-check-input js-row-allow-all" type="checkbox"
                                                             data-group="{{ $groupId }}"
-                                                            data-row="{{ $rowKey }}">
+                                                            data-row="{{ $rowKey }}"
+                                                            @disabled($readOnly ?? false)>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -133,6 +138,7 @@
                 @endforelse
 
                 {{-- Footer Actions --}}
+                @if(($permissions['can_edit'] ?? false) && !($readOnly ?? false))
                 <div class="card mb-0">
                     <div class="card-body py-2 my-1">
                         <div class="d-flex justify-content-end align-items-center">
@@ -145,6 +151,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
             </form>
 
             <div class="table-footer"></div>

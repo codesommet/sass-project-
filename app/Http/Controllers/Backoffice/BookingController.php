@@ -153,10 +153,10 @@ class BookingController extends Controller
             // Add agency
             $data['agency_id'] = Auth::guard('backoffice')->user()->agency_id;
 
-            // Calculate booked days
+            // Calculate booked days (include both start and end day)
             $startDate = Carbon::parse($data['start_date']);
             $endDate = Carbon::parse($data['end_date']);
-            $data['booked_days'] = $startDate->diffInDays($endDate);
+            $data['booked_days'] = max($startDate->diffInDays($endDate) + 1, 1);
 
             // Set datetime fields
             $data['start_at'] = Carbon::parse($data['start_date'] . ' 00:00:00');
@@ -256,7 +256,7 @@ class BookingController extends Controller
             if (isset($data['start_date']) || isset($data['end_date'])) {
                 $startDate = isset($data['start_date']) ? Carbon::parse($data['start_date']) : $booking->start_date;
                 $endDate = isset($data['end_date']) ? Carbon::parse($data['end_date']) : $booking->end_date;
-                $data['booked_days'] = $startDate->diffInDays($endDate);
+                $data['booked_days'] = max($startDate->diffInDays($endDate) + 1, 1);
 
                 // Update datetime fields
                 $data['start_at'] = Carbon::parse($startDate->format('Y-m-d') . ' 00:00:00');
@@ -444,7 +444,7 @@ class BookingController extends Controller
             ->with(['client', 'vehicle'])
             ->get();
 
-        return view('Backoffice.bookings.calendar', [
+        return view('backoffice.bookings.calendar', [
             'bookings' => $bookings,
         ]);
     }

@@ -71,7 +71,7 @@ class VehicleModelController extends Controller
             ->orderBy('name')
             ->get();
 
-        return view('backoffice.vehicles.create', compact('vehicleModels'));
+        return redirect()->route('backoffice.vehicle-models.index');
     }
 
     /**
@@ -122,7 +122,7 @@ class VehicleModelController extends Controller
             'can_delete' => auth()->user()->can('vehicle-models.general.delete'),
         ];
 
-        return view('backoffice.vehicle-models.show', compact('vehicleModel', 'permissions'));
+        return redirect()->route('backoffice.vehicle-models.index');
     }
 
     /**
@@ -141,7 +141,7 @@ class VehicleModelController extends Controller
             ->orderBy('name')
             ->get();
 
-        return view('backoffice.vehicle-models.edit', compact('vehicleModel', 'brands'));
+        return redirect()->route('backoffice.vehicle-models.index');
     }
 
     /**

@@ -6,12 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Traits\WithNotifications;
 use Illuminate\Support\Facades\DB;
 
 class NotificationController extends Controller
 {
-    use WithNotifications;
 
     /**
      * Display active notifications.

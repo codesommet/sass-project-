@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(php artisan:*)",
+      "Bash(npm install:*)",
+      "Bash(grep -n \"}\\);$\" /c/Users/ASUS/Desktop/Clients/Projet-Stage/routes/Backoffice.php)",
+      "Bash(grep -r 'This action is unauthorized' /c/Users/ASUS/Desktop/Clients/Projet-Stage --include=*.php)",
+      "Bash(ls -la /c/Users/ASUS/Desktop/Clients/Projet-Stage/app/Http/Requests/*.php)",
+      "Bash(grep -r CheckBackofficePermission /c/Users/ASUS/Desktop/Clients/Projet-Stage --include=*.php)"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\ASUS\\Desktop\\Clients\\Projet-Stage\\database\\migrations"
+    ]
+  }
+}

@@ -35,6 +35,9 @@ class RolesAndSuperAdminSeeder extends Seeder
             'agency-subscriptions' => [
                 'general' => ['view', 'create', 'edit', 'delete'],
             ],
+            'agency-settings' => [
+                'general' => ['view', 'edit'],
+            ],
             
             // ACCÈS SECTION
             'roles-permissions' => [
@@ -127,6 +130,16 @@ class RolesAndSuperAdminSeeder extends Seeder
                 'general' => ['view', 'create', 'edit', 'delete'],
             ],
             
+            // REPORTS SECTION
+            'reports' => [
+                'general' => ['view'],
+            ],
+
+            // NOTIFICATIONS SECTION
+            'notifications' => [
+                'general' => ['view'],
+            ],
+
             // TRASH SECTION
             'trash' => [
                 'general' => ['view', 'restore', 'delete'],
@@ -183,14 +196,12 @@ class RolesAndSuperAdminSeeder extends Seeder
         Role::findByName('super-admin', 'backoffice')
             ->syncPermissions($allPermissions);
 
-        // 2. AGENCY-ADMIN: All permissions EXCEPT global modules
+        // 2. AGENCY-ADMIN: All permissions EXCEPT super-admin-only modules
         $agencyAdminPerms = array_filter($allPermissions, function ($perm) {
-            // Exclude global modules that only super-admin should manage
+            // Exclude only super-admin-only modules
             return !str_starts_with($perm, 'agencies.') &&
                    !str_starts_with($perm, 'agency-subscriptions.') &&
-                   !str_starts_with($perm, 'users.') &&
-                   !str_starts_with($perm, 'roles-permissions.') &&
-                   !str_starts_with($perm, 'trash.'); // Trash management for super-admin only
+                   !str_starts_with($perm, 'trash.');
         });
         Role::findByName('agency-admin', 'backoffice')
             ->syncPermissions(array_values($agencyAdminPerms));

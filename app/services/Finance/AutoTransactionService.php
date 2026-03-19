@@ -17,36 +17,32 @@ use Carbon\Carbon;
 
 class AutoTransactionService
 {
-    protected $defaultAccountId;
-
-    public function __construct()
-    {
-        $this->defaultAccountId = $this->getDefaultAccount();
-    }
+    protected $defaultAccountCache = [];
 
     /**
-     * Get or create default cash account
+     * Get or create default cash account for a given agency
      */
-    protected function getDefaultAccount()
+    protected function getDefaultAccountId(?int $agencyId = null): int
     {
-        $agencyId = auth()->user()->agency_id;
-        
-        $account = FinancialAccount::where('agency_id', $agencyId)
-            ->where('is_default', true)
-            ->first();
-            
-        if (!$account) {
-            $account = FinancialAccount::create([
-                'agency_id' => $agencyId,
+        $agencyId = $agencyId ?? auth()->user()->agency_id;
+
+        if (isset($this->defaultAccountCache[$agencyId])) {
+            return $this->defaultAccountCache[$agencyId];
+        }
+
+        $account = FinancialAccount::firstOrCreate(
+            ['agency_id' => $agencyId, 'is_default' => true],
+            [
                 'name' => 'Caisse principale',
                 'type' => 'cash',
                 'initial_balance' => 0,
                 'current_balance' => 0,
-                'currency' => 'MAD',
-                'is_default' => true
-            ]);
-        }
-        
+                'is_default' => true,
+            ]
+        );
+
+        $this->defaultAccountCache[$agencyId] = $account->id;
+
         return $account->id;
     }
 
@@ -74,7 +70,7 @@ class AutoTransactionService
             // Créer la transaction
             $transaction = FinancialTransaction::create([
                 'agency_id' => $contract->agency_id,
-                'financial_account_id' => $this->defaultAccountId,
+                'financial_account_id' => $this->getDefaultAccountId($contract->agency_id),
                 'date' => $contract->start_date,
                 'type' => 'income',
                 'amount' => $amount,
@@ -218,7 +214,7 @@ class AutoTransactionService
             
             $transaction = FinancialTransaction::create([
                 'agency_id' => $credit->agency_id,
-                'financial_account_id' => $this->defaultAccountId,
+                'financial_account_id' => $this->getDefaultAccountId($credit->agency_id),
                 'date' => $payment->paid_date ?? now(),
                 'type' => 'expense',
                 'amount' => $montantTotal,
@@ -292,7 +288,7 @@ class AutoTransactionService
 
             $transaction = FinancialTransaction::create([
                 'agency_id' => $agencyId,
-                'financial_account_id' => $this->defaultAccountId,
+                'financial_account_id' => $this->getDefaultAccountId($agencyId),
                 'date' => $document->date ?? $document->created_at ?? now(),
                 'type' => 'expense',
                 'amount' => $amount,

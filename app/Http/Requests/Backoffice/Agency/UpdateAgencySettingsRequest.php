@@ -8,7 +8,15 @@ class UpdateAgencySettingsRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return auth('backoffice')->user()?->hasRole('super-admin', 'backoffice') ?? false;
+        $user = auth('backoffice')->user();
+        if (!$user) return false;
+
+        // Super-admin can update any agency
+        if ($user->hasRole('super-admin', 'backoffice')) return true;
+
+        // Agency users with settings permission can update their own agency
+        $agency = $this->route('agency');
+        return $agency && $user->agency_id === $agency->id && $user->can('agency-settings.general.edit');
     }
 
     public function rules(): array
@@ -30,7 +38,8 @@ class UpdateAgencySettingsRequest extends FormRequest
             'notifications.types.vehicle_management' => ['sometimes', 'boolean'],
 
             // App Settings
-            'app.invoice_template' => ['sometimes', 'string', 'in:modern,classic,minimal'],
+            'app.invoice_template' => ['sometimes', 'string', 'in:template1,template2,template3'],
+            'app.contract_template' => ['sometimes', 'string', 'in:template1,template2,template3'],
 
             // System Settings
             'app.system.default_currency' => ['sometimes', 'string', 'size:3'],
@@ -68,6 +77,7 @@ class UpdateAgencySettingsRequest extends FormRequest
             'notifications.types.user_tenant_notifications' => 'notifications utilisateur',
             'notifications.types.vehicle_management' => 'gestion des véhicules',
             'app.invoice_template' => 'modèle de facture',
+            'app.contract_template' => 'modèle de contrat',
             'app.system.default_currency' => 'devise par défaut',
             'app.system.vat_enabled' => 'TVA activée',
             'app.system.vat_percentage' => 'pourcentage TVA',

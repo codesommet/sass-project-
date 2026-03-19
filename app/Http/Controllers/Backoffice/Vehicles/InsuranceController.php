@@ -109,7 +109,7 @@ class InsuranceController extends Controller
                 'can_delete' => auth()->user()->can('vehicle-insurances.general.delete'),
             ];
 
-            return view('Backoffice.insurances.index', [
+            return view('backoffice.insurances.index', [
                 'vehicle' => null,
                 'insurances' => $insurances,
                 'availableCompanies' => $availableCompanies,
@@ -122,11 +122,17 @@ class InsuranceController extends Controller
         $vehicle = Vehicle::find($vehicleId);
         
         if (!$vehicle) {
-            return view('Backoffice.insurances.index', [
+            return view('backoffice.insurances.index', [
                 'vehicle' => null,
                 'insurances' => new LengthAwarePaginator([], 0, 15),
                 'availableCompanies' => collect([]),
-                'isGlobalView' => false
+                'isGlobalView' => false,
+                'permissions' => [
+                    'can_view' => auth()->user()->can('vehicle-insurances.general.view'),
+                    'can_create' => auth()->user()->can('vehicle-insurances.general.create'),
+                    'can_edit' => auth()->user()->can('vehicle-insurances.general.edit'),
+                    'can_delete' => auth()->user()->can('vehicle-insurances.general.delete'),
+                ],
             ]);
         }
         
@@ -209,7 +215,7 @@ class InsuranceController extends Controller
             'can_delete' => auth()->user()->can('vehicle-insurances.general.delete'),
         ];
 
-        return view('Backoffice.insurances.index', compact('vehicle', 'insurances', 'availableCompanies', 'permissions'));
+        return view('backoffice.insurances.index', compact('vehicle', 'insurances', 'availableCompanies', 'permissions'));
     }
 
     public function create(Vehicle $vehicle = null)
@@ -220,7 +226,7 @@ class InsuranceController extends Controller
         }
 
         $vehicles = Vehicle::orderBy('registration_number')->get();
-        return view('Backoffice.insurances.partials._modal_create', compact('vehicle', 'vehicles'));
+        return view('backoffice.insurances.partials._modal_create', compact('vehicle', 'vehicles'));
     }
 
     public function store(VehicleInsuranceStoreRequest $request)
@@ -291,7 +297,7 @@ class InsuranceController extends Controller
             'can_delete' => auth()->user()->can('vehicle-insurances.general.delete'),
         ];
 
-        return view('Backoffice.insurances.show', compact('vehicle', 'insurance', 'permissions'));
+        return view('backoffice.insurances.show', compact('vehicle', 'insurance', 'permissions'));
     }
 
     public function edit(Vehicle $vehicle, VehicleInsurance $insurance)
@@ -304,7 +310,7 @@ class InsuranceController extends Controller
         $this->authorize('update', $vehicle);
         $this->verifyResource($vehicle, $insurance);
         $vehicles = Vehicle::orderBy('registration_number')->get();
-        return view('Backoffice.insurances.partials._modal_edit', compact('vehicle', 'insurance', 'vehicles'));
+        return view('backoffice.insurances.partials._modal_edit', compact('vehicle', 'insurance', 'vehicles'));
     }
 
     public function update(VehicleInsuranceUpdateRequest $request, Vehicle $vehicle, VehicleInsurance $insurance)

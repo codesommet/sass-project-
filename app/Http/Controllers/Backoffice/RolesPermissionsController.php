@@ -11,16 +11,51 @@ use Spatie\Permission\PermissionRegistrar;
 class RolesPermissionsController extends Controller
 {
     /**
+     * Super-admin-only permission modules — hidden from non-super-admins
+     */
+    private const SUPER_ADMIN_MODULES = [
+        'agencies',
+        'agency-subscriptions',
+        'users',
+        'roles-permissions',
+        'trash',
+    ];
+
+    /**
+     * Check if current user is super-admin
+     */
+    private function isSuperAdmin(): bool
+    {
+        return auth()->guard('backoffice')->user()->hasRole('super-admin');
+    }
+
+    /**
+     * Filter out super-admin-only permissions for non-super-admins
+     */
+    private function filterPermissionsForUser($permissions)
+    {
+        if ($this->isSuperAdmin()) {
+            return $permissions;
+        }
+
+        return $permissions->filter(function ($perm) {
+            $module = explode('.', $perm->name)[0] ?? '';
+            return !in_array($module, self::SUPER_ADMIN_MODULES);
+        });
+    }
+
+    /**
      * Show roles index page
      */
     public function indexRoles(Request $request)
     {
-        // ✅ Vérifier la permission VIEW
+        // Vérifier la permission VIEW
         if (!auth()->guard('backoffice')->user()->can('roles-permissions.general.view')) {
             abort(403, 'Vous n\'avez pas la permission de voir les rôles et permissions.');
         }
 
         $user = auth()->guard('backoffice')->user();
+        $isSuperAdmin = $this->isSuperAdmin();
         $q = trim((string) $request->get('q', ''));
 
         $rolesQuery = Role::query()
@@ -28,19 +63,26 @@ class RolesPermissionsController extends Controller
             ->with(['permissions:id,name,guard_name'])
             ->orderBy('name');
 
+        // Non-super-admins cannot see the super-admin role
+        if (!$isSuperAdmin) {
+            $rolesQuery->where('name', '!=', 'super-admin');
+        }
+
         if ($q !== '') {
             $rolesQuery->where('name', 'like', "%{$q}%");
         }
 
         $roles = $rolesQuery->paginate(15)->withQueryString();
 
-        // Get all permissions for the modal
-        $allPermissions = Permission::query()
-            ->where('guard_name', 'backoffice')
-            ->orderBy('name')
-            ->get();
+        // Get permissions for the modal — filter out super-admin-only modules for non-super-admins
+        $allPermissions = $this->filterPermissionsForUser(
+            Permission::query()
+                ->where('guard_name', 'backoffice')
+                ->orderBy('name')
+                ->get()
+        );
 
-        // ✅ Passer les permissions à la vue
+        // Passer les permissions à la vue
         $permissions = [
             'can_view' => auth()->guard('backoffice')->user()->can('roles-permissions.general.view'),
             'can_create' => auth()->guard('backoffice')->user()->can('roles-permissions.general.create'),
@@ -48,7 +90,7 @@ class RolesPermissionsController extends Controller
             'can_delete' => auth()->guard('backoffice')->user()->can('roles-permissions.general.delete'),
         ];
 
-        return view('Backoffice.roles-permissions.roles', compact('roles', 'allPermissions', 'permissions'));
+        return view('backoffice.roles-permissions.roles', compact('roles', 'allPermissions', 'permissions', 'isSuperAdmin'));
     }
 
     /**
@@ -57,7 +99,7 @@ class RolesPermissionsController extends Controller
      */
     public function showPermissions(Role $role, Request $request)
     {
-        // ✅ Vérifier la permission VIEW
+        // Vérifier la permission VIEW
         if (!auth()->guard('backoffice')->user()->can('roles-permissions.general.view')) {
             abort(403, 'Vous n\'avez pas la permission de voir les permissions.');
         }
@@ -67,11 +109,18 @@ class RolesPermissionsController extends Controller
             abort(404);
         }
 
-        // Get all permissions for backoffice guard
-        $allPermissions = Permission::query()
-            ->where('guard_name', 'backoffice')
-            ->orderBy('name')
-            ->get();
+        // Non-super-admins cannot view super-admin role permissions
+        if ($role->name === 'super-admin' && !$this->isSuperAdmin()) {
+            abort(403, 'Vous n\'avez pas la permission de voir les permissions du super-admin.');
+        }
+
+        // Get permissions — filter out super-admin-only modules for non-super-admins
+        $allPermissions = $this->filterPermissionsForUser(
+            Permission::query()
+                ->where('guard_name', 'backoffice')
+                ->orderBy('name')
+                ->get()
+        );
 
         // Get permissions already assigned to this role
         $rolePermissionIds = $role->permissions()->pluck('id')->toArray();
@@ -122,12 +171,17 @@ class RolesPermissionsController extends Controller
             ksort($resources);
         }
 
-        // ✅ Passer les permissions à la vue
+        // Passer les permissions à la vue
         $permissions = [
             'can_edit' => auth()->guard('backoffice')->user()->can('roles-permissions.general.edit'),
         ];
 
-        return view('Backoffice.roles-permissions.permissions', compact('role', 'matrix', 'allPermissions', 'permissions'));
+        $isSuperAdmin = $this->isSuperAdmin();
+
+        // agency-admin permissions are read-only for non-super-admins
+        $readOnly = !$isSuperAdmin && $role->name === 'agency-admin';
+
+        return view('backoffice.roles-permissions.permissions', compact('role', 'matrix', 'allPermissions', 'permissions', 'isSuperAdmin', 'readOnly'));
     }
 
     /**
@@ -136,7 +190,7 @@ class RolesPermissionsController extends Controller
      */
     public function updatePermissions(Role $role, Request $request)
     {
-        // ✅ Vérifier la permission EDIT
+        // Vérifier la permission EDIT
         if (!auth()->guard('backoffice')->user()->can('roles-permissions.general.edit')) {
             abort(403, 'Vous n\'avez pas la permission de modifier les permissions.');
         }
@@ -146,17 +200,31 @@ class RolesPermissionsController extends Controller
             abort(404);
         }
 
+        // Non-super-admins cannot edit super-admin or agency-admin roles
+        if (in_array($role->name, ['super-admin', 'agency-admin']) && !$this->isSuperAdmin()) {
+            abort(403, 'Vous n\'avez pas la permission de modifier les permissions de ce rôle.');
+        }
+
         try {
             // Get array of permission IDs from request
             // Format: permissions = [id1 => 1, id2 => 1, ...]
             $permissionIds = array_keys($request->input('permissions', []) ?? []);
 
             // Validate that all permission IDs exist
-            $validPermissions = Permission::query()
+            $validPermissionsQuery = Permission::query()
                 ->where('guard_name', 'backoffice')
-                ->whereIn('id', $permissionIds)
-                ->pluck('id')
-                ->toArray();
+                ->whereIn('id', $permissionIds);
+
+            // Non-super-admins cannot assign super-admin-only module permissions
+            if (!$this->isSuperAdmin()) {
+                $validPermissionsQuery->where(function ($q) {
+                    foreach (self::SUPER_ADMIN_MODULES as $module) {
+                        $q->where('name', 'not like', $module . '.%');
+                    }
+                });
+            }
+
+            $validPermissions = $validPermissionsQuery->pluck('id')->toArray();
 
             // Sync permissions: remove old, add new (only valid ones)
             $role->syncPermissions($validPermissions);

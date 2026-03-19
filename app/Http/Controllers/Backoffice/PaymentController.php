@@ -208,7 +208,7 @@ class PaymentController extends Controller
             'can_confirm' => auth()->user()->can('payments.general.edit'),
         ];
 
-        return view('backoffice.payments.partials.show', compact('payment', 'permissions'));
+        return view('backoffice.payments.show', compact('payment', 'permissions'));
     }
 
     /**
@@ -302,9 +302,20 @@ class PaymentController extends Controller
 
             $paymentData = clone $payment;
 
-            // Delete financial transaction if exists
+            // Reverse and delete financial transaction if exists
             if ($payment->financialTransaction) {
-                $payment->financialTransaction->delete();
+                $transaction = $payment->financialTransaction;
+                $account = $transaction->account;
+                if ($account) {
+                    // Reverse the balance effect
+                    if ($transaction->type === 'income') {
+                        $account->current_balance -= $transaction->amount;
+                    } else {
+                        $account->current_balance += $transaction->amount;
+                    }
+                    $account->save();
+                }
+                $transaction->delete();
             }
 
             $payment->delete();
@@ -370,7 +381,7 @@ class PaymentController extends Controller
             ->where('status', 'confirmed')
             ->sum('amount');
 
-        if ($totalPaid >= $invoice->total_ttc) {
+        if (bccomp((string)$totalPaid, (string)$invoice->total_ttc, 2) >= 0) {
             $invoice->update(['status' => 'paid']);
         } elseif ($totalPaid > 0) {
             $invoice->update(['status' => 'partially_paid']);

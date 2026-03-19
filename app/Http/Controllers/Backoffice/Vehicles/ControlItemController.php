@@ -82,7 +82,7 @@ class ControlItemController extends Controller
             'can_delete' => auth()->user()->can('vehicle-control-items.general.delete'),
         ];
 
-        return view('Backoffice.control-items.index', compact('items', 'controls', 'permissions'));
+        return view('backoffice.control-items.index', compact('items', 'controls', 'permissions'));
     }
 
     /**
@@ -103,7 +103,7 @@ class ControlItemController extends Controller
 
         $selectedControlId = $request->query('control_id');
 
-        return view('Backoffice.control-items.partials._modal_create', compact('controls', 'selectedControlId'));
+        return view('backoffice.control-items.partials._modal_create', compact('controls', 'selectedControlId'));
     }
 
     /**
@@ -180,7 +180,7 @@ class ControlItemController extends Controller
             'can_delete' => auth()->user()->can('vehicle-control-items.general.delete'),
         ];
 
-        return view('Backoffice.control-items.show', compact('item', 'permissions'));
+        return view('backoffice.control-items.show', compact('item', 'permissions'));
     }
 
     /**
@@ -203,7 +203,7 @@ class ControlItemController extends Controller
             ->orderBy('control_number')
             ->get();
 
-        return view('Backoffice.control-items.partials._modal_edit', compact('item', 'controls'));
+        return view('backoffice.control-items.partials._modal_edit', compact('item', 'controls'));
     }
 
     /**

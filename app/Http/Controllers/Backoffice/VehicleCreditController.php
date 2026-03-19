@@ -115,7 +115,7 @@ class VehicleCreditController extends Controller
             'can_record_payment' => auth()->user()->can('vehicle-credits.general.edit'), // Enregistrer paiement = edit
         ];
         
-        return view('Backoffice.vehicle-credits.index', compact('credits', 'availableCreditors', 'vehicles', 'permissions'));
+        return view('backoffice.vehicle-credits.index', compact('credits', 'availableCreditors', 'vehicles', 'permissions'));
     }
 
     /**
@@ -135,7 +135,7 @@ class VehicleCreditController extends Controller
             ->orderBy('registration_number')
             ->get();
         
-        return view('Backoffice.vehicle-credits.partials._modal_create', compact('vehicles'));
+        return view('backoffice.vehicle-credits.partials._modal_create', compact('vehicles'));
     }
 
     /**
@@ -154,12 +154,12 @@ class VehicleCreditController extends Controller
         // Nettoyer les entrées avant validation
         $input = $request->all();
         
-        // Supprimer les zéros non significatifs et convertir en nombres
-        $input['down_payment'] = !empty($input['down_payment']) ? (float)ltrim($input['down_payment'], '0') : 0;
-        $input['interest_rate'] = !empty($input['interest_rate']) ? (float)ltrim($input['interest_rate'], '0') : 0;
-        $input['duration_months'] = (int)$input['duration_months'];
-        $input['total_amount'] = (float)$input['total_amount'];
-        $input['monthly_payment'] = (float)$input['monthly_payment'];
+        // Convert to proper numeric types
+        $input['down_payment'] = isset($input['down_payment']) ? (float)$input['down_payment'] : 0;
+        $input['interest_rate'] = isset($input['interest_rate']) ? (float)$input['interest_rate'] : 0;
+        $input['duration_months'] = (int)($input['duration_months'] ?? 0);
+        $input['total_amount'] = (float)($input['total_amount'] ?? 0);
+        $input['monthly_payment'] = (float)($input['monthly_payment'] ?? 0);
         
         $request->merge($input);
         
@@ -298,7 +298,7 @@ class VehicleCreditController extends Controller
             'can_record_payment' => auth()->user()->can('vehicle-credits.general.edit'),
         ];
         
-    return view('Backoffice.vehicle-credits.show', [
+    return view('backoffice.vehicle-credits.show', [
         'credit' => $vehicleCredit,
         'permissions' => $permissions,
         'from' => request('from')
@@ -322,7 +322,7 @@ class VehicleCreditController extends Controller
             ->orderBy('registration_number')
             ->get();
         
-        return view('Backoffice.vehicle-credits.partials._modal_edit', [
+        return view('backoffice.vehicle-credits.partials._modal_edit', [
             'credit' => $vehicleCredit,
             'vehicles' => $vehicles
         ]);
@@ -497,7 +497,7 @@ class VehicleCreditController extends Controller
             ->limit(5)
             ->get();
         
-        return view('Backoffice.vehicle-credits.dashboard', compact('stats', 'recentPayments', 'expiringSoon'));
+        return view('backoffice.vehicle-credits.dashboard', compact('stats', 'recentPayments', 'expiringSoon'));
     }
 
     /**
@@ -532,7 +532,7 @@ class VehicleCreditController extends Controller
         
         $credits = $query->paginate(15)->withQueryString();
         
-        return view('Backoffice.vehicle-credits.trashed', compact('credits'));
+        return view('backoffice.vehicle-credits.trashed', compact('credits'));
     }
 
     /**

@@ -56,7 +56,7 @@ class VehicleBrandController extends Controller
             abort(403, 'Vous n\'avez pas la permission de créer des marques.');
         }
 
-        return view('backoffice.vehicle-brands.create');
+        return redirect()->route('backoffice.vehicle-brands.index');
     }
 
     /**
@@ -116,7 +116,7 @@ class VehicleBrandController extends Controller
             'can_delete' => auth()->user()->can('vehicle-brands.general.delete'),
         ];
 
-        return view('backoffice.vehicle-brands.show', compact('vehicleBrand', 'permissions'));
+        return redirect()->route('backoffice.vehicle-brands.index');
     }
 
     /**
@@ -130,7 +130,7 @@ class VehicleBrandController extends Controller
         }
 
         $this->authorize('update', $vehicleBrand);
-        return view('backoffice.vehicle-brands.edit', compact('vehicleBrand'));
+        return redirect()->route('backoffice.vehicle-brands.index');
     }
 
     /**

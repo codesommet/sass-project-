@@ -98,32 +98,41 @@ class InvoicePDFController extends Controller
             'generated_at' => Carbon::now()->format('d/m/Y H:i'),
             'generated_by' => auth()->user()->name ?? 'System'
         ];
-        
-        $pdf = Pdf::loadView('backoffice.invoices.pdf.single', $data);
+
+        // Use the selected template from agency settings
+        $template = $agency?->settings['app']['invoice_template'] ?? 'template1';
+        $viewName = in_array($template, ['template1', 'template2']) ? $template : 'template1';
+
+        $pdf = Pdf::loadView('backoffice.invoices.pdf.' . $viewName, $data);
         $pdf->setPaper('A4', 'portrait');
-        
+
         $filename = 'facture_' . $invoice->invoice_number . '_' . date('Y-m-d');
-        
+
         return $pdf->download($filename . '.pdf');
     }
 
 
-public function view($id)
-{
-    $invoice = Invoice::with(['client', 'rentalContract', 'items'])->findOrFail($id);
-    
-    // Add the missing variables
-    $generated_at = now()->format('d/m/Y H:i');
-    $generated_by = auth()->user()->name ?? 'System';
-    
-    $pdf = PDF::loadView('Backoffice.invoices.pdf.single', [
-        'invoice' => $invoice,
-        'generated_at' => $generated_at,
-        'generated_by' => $generated_by
-    ]);
-    
-    return $pdf->stream('facture-' . $invoice->invoice_number . '.pdf');
-}
+    public function view($id)
+    {
+        $invoice = Invoice::with(['client', 'rentalContract', 'items', 'agency'])->findOrFail($id);
+
+        $agency = $invoice->agency;
+
+        // Use the selected template from agency settings
+        $template = $agency?->settings['app']['invoice_template'] ?? 'template1';
+        $viewName = in_array($template, ['template1', 'template2']) ? $template : 'template1';
+
+        $pdf = PDF::loadView('backoffice.invoices.pdf.' . $viewName, [
+            'invoice' => $invoice,
+            'agency' => $agency,
+            'logo' => null,
+            'signature' => null,
+            'generated_at' => now()->format('d/m/Y H:i'),
+            'generated_by' => auth()->user()->name ?? 'System',
+        ]);
+
+        return $pdf->stream('facture-' . $invoice->invoice_number . '.pdf');
+    }
     
     /**
      * Export multiple invoices as PDF with logo

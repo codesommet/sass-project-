@@ -97,7 +97,7 @@ class TechnicalCheckController extends Controller
                 'can_delete' => auth()->user()->can('vehicle-technical-checks.general.delete'),
             ];
 
-            return view('Backoffice.technical-checks.index', [
+            return view('backoffice.technical-checks.index', [
                 'vehicle' => null,
                 'technicalChecks' => $technicalChecks,
                 'availableYears' => collect([]),
@@ -110,11 +110,17 @@ class TechnicalCheckController extends Controller
         $vehicle = Vehicle::find($vehicleId);
         
         if (!$vehicle) {
-            return view('Backoffice.technical-checks.index', [
+            return view('backoffice.technical-checks.index', [
                 'vehicle' => null,
                 'technicalChecks' => new LengthAwarePaginator([], 0, 15),
                 'availableYears' => collect([]),
-                'isGlobalView' => false
+                'isGlobalView' => false,
+                'permissions' => [
+                    'can_view' => auth()->user()->can('vehicle-technical-checks.general.view'),
+                    'can_create' => auth()->user()->can('vehicle-technical-checks.general.create'),
+                    'can_edit' => auth()->user()->can('vehicle-technical-checks.general.edit'),
+                    'can_delete' => auth()->user()->can('vehicle-technical-checks.general.delete'),
+                ],
             ]);
         }
         
@@ -191,7 +197,7 @@ class TechnicalCheckController extends Controller
             'can_delete' => auth()->user()->can('vehicle-technical-checks.general.delete'),
         ];
 
-        return view('Backoffice.technical-checks.index', compact('vehicle', 'technicalChecks', 'availableYears', 'permissions'));
+        return view('backoffice.technical-checks.index', compact('vehicle', 'technicalChecks', 'availableYears', 'permissions'));
     }
 
     /**
@@ -206,7 +212,7 @@ class TechnicalCheckController extends Controller
         }
 
         $vehicles = Vehicle::orderBy('registration_number')->get();
-        return view('Backoffice.technical-checks.partials._modal_create', compact('vehicle', 'vehicles'));
+        return view('backoffice.technical-checks.partials._modal_create', compact('vehicle', 'vehicles'));
     }
 
     /**
@@ -285,7 +291,7 @@ class TechnicalCheckController extends Controller
             'can_delete' => auth()->user()->can('vehicle-technical-checks.general.delete'),
         ];
 
-        return view('Backoffice.technical-checks.show', compact('vehicle', 'technicalCheck', 'permissions'));
+        return view('backoffice.technical-checks.show', compact('vehicle', 'technicalCheck', 'permissions'));
     }
 
     /**
@@ -302,7 +308,7 @@ class TechnicalCheckController extends Controller
         $this->authorize('update', $vehicle);
         $this->verifyResource($vehicle, $technicalCheck);
         $vehicles = Vehicle::orderBy('registration_number')->get();
-        return view('Backoffice.technical-checks.partials._modal_edit', compact('vehicle', 'technicalCheck', 'vehicles'));
+        return view('backoffice.technical-checks.partials._modal_edit', compact('vehicle', 'technicalCheck', 'vehicles'));
     }
 
     /**

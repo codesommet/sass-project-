@@ -98,7 +98,7 @@ class UserController extends Controller
             $agencies = Agency::query()->orderBy('name')->get();
         }
 
-        return view('Backoffice.users.create', compact('agencies'));
+        return redirect()->route('backoffice.users.index');
     }
 
     /**
@@ -166,7 +166,7 @@ class UserController extends Controller
             'can_delete' => auth()->user()->can('users.general.delete'),
         ];
 
-        return view('Backoffice.users.show', compact('user', 'permissions'));
+        return redirect()->route('backoffice.users.index');
     }
 
     /**
@@ -191,7 +191,7 @@ class UserController extends Controller
             $agencies = Agency::query()->orderBy('name')->get();
         }
 
-        return view('Backoffice.users.edit', compact('user', 'agencies'));
+        return redirect()->route('backoffice.users.index');
     }
 
     /**

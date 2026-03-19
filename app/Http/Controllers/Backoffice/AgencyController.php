@@ -77,7 +77,7 @@ class AgencyController extends Controller
             abort(403, 'Vous n\'avez pas la permission de créer des agences.');
         }
 
-        return view('backoffice.agencies.create');
+        return redirect()->route('backoffice.agencies.index');
     }
 
     /**
@@ -133,7 +133,7 @@ class AgencyController extends Controller
             'can_delete' => auth()->user()->can('agencies.general.delete'),
         ];
 
-        return view('backoffice.agencies.show', compact('agency', 'stats', 'permissions'));
+        return redirect()->route('backoffice.agencies.index');
     }
 
     /**
@@ -146,7 +146,7 @@ class AgencyController extends Controller
             abort(403, 'Vous n\'avez pas la permission de modifier les agences.');
         }
 
-        return view('backoffice.agencies.edit', compact('agency'));
+        return redirect()->route('backoffice.agencies.index');
     }
 
     /**
@@ -208,13 +208,13 @@ class AgencyController extends Controller
     public function profile(Agency $agency): View
     {
         // ✅ Vérifier la permission VIEW
-        if (!auth()->user()->can('agencies.general.view')) {
-            abort(403, 'Vous n\'avez pas la permission de voir les agences.');
+        if (!auth()->user()->can('agency-settings.general.view')) {
+            abort(403, 'Vous n\'avez pas la permission de voir les paramètres de l\'agence.');
         }
         
         $user = auth()->user();
 
-        return view('Backoffice.profile.profile-setting', [
+        return view('backoffice.profile.profile-setting', [
             'agency' => $agency,
             'user' => $user,
         ]);
@@ -226,8 +226,8 @@ class AgencyController extends Controller
     public function updateProfile(UpdateAgencyProfileRequest $request, Agency $agency): RedirectResponse
     {
         // ✅ Vérifier la permission EDIT
-        if (!auth()->user()->can('agencies.general.edit')) {
-            abort(403, 'Vous n\'avez pas la permission de modifier les agences.');
+        if (!auth()->user()->can('agency-settings.general.edit')) {
+            abort(403, 'Vous n\'avez pas la permission de modifier les paramètres de l\'agence.');
         }
 
         $agency->update([

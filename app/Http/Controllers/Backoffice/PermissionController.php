@@ -10,6 +10,25 @@ use Spatie\Permission\Models\Permission;
 
 class PermissionController extends Controller
 {
+    private const SUPER_ADMIN_MODULES = [
+        'agencies',
+        'agency-subscriptions',
+        'users',
+        'roles-permissions',
+        'trash',
+    ];
+
+    private function isSuperAdminModule(string $permName): bool
+    {
+        $module = explode('.', $permName)[0] ?? '';
+        return in_array($module, self::SUPER_ADMIN_MODULES);
+    }
+
+    private function isSuperAdmin(): bool
+    {
+        return auth()->guard('backoffice')->user()->hasRole('super-admin');
+    }
+
     public function index(Request $request)
     {
         $query = Permission::query()
@@ -27,12 +46,17 @@ class PermissionController extends Controller
 
     public function create()
     {
-        return view('backoffice.permissions.create');
+        return redirect()->route('backoffice.roles-permissions.roles');
     }
 
     public function store(PermissionStoreRequest $request)
     {
         $data = $request->validated();
+
+        // Non-super-admins cannot create permissions for super-admin-only modules
+        if (!$this->isSuperAdmin() && $this->isSuperAdminModule($data['name'])) {
+            abort(403, 'Vous n\'avez pas la permission de créer des permissions pour ce module.');
+        }
 
         $permission = Permission::create([
             'name'       => $data['name'],
@@ -57,19 +81,24 @@ class PermissionController extends Controller
     {
         abort_unless($permission->guard_name === 'backoffice', 404);
 
-        return view('backoffice.permissions.show', compact('permission'));
+        return redirect()->route('backoffice.roles-permissions.roles');
     }
 
     public function edit(Permission $permission)
     {
         abort_unless($permission->guard_name === 'backoffice', 404);
 
-        return view('backoffice.permissions.edit', compact('permission'));
+        return redirect()->route('backoffice.roles-permissions.roles');
     }
 
     public function update(PermissionUpdateRequest $request, Permission $permission)
     {
         abort_unless($permission->guard_name === 'backoffice', 404);
+
+        // Non-super-admins cannot edit super-admin-only module permissions
+        if (!$this->isSuperAdmin() && $this->isSuperAdminModule($permission->name)) {
+            abort(403, 'Vous n\'avez pas la permission de modifier cette permission.');
+        }
 
         $data = $request->validated();
 
@@ -95,8 +124,12 @@ class PermissionController extends Controller
     {
         abort_unless($permission->guard_name === 'backoffice', 404);
 
+        // Non-super-admins cannot delete super-admin-only module permissions
+        if (!$this->isSuperAdmin() && $this->isSuperAdminModule($permission->name)) {
+            abort(403, 'Vous n\'avez pas la permission de supprimer cette permission.');
+        }
+
         $name = $permission->name;
-         $item->delete();
         // Store permission data for notification before delete
         $permissionData = clone $permission;
         $permission->delete();
